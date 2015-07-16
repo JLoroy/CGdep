@@ -3,10 +3,10 @@ var router = express.Router();
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-  host     : 'localhost',
+  host     : '127.0.0.1',
   user     : 'root',
   password : 'admin',
-  database : 'CGdb',
+  database : 'cgdb',
   port     : '3306'
 });
 connection.connect();

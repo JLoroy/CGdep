@@ -3,10 +3,10 @@ var router = express.Router();
 
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-  host     : 'localhost',
+  host     : '127.0.0.1',
   user     : 'root',
   password : 'admin',
-  database : 'CGdb',
+  database : 'cgdb',
   port     : '3306'
 });
 connection.connect();
@@ -17,10 +17,17 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/magasins', function(req, res){
-  connection.query('SELECT Magasin.idMagasin, Magasin.Nom FROM Magasin', function(err, rows, fields) {
-    if (err) throw err;
-    res.send(rows);
-  });
+  if(!req.body.nom){
+    connection.query('SELECT * FROM Magasin', function(err, rows, fields) {
+      if (err) throw err;
+      res.send(rows);
+    });
+  } else {
+    connection.query("SELECT * FROM Magasin WHERE Magasin.Nom LIKE '%"+req.body.nom+"%'", function(err, rows, fields) {
+      if (err) throw err;
+      res.send(rows);
+    });
+  }
 });
 
 router.post('/commandes', function(req, res){
@@ -94,6 +101,15 @@ router.post('/produits', function(req, res){
 
 router.post("/newCategory", function(req, res){
   var query = "INSERT INTO Categorie(Nom) VALUES('"+req.body.nom+"');";
+
+  connection.query(query , function(err, rows, fields) {
+    if (err) throw err;
+    res.send(rows);
+  });
+});
+
+router.post("/newMagasin", function(req, res){
+  var query = "INSERT INTO Magasin(Nom, Adresse) VALUES('"+req.body.nom+","+req.body.adresse+"');";
 
   connection.query(query , function(err, rows, fields) {
     if (err) throw err;

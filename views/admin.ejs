@@ -57,7 +57,7 @@
                     </label>
                     <div class="input-group col-md-8">
                         <input ng-model="dateCreate" ng-change="refresh()" id="dpCreate" type="text" placeholder="Entrez une date" class="form-control">
-                        <span ng-click="dateCreate=''" class="input-group-addon glyphicon glyphicon-remove"></span>
+                        <span ng-click="dateCreate='';refresh()" class="input-group-addon glyphicon glyphicon-remove"></span>
                     </div>
                 </div>
                 <div class="form-group col-md-4">
@@ -75,7 +75,7 @@
                     </label>
                     <div class="input-group col-md-8">
                         <input ng-model="nbrResult" ng-change="refresh()" type="number" placeholder="Entrez un nombre" class="form-control">
-                        <span ng-click="nbrResult=''" class="input-group-addon glyphicon glyphicon-remove"></span>
+                        <span ng-click="nbrResult=0" class="input-group-addon glyphicon glyphicon-remove"></span>
                     </div>
                 </div>
             </div>
@@ -235,8 +235,51 @@
             </table>
         </div>
     </div>
-    <div class="tab-pane" id="magasin">
-        <div class="mainContentMagasins col-md-12">
+    <div class="tab-pane" id="magasin" ng-controller="MagasinController">
+        <div class="form-horizontal col-md-8 col-md-offset-2">
+            <div class="form-group">
+                <label class="control-label col-md-4">Magasin</label>
+                <div class="col-md-8 btn-group">
+                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getMagasins()" aria-haspopup="true" aria-expanded="false">
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="magasin in magasins"><span ng-click="data.query=magasin.Nom;getMagasins();">{{magasin.Nom}}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <table class="table col-md-4">
+                <thead>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Ajouter</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><input type="text" ng-model="new.name"></td>
+                    <td><input type="text" ng-model="new.adress"></td>
+                    <td><button class="btn btn-primary" ng-click="add();getMagasins();">Ajouter</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Adresse</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="magasin in magasins">
+                    <td>{{magasin.idMagasin}}</td>
+                    <td>{{magasin.Nom}}</td>
+                    <td>{{magasin.Adresse}}</td>
+                    <td><button class="btn btn-primary" ng-click="modify(magasin);getMagasins();">Modifier</button></td>
+                    <td><button class="btn btn-danger" ng-click="delete(magasin);getMagasins();">Supprimer</button></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="tab-pane" id="personnel">
