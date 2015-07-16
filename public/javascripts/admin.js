@@ -75,3 +75,23 @@ app.controller('CategoryController', function($scope, $http){
     };
     $scope.getCategories();
 });
+
+app.controller('MagasinController', function($scope, $http){
+    $scope.new = {};
+    $scope.data = {};
+    $scope.data.query = '';
+    $scope.getMagasins = function(){
+        $http.post("magasins",{
+            nom: $scope.data.query
+        }).success(function(res){
+            $scope.magasins = res;
+        });
+    };
+    $scope.add = function(){
+        $http.post("newCategory", {
+            nom: $scope.new.name,
+            adresse: $scope.new.adress
+        });
+    };
+    $scope.getMagasins();
+});
