@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<head>
+
+    <!--
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    -->
+    <meta charset="utf-8">
+    <script src="/jquery.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
+    <script src="/bootstrap/js/bootstrap-datepicker.js"></script>
+    <script src="/bootstrap/js/typeahead.js"></script>
+    <script src="/bootstrap/js/handlebars.js"></script>
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="/bootstrap/css/datepicker.css" rel="stylesheet" />
+    <link href="/bootstrap/css/typeahead.css" rel="stylesheet" />
+    <link href="/cgcss.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+    <script src="javascripts/admin.js"></script>
+    <title>Panneau d'administration</title>
+</head>
+<body ng-app="admin">
+
+<!--[if lt IE 7]>
+<p class="browsehappy">Vous utilisez une version de navigateur <strong>depassee</strong>. Veuillez <a href="http://browsehappy.com/">mettre a jour votre navigateur</a> pour ameliorer votre experience.</p>
+<![endif]-->
+
+<!-- Nav tabs -->
+<ul id="mainTab" class="nav nav-tabs" role="tablist">
+    <li class="active"><a href="#commande" role="tab" data-toggle="tab">Commandes</a></li>
+    <li><a href="#client" role="tab" data-toggle="tab">Clients</a></li>
+    <li><a href="#produit" role="tab" data-toggle="tab">Produits</a></li>
+    <li><a href="#categorie" role="tab" data-toggle="tab">Categories</a></li>
+    <li><a href="#magasin" role="tab" data-toggle="tab">Magasins</a></li>
+    <li><a href="#personnel" role="tab" data-toggle="tab">Personnel</a></li>
+    <li><a href="#terminal" role="tab" data-toggle="tab">Terminaux</a></li>
+    <li><a href="#ferie" role="tab" data-toggle="tab">Ferie</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane active" id="commande" ng-controller="CommandeController">
+        <div class="row">
+            <div id="selectorMagasin" class="col-md-12 form-inline">
+                <label ng-repeat="magasin in magasins" class="btn btn-primary active" ng-click="refresh()">
+                    <input class="form-control" type="checkbox" ng-model="selectedMagasins[magasin.idMagasin]">{{magasin.Nom}}
+                </label>
+            </div>
+        </div>
+        </br>
+        <div class="row">
+            <div class="form-inline col-md-12">
+                <div class="form-group col-md-4">
+                    <label class="col-md-4">
+                        Cr&eacuteation
+                    </label>
+                    <div class="input-group col-md-8">
+                        <input ng-model="dateCreate" ng-change="refresh()" id="dpCreate" type="text" placeholder="Entrez une date" class="form-control">
+                        <span ng-click="dateCreate=''" class="input-group-addon glyphicon glyphicon-remove"></span>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="col-md-4">
+                        R&eacuteception
+                    </label>
+                    <div class="input-group col-md-8">
+                        <input ng-model="dateLivraison" ng-change="refresh()" id="dpLivraison" type="text" placeholder="Entrez une date" class="form-control">
+                        <span ng-click="dateLivraison=''" class="input-group-addon glyphicon glyphicon-remove"></span>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="col-md-4">
+                        # R&eacutesultats
+                    </label>
+                    <div class="input-group col-md-8">
+                        <input ng-model="nbrResult" ng-change="refresh()" type="number" placeholder="Entrez un nombre" class="form-control">
+                        <span ng-click="nbrResult=''" class="input-group-addon glyphicon glyphicon-remove"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>Creation</th>
+                <th>Livraison</th>
+                <th>Prix</th>
+                <th>P/NP</th>
+                <th>Remarque</th>
+                <th>Client</th>
+                <th>Vendeuse</th>
+                <th>Magasin</th>
+                <th>Supprimer</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="commande in commandes">
+                    <td>{{commande.idCommande}}</td>
+                    <td>{{commande.Creation | date:'EEEE dd MMMM yyyy'}}</td>
+                    <td>{{commande.Livraison | date:'EEEE dd MMMM yyyy'}}</td>
+                    <td>{{commande.Montant}}</td>
+                    <td>{{(commande.PNP==2)?'AF':(commande.PNP==1)?'P':'NP'}}</td>
+                    <td>{{commande.Remarque}}</td>
+                    <td>{{commande.clientNom}}</td>
+                    <td>{{commande.vendeuseNom}}</td>
+                    <td>{{commande.magasinNom}}</td>
+                    <td><button class="btn btn-danger" ng-click="delete(commande);refresh();">Supprimer</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane" id="client" ng-controller="ClientController">
+        <div class="form-horizontal col-md-8 col-md-offset-2">
+            <div class="form-group">
+                <label class="control-label col-md-4">Nom du client</label>
+                <div class="col-md-8 btn-group">
+                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getClients()" aria-haspopup="true" aria-expanded="false">
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="client in clients"><span ng-click="data.query=client.Nom;getClients();">{{client.Nom}}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="mainContentClients col-md-12">
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Tel</th>
+                <th>Mail</th>
+                <th>TVA</th>
+                <th>Inscription</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="client in clients">
+                    <td>{{client.idClient}}</td>
+                    <td>{{client.Nom}}</td>
+                    <td>{{client.Tel}}</td>
+                    <td>{{client.Mail}}</td>
+                    <td>{{client.TVA}}</td>
+                    <td>{{client.Inscription | date:'EEEE dd MMMM yyyy'}}</td>
+                    <td><button class="btn btn-primary" ng-click="modify(client);getClients();">Modifier</button></td>
+                    <td><button class="btn btn-danger" ng-click="delete(client);getClients();">Supprimer</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane" id="produit" ng-controller="ProduitController">
+        <div class="row">
+            <div id="selectorCategory" class="col-md-12 form-inline">
+                <label ng-repeat="category in categories" class="btn btn-primary active" ng-click="getProduits()">
+                    <input class="form-control" type="checkbox" ng-model="data.selectedCategories[category.idCategorie]">{{category.Nom}}
+                </label>
+            </div>
+        </div>
+        <div class="form-horizontal col-md-8 col-md-offset-2">
+            <div class="form-group">
+                <label class="control-label col-md-4">Produit</label>
+                <div class="col-md-8 btn-group">
+                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getProduits()" aria-haspopup="true" aria-expanded="false">
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="produit in produits"><span ng-click="data.query=produit.Nom;getProduits();">{{produit.Nom}}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Categorie</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="produit in produits">
+                    <td>{{produit.idProduit}}</td>
+                    <td>{{produit.Nom}}</td>
+                    <td>{{produit.Prix}}</td>
+                    <td>{{produit.nomCategory}}</td>
+                    <td><button class="btn btn-primary" ng-click="modify(produit);getProduits();">Modifier</button></td>
+                    <td><button class="btn btn-danger" ng-click="delete(produit);getProduits();">Supprimer</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane" id="categorie" ng-controller="CategoryController">
+        <div class="form-horizontal col-md-8 col-md-offset-2">
+            <div class="form-group">
+                <label class="control-label col-md-4">Categorie</label>
+                <div class="col-md-8 btn-group">
+                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getCategories()" aria-haspopup="true" aria-expanded="false">
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="category in categories"><span ng-click="data.query=category.Nom;getCategories();">{{category.Nom}}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <table class="table col-md-4">
+                <thead>
+                <th>Nom</th>
+                <th>Ajouter</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><input type="text" ng-model="new"</td>
+                    <td><button class="btn btn-primary" ng-click="add();getCategories();">Ajouter</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="category in categories">
+                    <td>{{category.idCategorie}}</td>
+                    <td>{{category.Nom}}</td>
+                    <td><button class="btn btn-primary" ng-click="modify(category);getCategories();">Modifier</button></td>
+                    <td><button class="btn btn-danger" ng-click="delete(category);getCategories();">Supprimer</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane" id="magasin">
+        <div class="mainContentMagasins col-md-12">
+        </div>
+    </div>
+    <div class="tab-pane" id="personnel">
+        <div class="mainContentPersonnel col-md-12">
+        </div>
+    </div>
+    <div class="tab-pane" id="terminal">
+        <div class="mainContentTerminaux col-md-12">
+        </div>
+    </div>
+    <div class="tab-pane" id="ferie">
+        <form role="form" class="form-horizontal col-md-5">
+            <div class="form-group">
+                <label class="col-md-3 control-label">Jour f&eacuteri&eacute</label>
+                <div class="col-md-9">
+                    <div class="input-group col-md-8">
+                        <input id="dpFerie" type="text" placeholder="Entrez une date" class="form-control">
+                        <span class="input-group-addon glyphicon glyphicon-remove clearInput"></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="col-md-1">
+            <button id="addFerie" class="btn btn-success btn-block disabled">Ajouter</button>
+        </div>
+        <div class="mainContentFerie col-md-12">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#dpCreate').datepicker({
+            format: "yyyy-mm-dd",
+            clearBtn: true,
+            autoclose: true
+        });
+        $('#dpLivraison').datepicker({
+            format: "yyyy-mm-dd",
+            clearBtn: true,
+            autoclose: true
+        });
+        $('#dpFerie').datepicker({
+            format: "yyyy-mm-dd",
+            clearBtn: true,
+            autoclose: true
+        });
+    });
+</script>
+
+<!--
+<div ng-controller="MainController">
+    <div ng-if="!data.display">
+        <button ng-click="data.display=true" class="btn btn-primary">YOLO</button>
+    </div>
+    <div ng-if="data.display">
+        <button ng-click="data.display=false" class="btn btn-danger">SWAGG</button>
+    </div>
+    <p>display : {{data.display}}</p>
+    <p>text : {{data.text}}</p>
+    <p ng-repeat="client in clients">{{client.name}} {{client.tel}} {{client.id}}</p>
+</div>
+-->
+
+</body>
+</html>
