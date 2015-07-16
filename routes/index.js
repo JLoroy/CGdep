@@ -116,4 +116,14 @@ router.post("/newMagasin", function(req, res){
     res.send(rows);
   });
 });
+
+router.post("/newVendeuse", function(req, res){
+  //TODO : photo
+  var query = "INSERT INTO Vendeuse(Nom) VALUES('"+req.body.nom+"');";
+
+  connection.query(query , function(err, rows, fields) {
+    if (err) throw err;
+    res.send(rows);
+  });
+});
 module.exports = router;

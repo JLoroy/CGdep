@@ -282,8 +282,48 @@
             </table>
         </div>
     </div>
-    <div class="tab-pane" id="personnel">
-        <div class="mainContentPersonnel col-md-12">
+    <div class="tab-pane" id="personnel" ng-controller="VendeuseController">
+        <div class="form-horizontal col-md-8 col-md-offset-2">
+            <div class="form-group">
+                <label class="control-label col-md-4">Personnel</label>
+                <div class="col-md-8 btn-group">
+                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getVendeuses()" aria-haspopup="true" aria-expanded="false">
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="vendeuse in vendeuses"><span ng-click="data.query=vendeuse.Nom;getVendeuses();">{{vendeuse.Nom}}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <table class="table col-md-4">
+                <thead>
+                <th>Nom</th>
+                <th>Ajouter</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><input type="text" ng-model="new.name"></td>
+                    <!--TODO: rajouter photo-->
+                    <td><button class="btn btn-primary" ng-click="add();getVendeuses();">Ajouter</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="vendeuse in vendeuses">
+                    <td>{{vendeuse.idVendeuse}}</td>
+                    <td>{{vendeuse.Nom}}</td>
+                    <td><button class="btn btn-primary" ng-click="modify(vendeuse);getVendeuses();">Modifier</button></td>
+                    <td><button class="btn btn-danger" ng-click="delete(vendeuse);getVendeuses();">Supprimer</button></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="tab-pane" id="terminal">
