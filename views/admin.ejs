@@ -162,7 +162,7 @@
             <div class="form-group">
                 <label class="control-label col-md-4">Produit</label>
                 <div class="col-md-8 btn-group">
-                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getProduits()" aria-haspopup="true" aria-expanded="false">
+                    <input placeholder="Entrez un nom" type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getProduits()" aria-haspopup="true" aria-expanded="false">
                     <ul class="dropdown-menu">
                         <li ng-repeat="produit in produits"><span ng-click="data.query=produit.Nom;getProduits();">{{produit.Nom}}</span></li>
                     </ul>
@@ -193,17 +193,7 @@
         </div>
     </div>
     <div class="tab-pane" id="categorie" ng-controller="CategoryController">
-        <div class="form-horizontal col-md-8 col-md-offset-2">
-            <div class="form-group">
-                <label class="control-label col-md-4">Categorie</label>
-                <div class="col-md-8 btn-group">
-                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getCategories()" aria-haspopup="true" aria-expanded="false">
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="category in categories"><span ng-click="data.query=category.Nom;getCategories();">{{category.Nom}}</span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+
         <div class="col-md-12">
             <table class="table col-md-4">
                 <thead>
@@ -236,17 +226,7 @@
         </div>
     </div>
     <div class="tab-pane" id="magasin" ng-controller="MagasinController">
-        <div class="form-horizontal col-md-8 col-md-offset-2">
-            <div class="form-group">
-                <label class="control-label col-md-4">Magasin</label>
-                <div class="col-md-8 btn-group">
-                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getMagasins()" aria-haspopup="true" aria-expanded="false">
-                    <ul class="dropdown-menu">
-                        <li ng-repeat="magasin in magasins"><span ng-click="data.query=magasin.Nom;getMagasins();">{{magasin.Nom}}</span></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+
         <div class="col-md-12">
             <table class="table col-md-4">
                 <thead>
@@ -302,7 +282,7 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td><input type="text" ng-model="new.name"></td>
+                    <td><input type="text" ng-model="new.name" placeholder="Entrez un nom"></td>
                     <!--TODO: rajouter photo-->
                     <td><button class="btn btn-primary" ng-click="add();getVendeuses();">Ajouter</button></td>
                 </tr>
@@ -326,26 +306,81 @@
             </table>
         </div>
     </div>
-    <div class="tab-pane" id="terminal">
-        <div class="mainContentTerminaux col-md-12">
+    <div class="tab-pane" id="terminal" ng-controller="TerminalController"><div class="row">
+            <div id="selectorMagasin" class="col-md-12 form-inline">
+                <label ng-repeat="magasin in magasins" class="btn btn-primary active" ng-click="refresh()">
+                    <input class="form-control" type="checkbox" ng-model="selectedMagasins[magasin.idMagasin]">{{magasin.Nom}}
+                </label>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <table class="table col-md-4">
+                <thead>
+                <th>Magasin</th>
+                <th>Ajouter</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><select class="form-control" ng-model="new.magasin">
+                            <option value="" disabled selected>Choisissez un Magasin</option>
+                            <option ng-repeat="magasin in magasins" value="{{magasin.idMagasin}}" ng-click="getTerminals()">{{magasin.Nom}}</option>
+                        </select></td>
+                    <td><button class="btn btn-primary" ng-click="add();getTerminals();">Ajouter</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>Magasin</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="terminal in terminals" ng-if="terminal.Actif == 1">
+                    <td>{{terminal.idTerminal}}</td>
+                    <td><select class="form-control" ng-model="terminal.magasin">
+                            <option ng-repeat="magasin in magasins" value="{{magasin.Nom}}" ng-click="getTerminals();terminal.idMagasin = magasin.idMagasin">{{magasin.Nom}}</option>
+                            <option ng-selected="true" hidden>{{terminal.magasin}}</option>
+                        </select></td>
+                    <td><button class="btn btn-primary" ng-click="modify(terminal);getTerminals();">Modifier</button></td>
+                    <td><button class="btn btn-danger" ng-click="delete(terminal);getTerminals();">Supprimer</button></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="tab-pane" id="ferie">
-        <form role="form" class="form-horizontal col-md-5">
-            <div class="form-group">
-                <label class="col-md-3 control-label">Jour f&eacuteri&eacute</label>
-                <div class="col-md-9">
-                    <div class="input-group col-md-8">
-                        <input id="dpFerie" type="text" placeholder="Entrez une date" class="form-control">
-                        <span class="input-group-addon glyphicon glyphicon-remove clearInput"></span>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <div class="col-md-1">
-            <button id="addFerie" class="btn btn-success btn-block disabled">Ajouter</button>
-        </div>
-        <div class="mainContentFerie col-md-12">
+    <div class="tab-pane" id="ferie" ng-controller="FerieController">
+
+        <div class="col-md-12">
+            <table class="table col-md-12">
+                <thead class="col-md-5">>
+                    <th class="col-md-1" >Date</th>
+                    <th class="col-md-offset-3 col-md-1">Ajouter</th>
+                </thead>
+                <tbody>
+                    <tr class=" input-group col-md-3">
+                        <td class=" input-group">
+                            <input id="dpFerie" type="text" placeholder="Entrez une date" class="form-control" ng-model="newdate">
+                            <span class="input-group-addon glyphicon glyphicon-remove" ng-click="newdate=''"></span>
+                        </td>
+                        <td><button class="btn btn-primary" ng-click="add();getFeries();">Ajouter</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>Date</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="ferie in feries">
+                    <td>{{ferie.idFerie}}</td>
+                    <td>{{ferie.date | date:'EEEE dd MMMM yyyy'}}</td>
+                    <td><button class="btn btn-danger" ng-click="delete(ferie);getFeries();">Supprimer</button></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -369,20 +404,6 @@
         });
     });
 </script>
-
-<!--
-<div ng-controller="MainController">
-    <div ng-if="!data.display">
-        <button ng-click="data.display=true" class="btn btn-primary">YOLO</button>
-    </div>
-    <div ng-if="data.display">
-        <button ng-click="data.display=false" class="btn btn-danger">SWAGG</button>
-    </div>
-    <p>display : {{data.display}}</p>
-    <p>text : {{data.text}}</p>
-    <p ng-repeat="client in clients">{{client.name}} {{client.tel}} {{client.id}}</p>
-</div>
--->
 
 </body>
 </html>

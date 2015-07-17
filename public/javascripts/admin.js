@@ -88,10 +88,95 @@ app.controller('MagasinController', function($scope, $http){
         });
     };
     $scope.add = function(){
-        $http.post("newCategory", {
+        //console.log("Add : "+$scope.new.name+" "+$scope.new.adress);
+        $http.post("newMagasin", {
             nom: $scope.new.name,
             adresse: $scope.new.adress
         });
     };
     $scope.getMagasins();
+});
+
+app.controller('VendeuseController', function($scope, $http){
+    $scope.new = {};
+    $scope.data = {};
+    $scope.data.query = '';
+    $scope.getVendeuses = function(){
+        $http.post("vendeuses",{
+            nom: $scope.data.query
+        }).success(function(res){
+            $scope.vendeuses = res;
+        });
+    };
+    $scope.add = function(){
+        $http.post("newVendeuse", {
+            nom: $scope.new.name,
+        });
+    };
+    $scope.getVendeuses();
+});
+
+app.controller('TerminalController', function($scope, $http){
+    $scope.new = {};
+    $scope.data = {};
+    $scope.data.query = '';
+    $scope.selectedMagasins = {};
+    $scope.getTerminals = function(){
+        $http.post("terminals",{
+            magasin: $scope.selectedMagasins
+        }).success(function(res){
+            $scope.terminals = res;
+        });
+    };
+    $http.post("magasins").success(function(res){
+        $scope.magasins = res;
+    });
+    $scope.add = function(){
+        if($scope.new.magasin) {
+            $http.post("newTerminal", {
+                magasin: $scope.new.magasin
+            });
+        }
+        $scope.new.magasin = '';
+    };
+    $scope.modify = function(toMod){
+        console.log(toMod);
+        console.log($scope.terminals);
+        $http.post("modify/terminal", {
+            toModify: toMod
+        })
+    };
+    $scope.delete = function(toRem){
+        $http.post("remove/terminal",{
+            toRemove: toRem
+        });
+    }
+    $scope.getTerminals();
+});
+
+app.controller('FerieController', function($scope, $http){
+    $scope.newdate;
+    $scope.getFeries = function(){
+        $http.post("feries",{
+        }).success(function(res){
+            $scope.feries = res;
+        });
+    };
+    $scope.add = function(){
+        if($scope.newdate) {
+            console.log($scope.newdate);
+            $http.post("newFerie",{
+                date: $scope.newdate
+            });
+        }
+        else{
+            console.log("Enter a date")
+        }
+    };
+    $scope.delete = function(toRem){
+        $http.post("remove/ferie",{
+            toRemove: toRem
+        });
+    }
+    $scope.getFeries();
 });
