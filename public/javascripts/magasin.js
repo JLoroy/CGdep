@@ -7,7 +7,7 @@ app.run(function($rootScope, $http){
 });
 
 app.controller('choixVendeuse', function($scope, $http){
-    $scope.activeTab = sess.idMagasin;
+    $scope.activeTab = sess.magasin.idMagasin;
     $http.post("magasins").success(function(res){
         $scope.magasins = res;
     });

@@ -309,7 +309,7 @@ router.post('/newsession', function(req, res){
     sess.data = req.body.data;
 });
 
-routeur.post('/getsession', function(req, res){
+router.post('/getsession', function(req, res){
     sess = req.session;
 
     if(sess.data) res = sess.data;

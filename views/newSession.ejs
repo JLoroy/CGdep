@@ -15,25 +15,17 @@
     <title>Nouvelle Session</title>
 </head>
 <body ng-app="newSession">
-    <div class="modal fade" ng-controller="newSessionController">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Nouvelle session</h4>
-                </div>
-                <div class="modal-body">
-                    <ul class="nav nav-pills" role="tablist">
-                        <li ng-repeat="magasin in magasins">
-                            {{magasin.Nom}}
-                            <label class="btn btn-lg btn-primary" ng-repeat="terminal in terminals" ng-if="terminal.Magasin_idMagasin == magasin.idMagasin">
-                                <input type="radio" ng-model="data.terminal" ng-value="terminal.idTerminal">{{Terminal.idTerminal}}
-                            </label>
-                        </li>
-                    </ul>
-                    <button class="btn btn-primary" ng-click="sendSession();">Confirmer</button>
-                </div>
-            </div>
-        </div>
+    <div ng-controller="newSessionController">
+        <h4 class="modal-title">Nouvelle session</h4>
+        <ul class="nav nav-pills" role="tablist">
+            <li ng-repeat="magasin in magasins">
+                {{magasin.Nom}}
+                <label class="btn btn-lg btn-primary" ng-repeat="terminal in terminals" ng-if="terminal.Magasin_idMagasin == magasin.idMagasin">
+                    <input type="radio" ng-click="data.terminal = terminal; data.magasin = magasin">{{Terminal.idTerminal}}
+                </label>
+            </li>
+        </ul>
+        <button class="btn btn-primary" ng-click="sendSession();">Confirmer</button> <!-- disabled="{{data.terminal == undefined}}" -->
     </div>
 </body>
 </html>
