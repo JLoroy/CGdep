@@ -1,0 +1,121 @@
+#!/usr/bin/env python
+# -*-coding:Latin-1 -*
+
+import cgi
+import cgitb
+import MySQLdb as mysqldb
+import session, time
+from utils import fieldStorageToDict, idgen
+import time
+import sys, os
+sys.path.append(os.environ["PATH_TRANSLATED"])
+
+cgitb.enable()
+params = fieldStorageToDict(cgi.FieldStorage())
+sess = session.Session(expires=365*24*60*60, cookie_path='/')
+
+try:
+	conn = mysqldb.connect('localhost', 'root', 'CG14paukSQL', 'CGdb')
+except MySQLdb.Error, e:
+	print "Error %d: %s" % (e.args[0], e.args[1])
+	sys.exit(1)
+db = conn.cursor()
+
+print "Content-Type: text/html\n"
+
+allCateg = []
+
+if params.has_key('selectCateg') :
+	allCateg = filter(None, params["selectCateg"].split(";"))
+	sess.data['selectCategorie'] = params["selectCateg"]
+else :
+	sess.data['selectCategorie'] = ";"
+
+for selectCateg in allCateg :
+	#TODO : changer db pour ne plus devoir passer par terminal pour le magasin
+	#Pour réimplémentation datepicker start & end : changer :
+	#params["date"], params["date"] PAR
+	#params["dateStart"], params["dateEnd"]
+
+	#PRODUITS NON CUSTOM
+	request = """
+	SELECT Produit.Nom, ProduitCommande.Quantite, Magasin.Nom, ProduitCommande.Details
+	FROM ProduitCommande
+	INNER JOIN Produit
+	ON ProduitCommande.Produit_idProduit=Produit.idProduit
+	INNER JOIN Commande
+	ON ProduitCommande.Commande_idCommande=Commande.idCommande
+	INNER JOIN Terminal
+	ON Commande.Terminal_idTerminal=Terminal.idTerminal
+	INNER JOIN Magasin
+	ON Terminal.Magasin_idMagasin=Magasin.idMagasin
+	WHERE Produit.Categorie_idCategorie=%s AND Magasin.idMagasin=%s AND Commande.Livraison BETWEEN '%s 00:00:00' AND '%s 23:59:59'
+	;
+	""" % (selectCateg, params["magasin"], params["date"], params["date"])
+	db.execute(request)
+
+	data = db.fetchall()
+
+
+
+	#PRODUIT CUSTOM
+	request = """
+	SELECT ProduitCustom.Nom, ProduitCommande.Quantite, Magasin.Nom, ProduitCommande.Details
+	FROM ProduitCommande
+	INNER JOIN ProduitCustom
+	ON ProduitCommande.ProduitCustom_idProduitCustom=ProduitCustom.idProduitCustom
+	INNER JOIN Commande
+	ON ProduitCommande.Commande_idCommande=Commande.idCommande
+	INNER JOIN Terminal
+	ON Commande.Terminal_idTerminal=Terminal.idTerminal
+	INNER JOIN Magasin
+	ON Terminal.Magasin_idMagasin=Magasin.idMagasin
+	WHERE ProduitCustom.Categorie_idCategorie=%s AND Magasin.idMagasin=%s AND Commande.Livraison BETWEEN '%s 00:00:00' AND '%s 23:59:59'
+	;
+	""" % (selectCateg, params["magasin"], params["date"], params["date"])
+	db.execute(request)
+
+	data = data + db.fetchall()
+
+
+
+
+	listProduit = list(set([item[0] for item in data]))
+
+	db.execute("""SELECT Magasin.Nom FROM Magasin""")
+
+	listMagasin = [item[0] for item in db.fetchall()]
+	#lambda x: not(x == "" and x == "None" and x == None)
+	for i in range(len(listProduit)) :
+		details = filter(lambda x: not(x[3] == "" or x[3] == "None" or x[3] == None), [item for item in data if (item[0] == listProduit[i])])
+		badge = "" if (len(details) == 0) else """<span class="badge">%s</span> """ % "+"
+		print """<tr data-toggle="collapse" data-target="#tr%s_%s"><td>%s%s</td>""" % (selectCateg, i, badge, listProduit[i])
+		for magasin in listMagasin :
+			print "<td>%s</td>" % sum([item[1] for item in data if (item[0] == listProduit[i] and item[2] == magasin)])
+		print "<td>%s</td></tr>" % sum([item[1] for item in data if (item[0] == listProduit[i])])
+		if not len(details) == 0 :
+			print """
+			<tr id="tr%s_%s" class="collapse" style="background-color: whitesmoke;">
+			  <td colspan="%s">""" % (selectCateg, i, (len(listMagasin)+2))
+
+			for j in range(len(details)) :
+				if not j == 0 :
+					print "<hr/>"
+				print """<span class="label label-info">%s</span> <span class="label label-info">%s</span> """ % (details[j][1], details[j][2])
+				print details[j][3]
+
+			print """
+			  </td>
+			</tr>"""
+
+
+
+
+
+
+
+
+
+
+
+

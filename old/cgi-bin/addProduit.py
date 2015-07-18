@@ -1,0 +1,63 @@
+#!/usr/bin/env python
+
+import MySQLdb as mysqldb
+import cgi
+import cgitb
+from utils import fieldStorageToDict, idgen
+
+cgitb.enable()
+params = fieldStorageToDict(cgi.FieldStorage())
+
+try:
+	conn = mysqldb.connect('localhost', 'root', 'CG14paukSQL', 'CGdb')
+except MySQLdb.Error, e:
+	print "Error %d: %s" % (e.args[0], e.args[1])
+	sys.exit(1)
+
+db = conn.cursor()
+
+print "Content-Type: text/html\n"
+
+dumbUser = False
+if not params.has_key("Nom") :
+	dumbUser = True
+	params.update({'Nom' : ''})
+if not params.has_key("Categorie") :
+	dumbUser = True
+	params.update({'Categorie' : ''})
+if not params.has_key("Prix") :
+	dumbUser = True
+	params.update({'Prix' : ''})
+if dumbUser :
+	print open("/var/www/cgi-bin/addProduit.html", "r").read() % params
+	for key in params :
+		if params[key] == "" :
+			print '<div>Veuillez remplir le champ %s</div>' % key
+else :
+
+	db.execute("DELETE FROM Produit WHERE 1=1")
+	conn.commit()
+
+	ID = idgen("Produit")
+
+	request = '''INSERT INTO Produit(idProduit,Nom,Categorie,Prix)
+	VALUES (%s,%s,%s,%s);'''
+
+	db.execute(request, (ID, params["Nom"], params["Categorie"], params["Prix"]))
+	conn.commit()
+
+	db.execute('''
+	SELECT * FROM Produit;
+	''')
+
+	print '<div>'
+	print 'Produit : ' + str(db.fetchall()[0][0])
+	print '</div>'
+	print '''
+	<div>
+	<input type="button" name="testButton" value="Try again?" onclick="self.location.href='http://192.168.1.6:8000/cgi-bin/start.py'">
+	</div>
+	'''
+
+db.close()
+conn.close()

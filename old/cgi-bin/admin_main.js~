@@ -1,0 +1,457 @@
+var selectTab = "";
+var selectMagasin = {}
+var data = {};
+var refreshRate = 300000;
+var timeToRefresh = setTimeout(startRefresh, refreshRate);
+
+function startRefresh() {
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+	refreshList();
+}
+
+function refreshList() {
+	$.get("admin_refresh.py", data, function(content){
+		$('.mainContent' + data["selectTab"]).html(content);
+		data["action"] = "";
+		$('.deleteCommande').removeClass('disabled');
+		$('#deleteCategorie').removeClass('disabled');
+		$('#deleteMagasin').removeClass('disabled');
+		$('#deleteVendeuse').removeClass('disabled');
+		$('#deleteTerminal').removeClass('disabled');
+		$('.delFerie').removeClass('disabled');
+	});
+}
+
+$('#mainTab').each(function() {
+	$(this).on('shown.bs.tab', function() {
+		clearTimeout(timeToRefresh);
+		data = {};
+		data["selectTab"] = $('#mainTab li.active a').html();
+		changeTab();
+		refreshList();
+		timeToRefresh = setTimeout(startRefresh, refreshRate);
+	});
+});
+
+
+
+$(document).on('click', '.clearInput', function(){
+	$(this).prev().val('');
+	$(this).prev().trigger('change');
+	$(this).prev().trigger('input');
+});
+
+function changeTab(){
+	if ($('#mainTab li.active a').html() == "Commandes") {
+		data["selectMagasin"] = "";
+		$('#selectorMagasin label').each(function() {
+			data["selectMagasin"] = data["selectMagasin"] + ";" + $(this).data('value');
+			selectMagasin[$(this).data('value')] = $(this).data('value');
+			$(this).addClass('btn-success');
+		});
+	}
+}
+
+data["selectTab"] = $('#mainTab li.active a').html();
+changeTab();
+
+//TAB COMMANDE
+$('#selectorMagasin label').each(function() {
+	$(this).click(function(){
+		clearTimeout(timeToRefresh);
+		selectMagasin[$(this).data('value')] = (selectMagasin[$(this).data('value')] == ";")?$(this).data('value'):";";
+		$(this).addClass((selectMagasin[$(this).data('value')] == ";")?'btn-primary':'btn-success');
+		$(this).removeClass((selectMagasin[$(this).data('value')] == ";")?'btn-success':'btn-primary');
+		data["selectMagasin"] = "";
+		for (item in selectMagasin) {
+			data["selectMagasin"] = data["selectMagasin"] + ";" + selectMagasin[item];
+		}
+		refreshList();
+		timeToRefresh = setTimeout(startRefresh, refreshRate);
+	});
+});
+
+$('#dpCreate').on('input changeDate', function() {
+	clearTimeout(timeToRefresh);
+	data["dateCreate"] = $(this).val();
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+$('#dpLivraison').on('input changeDate', function() {
+	clearTimeout(timeToRefresh);
+	data["dateLivraison"] = $(this).val();
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+$('#nbrResult').on('input', function() {
+	clearTimeout(timeToRefresh);
+	data["nbrResult"] = $(this).val();
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+$(document).on('click', '.deleteCommande', function(){
+	$('.deleteCommande').addClass('disabled');
+	clearTimeout(timeToRefresh);
+	data["action"] = "DELETE";
+	data["idCommande"] = $(this).data('idcommande');
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+//TAB CLIENT
+var searcherClient = function(){
+	return function findMatches(q, cb){
+		$.get("admin_client.py", {query: q}, function(content){
+			var tmp = content.split(";");
+			var strs = tmp[0].split("|");
+			var num = tmp[1].split("|");
+			var mail = tmp[2].split("|");
+			var matches, substrRegex;
+			matches = [];
+			var pattern = new RegExp('([a-z]|[A-Z])', 'i');
+			var mailPat = new RegExp('@', 'i');
+			$.each(strs, function(i, str){
+				if (pattern.test(str)){
+					if (mailPat.test(mail[i])){
+						matches.push({value: str, num: num[i], mail: mail[i]});
+					} else {
+						matches.push({value: str, num: num[i]});
+					}
+				}
+			});
+			cb(matches);
+		});
+	}
+}
+$("#ACclient").typeahead({
+	hint: true,
+	highlight: true,
+	minLength: 1
+	},
+	{
+	name: "Client",
+	source: searcherClient(),
+	templates: {
+		suggestion: Handlebars.compile('<p><Strong>{{value}}</strong> - {{num}}{{#if mail}} - {{mail}}{{/if}}</p>')
+	}
+});
+$("#ACclient").on('input typeahead:selected', function(){
+	clearTimeout(timeToRefresh);
+	data["NomClient"] = $(this).val();
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+$(document).on("input", "#clientForm input[type='text']", function(){
+	clearTimeout(timeToRefresh);
+	$("#modifyClient").removeClass("disabled");
+	if($("#clientNom").val() != "" && $("#clientInscription").val() != ""){
+		$("#addClient").removeClass("disabled");
+		$("#addClient").removeClass("disabled");
+	} else {
+		$("#addClient").addClass("disabled");
+		$("#addClient").addClass("disabled");
+	}
+});
+$(document).on("click", "#deleteClient", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["clientID"] = $('#clientID').val();
+	data["action"] = "DELETE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+$(document).on("click", "#modifyClient", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["clientID"] = $('#clientID').val();
+	data["clientNom"] = $('#clientNom').val();
+	data["clientTel"] = $('#clientTel').val();
+	data["clientMail"] = $('#clientMail').val();
+	data["clientTVA"] = $('#clientTVA').val();
+	data["clientInscription"] = $('#clientInscription').val();
+	data["action"] = "UPDATE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+$(document).on("click", "#addClient", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["clientID"] = $('#clientID').val();
+	data["clientNom"] = $('#clientNom').val();
+	data["clientTel"] = $('#clientTel').val();
+	data["clientMail"] = $('#clientMail').val();
+	data["clientTVA"] = $('#clientTVA').val();
+	data["clientInscription"] = $('#clientInscription').val();
+	data["action"] = "INSERT";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+//TAB PRODUIT
+var searcherProduit = function(){
+	return function findMatches(q, cb){
+		$.get("admin_produit.py", {query: q}, function(content){
+			var tmp = content.split(";");
+			var strs = tmp[0].split("|");
+			var prix = tmp[1].split("|");
+			var categorie = tmp[2].split("|");
+			var matches, substrRegex;
+			matches = [];
+			var pattern = new RegExp('([a-z]|[A-Z])', 'i');
+			$.each(strs, function(i, str){
+				if (pattern.test(str)){
+					matches.push({value: str, prix: prix[i]+"€", categorie: categorie[i]});
+				}
+			});
+			cb(matches);
+		});
+	}
+}
+$("#ACproduit").typeahead({
+	hint: true,
+	highlight: true,
+	minLength: 1
+	},
+	{
+	name: "Produit",
+	source: searcherProduit(),
+	templates: {
+		suggestion: Handlebars.compile('<p><Strong>{{value}}</strong> - {{prix}} - {{categorie}}</p>')
+	}
+});
+$("#ACproduit").on('input typeahead:selected', function(){
+	clearTimeout(timeToRefresh);
+	data["NomProduit"] = $(this).val();
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+$(document).on("input", "#produitForm input[type='text']", function(){
+	clearTimeout(timeToRefresh);
+	if (("NomProduit" in data) && (data["NomProduit"] != "")){
+		$("#modifyProduit").removeClass("disabled");
+	}
+	var isOk = true;
+	$("#produitForm input[type='text']").each(function(){
+		if ($(this).val() == ""){
+			isOk = false;
+		}
+	});
+	if (isOk) {
+		$("#addProduit").removeClass("disabled");
+	} else if (!($("#addProduit").hasClass("disabled"))){
+		$("#addProduit").addClass("disabled");
+	}
+});
+$(document).on("click", "#deleteProduit", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["produitID"] = $('#produitID').val();
+	data["action"] = "DELETE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+$(document).on("click", "#addProduit", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["produitID"] = $('#produitID').val();
+	data["produitNom"] = $('#produitNom').val();
+	data["produitPrix"] = $('#produitPrix').val();
+	data["produitCategorie"] = $('#produitCategorie').val();
+	data["action"] = "INSERT";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+$(document).on("click", "#modifyProduit", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["produitID"] = $('#produitID').val();
+	data["produitNom"] = $('#produitNom').val();
+	data["produitPrix"] = $('#produitPrix').val();
+	data["action"] = "UPDATE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+//TAB CATEGORIE
+$(document).on("input", "#categorieNom", function(){
+	clearTimeout(timeToRefresh);
+	if ($(this).val() == "") {
+		$("#addCategorie[data-idCategorie='" + $(this).data("idcategorie") + "']").addClass("disabled");
+	} else {
+		$("#addCategorie[data-idCategorie='" + $(this).data("idcategorie") + "']").removeClass("disabled");
+	}
+});
+$(document).on("click", "#addCategorie", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["categorieID"] = $("#categorieID[data-idCategorie='" + $(this).data("idcategorie") + "']").val();
+	data["categorieNom"] = $("#categorieNom[data-idCategorie='" + $(this).data("idcategorie") + "']").val();
+	data["action"] = "UPDATE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+$(document).on("click", "#deleteCategorie", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["categorieID"] = $("#categorieID[data-idCategorie='" + $(this).data("idcategorie") + "']").val();
+	data["categorieNom"] = $("#categorieNom[data-idCategorie='" + $(this).data("idcategorie") + "']").val();
+	data["action"] = "DELETE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+//TAB MAGASIN
+$(document).on("input", "#magasinNom", function(){
+	clearTimeout(timeToRefresh);
+	var id = $(this).data("idmagasin");
+	if ($(this).val() == "" || $("#magasinAdresse[data-idMagasin='" + id + "']").val() == "") {
+		$("#addMagasin[data-idMagasin='" + id + "']").addClass("disabled");
+	} else {
+		$("#addMagasin[data-idMagasin='" + id + "']").removeClass("disabled");
+	}
+});
+$(document).on("input", "#magasinAdresse", function(){
+	clearTimeout(timeToRefresh);
+	var id = $(this).data("idmagasin");
+	if ($(this).val() == "" || $("#magasinNom[data-idMagasin='" + id + "']").val() == "") {
+		$("#addMagasin[data-idMagasin='" + id + "']").addClass("disabled");
+	} else {
+		$("#addMagasin[data-idMagasin='" + id + "']").removeClass("disabled");
+	}
+});
+$(document).on("click", "#addMagasin", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["magasinID"] = $("#magasinID[data-idMagasin='" + $(this).data("idmagasin") + "']").val();
+	data["magasinNom"] = $("#magasinNom[data-idMagasin='" + $(this).data("idmagasin") + "']").val();
+	data["magasinAdresse"] = $("#magasinAdresse[data-idMagasin='" + $(this).data("idmagasin") + "']").val();
+	data["action"] = "UPDATE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+$(document).on("click", "#deleteMagasin", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["magasinID"] = $("#magasinID[data-idMagasin='" + $(this).data("idmagasin") + "']").val();
+	data["magasinNom"] = $("#magasinNom[data-idMagasin='" + $(this).data("idmagasin") + "']").val();
+	data["magasinAdresse"] = $("#magasinAdresse[data-idMagasin='" + $(this).data("idmagasin") + "']").val();
+	data["action"] = "DELETE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+//TAB PERSONNEL
+$(document).on("input", "#vendeuseNom", function(){
+	clearTimeout(timeToRefresh);
+	if ($(this).val() == "" || $("#vendeuseMagasin[data-idVendeuse='" + $(this).data("idvendeuse") + "']").val() == "") {
+		$("#addVendeuse[data-idVendeuse='" + $(this).data("idvendeuse") + "']").addClass("disabled");
+	} else {
+		$("#addVendeuse[data-idVendeuse='" + $(this).data("idvendeuse") + "']").removeClass("disabled");
+	}
+});
+$(document).on("change", "#vendeuseMagasin", function(){
+	clearTimeout(timeToRefresh);
+	if ($(this).val() == "" || $("#vendeuseNom[data-idVendeuse='" + $(this).data("idvendeuse") + "']").val() == "") {
+		$("#addVendeuse[data-idVendeuse='" + $(this).data("idvendeuse") + "']").addClass("disabled");
+	} else {
+		$("#addVendeuse[data-idVendeuse='" + $(this).data("idvendeuse") + "']").removeClass("disabled");
+	}
+});
+$(document).on("click", "#addVendeuse", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["vendeuseID"] = $("#vendeuseID[data-idVendeuse='" + $(this).data("idvendeuse") + "']").val();
+	data["vendeuseNom"] = $("#vendeuseNom[data-idVendeuse='" + $(this).data("idvendeuse") + "']").val();
+	data["vendeuseMagasin"] = $("#vendeuseMagasin[data-idVendeuse='" + $(this).data("idvendeuse") + "']").val();
+	data["action"] = "UPDATE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+$(document).on("click", "#deleteVendeuse", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["vendeuseID"] = $("#vendeuseID[data-idVendeuse='" + $(this).data("idvendeuse") + "']").val();
+	data["vendeuseNom"] = $("#vendeuseNom[data-idVendeuse='" + $(this).data("idvendeuse") + "']").val();
+	data["vendeuseMagasin"] = $("#vendeuseMagasin[data-idVendeuse='" + $(this).data("idvendeuse") + "']").val();
+	data["action"] = "DELETE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+
+//TAB TERMINAUX
+$(document).on("change", "#terminalMagasin", function(){
+	clearTimeout(timeToRefresh);
+	if ($(this).val() == "" || $("#terminalNom[data-idTerminal='" + $(this).data("idterminal") + "']").val() == "") {
+		$("#addTerminal[data-idTerminal='" + $(this).data("idterminal") + "']").addClass("disabled");
+	} else {
+		$("#addTerminal[data-idTerminal='" + $(this).data("idterminal") + "']").removeClass("disabled");
+	}
+});
+$(document).on("click", "#addTerminal", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["terminalID"] = $("#terminalID[data-idTerminal='" + $(this).data("idterminal") + "']").val();
+	data["terminalNom"] = $("#terminalNom[data-idTerminal='" + $(this).data("idterminal") + "']").val();
+	data["terminalMagasin"] = $("#terminalMagasin[data-idTerminal='" + $(this).data("idterminal") + "']").val();
+	data["action"] = "UPDATE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+$(document).on("click", "#deleteTerminal", function(e){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["terminalID"] = $("#terminalID[data-idTerminal='" + $(this).data("idterminal") + "']").val();
+	data["terminalNom"] = $("#terminalNom[data-idTerminal='" + $(this).data("idterminal") + "']").val();
+	data["terminalMagasin"] = $("#terminalMagasin[data-idTerminal='" + $(this).data("idterminal") + "']").val();
+	data["action"] = "DELETE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+//TAB FERIE
+$("#addFerie").on('click', function(){
+	$(this).addClass('disabled');
+	clearTimeout(timeToRefresh);
+	data["ferieDate"] = $("#dpFerie").val();
+	data["action"] = "INSERT";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+$(document).on('click', ".delFerie", function(e){
+	$(".delFerie").addClass('disabled');
+	clearTimeout(timeToRefresh);
+	e.preventDefault();
+	data["ferieID"] = $(this).data('idferie');
+	data["action"] = "DELETE";
+	refreshList();
+	timeToRefresh = setTimeout(startRefresh, refreshRate);
+});
+
+$("#dpFerie").on('change', function(){
+	if($(this).val() == ""){
+		$("#addFerie").addClass('disabled');
+	} else {
+		$("#addFerie").removeClass('disabled');
+	}
+});
+
+refreshList();

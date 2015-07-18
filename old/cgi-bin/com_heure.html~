@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Le Coin Gourmand</title>
+</head>
+<body>
+<h1 style="text-align: center;"><strong>Le Coin Gourmand</strong></h1>
+
+<h2 style="font-style: italic; text-align: center;">Heure</h2>
+
+<form action="com_date_val.py">
+<p style="text-align: center;"><input name="heure" type="radio" value="07h" /> 07h<br />
+<input checked="checked" name="heure" type="radio" value="10h" /> 10h<br />
+<input name="heure" type="radio" value="14h" /> 14h<br />
+<input name="suivant" type="submit" value="Suivant" /></p>
+</form>
+
+<form action="com_start.py">
+<p style="text-align: center;"><input name="retour" type="submit" value="Retour" /></p>
+</form>
+</body>
+</html>

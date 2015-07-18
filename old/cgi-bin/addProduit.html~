@@ -1,0 +1,22 @@
+<DIV ALIGN="center">
+<H3>Entrez les informations du nouveau produit :</H3>
+<FORM ACTION = "addProduit.py">
+<table>
+	<tr>
+		<td>Nom : </td>
+		<td><INPUT NAME = "Nom" VALUE = %s></td>
+	</tr>
+	<tr>
+		<td>Categorie : </td>
+		<td><INPUT TYPE="number" NAME = "Categorie" VALUE = %s></td>
+	</tr>
+	<tr>
+		<td>Prix : </td>
+		<td><INPUT NAME = "Prix" VALUE = %s></td>
+	</tr>
+	<tr>
+		<td><INPUT TYPE = "submit" VALUE = "Ajouter"></td>
+	</tr>
+</table>
+</FORM>
+</DIV>
