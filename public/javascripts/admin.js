@@ -26,6 +26,18 @@ app.controller('CommandeController', function($scope, $http){
     $http.post("magasins").success(function(res){
         $scope.magasins = res;
     });
+    $scope.modify = function(toMod){
+        console.log(toMod)
+        $http.post("modify/commande", {
+            toModify: toMod
+        })
+    };
+    $scope.delete = function(toRem){
+        $http.post("remove/commande",{
+            toRemove: toRem
+        });
+    }
+    $scope.refresh();
 });
 
 app.controller('ClientController', function($scope, $http){
@@ -38,10 +50,22 @@ app.controller('ClientController', function($scope, $http){
             $scope.clients = res;
         });
     };
+    $scope.modify = function(toMod){
+        console.log(toMod)
+        $http.post("modify/client", {
+            toModify: toMod
+        })
+    };
+    $scope.delete = function(toRem){
+        $http.post("remove/client",{
+            toRemove: toRem
+        });
+    }
 });
 
 app.controller('ProduitController', function($scope, $http){
     $scope.data = {};
+    $scope.new = {};
     $scope.data.query = '';
     $scope.data.selectedCategories = {};
     $scope.getProduits = function(){
@@ -55,6 +79,23 @@ app.controller('ProduitController', function($scope, $http){
     $http.post("categories").success(function(res){
         $scope.categories = res;
     });
+    $scope.add = function(){
+        console.log($scope.new)
+        $http.post("newProduit", {
+            new: $scope.new
+        })
+    };
+    $scope.modify = function(toMod){
+        console.log(toMod)
+        $http.post("modify/produit", {
+            toModify: toMod
+        })
+    };
+    $scope.delete = function(toRem){
+        $http.post("remove/produit",{
+            toRemove: toRem
+        });
+    }
 });
 
 app.controller('CategoryController', function($scope, $http){
@@ -73,6 +114,17 @@ app.controller('CategoryController', function($scope, $http){
             nom: $scope.new
         });
     };
+    $scope.modify = function(toMod){
+        console.log(toMod)
+        $http.post("modify/category", {
+            toModify: toMod
+        })
+    };
+    $scope.delete = function(toRem){
+        $http.post("remove/category",{
+            toRemove: toRem
+        });
+    }
     $scope.getCategories();
 });
 
@@ -94,6 +146,17 @@ app.controller('MagasinController', function($scope, $http){
             adresse: $scope.new.adress
         });
     };
+    $scope.modify = function(toMod){
+        console.log(toMod)
+        $http.post("modify/magasin", {
+            toModify: toMod
+        })
+    };
+    $scope.delete = function(toRem){
+        $http.post("remove/magasin",{
+            toRemove: toRem
+        });
+    }
     $scope.getMagasins();
 });
 
@@ -101,6 +164,7 @@ app.controller('VendeuseController', function($scope, $http){
     $scope.new = {};
     $scope.data = {};
     $scope.data.query = '';
+    $scope.selectedMagasins = {};
     $scope.getVendeuses = function(){
         $http.post("vendeuses",{
             nom: $scope.data.query
@@ -109,10 +173,27 @@ app.controller('VendeuseController', function($scope, $http){
         });
     };
     $scope.add = function(){
+        console.log($scope.new);
         $http.post("newVendeuse", {
-            nom: $scope.new.name,
+            nom: $scope.new.Nom,
+            magasin: $scope.new.Magasin_idMagasin
         });
+        $scope.new = {};
     };
+    $scope.modify = function(toMod){
+        console.log(toMod)
+        $http.post("modify/vendeuse", {
+            toModify: toMod
+        })
+    };
+    $scope.delete = function(toRem){
+        $http.post("remove/vendeuse",{
+            toRemove: toRem
+        });
+    }
+    $http.post("magasins").success(function(res){
+        $scope.magasins = res;
+    });
     $scope.getVendeuses();
 });
 
@@ -132,9 +213,10 @@ app.controller('TerminalController', function($scope, $http){
         $scope.magasins = res;
     });
     $scope.add = function(){
-        if($scope.new.magasin) {
+        console.log("nouveau terminal : "+$scope.new.idMagasin);
+        if($scope.new.Magasin_idMagasin) {
             $http.post("newTerminal", {
-                magasin: $scope.new.magasin
+                Magasin_idMagasin: $scope.new.Magasin_idMagasin
             });
         }
         $scope.new.magasin = '';
@@ -179,4 +261,42 @@ app.controller('FerieController', function($scope, $http){
         });
     }
     $scope.getFeries();
+});
+
+
+app.controller('CustomController', function($scope, $http){
+    $scope.new = {};
+    $scope.getCustoms = function(){
+        $http.post("customs",{
+        }).success(function(res){
+            $scope.customs = res;
+        });
+        $http.post("categories",{
+            }).success(function(res){
+                $scope.categories = res;
+            }
+        )
+    };
+    $scope.add = function(){
+        if($scope.new) {
+            console.log($scope.new);
+            $http.post("newCustom",{
+                new: $scope.new
+            });
+        }
+        else{
+            console.log("Missing informaitons")
+        }
+    };
+    $scope.delete = function(toRem){
+        $http.post("remove/custom",{
+            toRemove: toRem
+        });
+    }
+    $scope.modify = function(toMod){
+        $http.post("modify/custom",{
+            toModify: toMod
+        });
+    }
+    $scope.getCustoms();
 });

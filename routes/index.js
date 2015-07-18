@@ -5,7 +5,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
   host     : '127.0.0.1',
   user     : 'root',
-  password : 'admin',
+  password : 'eu1Thi4iawie',
   database : 'cgdb',
   port     : '3306'
 });
@@ -89,6 +89,7 @@ router.post('/vendeuses', function(req, res){
         connection.query('SELECT * FROM Vendeuse', function(err, rows, fields) {
             if (err) throw err;
             res.send(rows);
+            console.log(rows)
         });
     } else {
         connection.query("SELECT * FROM Vendeuse WHERE Vendeuse.Nom LIKE '%"+req.body.nom+"%'", function(err, rows, fields) {
@@ -98,7 +99,7 @@ router.post('/vendeuses', function(req, res){
     }
 });
 
-router.post('/terminals', function(req, res){var query = "SELECT Terminal.idTerminal, Terminal.Actif, Magasin.Nom as magasin " +
+router.post('/terminals', function(req, res){var query = "SELECT Terminal.idTerminal, Terminal.Actif, Terminal.Magasin_idMagasin, Magasin.Nom as magasin " +
     "FROM Terminal "+
     "JOIN Magasin ON Terminal.Magasin_idMagasin = Magasin.idMagasin "+
     "WHERE (FALSE ";
@@ -130,8 +131,18 @@ router.post('/feries', function(req, res){
     });
 });
 
+router.post('/customs', function(req, res){
+    var query = "SELECT produitcustom.idProduitCustom, produitcustom.Nom, produitcustom.Prix, produitcustom.Categorie_idCategorie, produitcustom.display, Categorie.Nom as categorie"+
+        " FROM produitcustom JOIN Categorie ON produitcustom.Categorie_idCategorie = idCategorie;";
+
+    connection.query(query, function(err, rows, fields) {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
 router.post('/produits', function(req, res){
-  var query = 'SELECT Produit.idProduit, Produit.Nom, Produit.Prix, Categorie.Nom AS nomCategory, Categorie.idCategorie AS idCategory ' +
+  var query = 'SELECT Produit.idProduit, Produit.Nom, Produit.Prix, Produit.Categorie_idCategorie, Categorie.Nom AS nomCategory, Categorie.idCategorie AS idCategory ' +
       'FROM Produit JOIN Categorie ON Produit.Categorie_idCategorie=Categorie.idCategorie ' +
       "WHERE (FALSE ";
   for(var key in req.body.selectedCategories){
@@ -146,12 +157,21 @@ router.post('/produits', function(req, res){
 });
 
 router.post("/newCategory", function(req, res){
-  var query = "INSERT INTO Categorie(Nom) VALUES('"+req.body.nom+"');";
+    var query = "INSERT INTO Categorie(Nom) VALUES('"+req.body.nom+"');";
 
-  connection.query(query , function(err, rows, fields) {
-    if (err) throw err;
-    res.send(rows);
-  });
+    connection.query(query , function(err, rows, fields) {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
+router.post("/newProduit", function(req, res){
+    var query = "INSERT INTO Produit(Nom, Prix, Categorie_idCategorie) VALUES('"+req.body.new.Nom+"',"+req.body.new.Prix+","+req.body.new.Categorie_idCategorie+");";
+    console.log("add: "+req.body.new);
+    connection.query(query , function(err, rows, fields) {
+        if (err) throw err;
+        res.send(rows);
+    });
 });
 
 router.post("/newMagasin", function(req, res){
@@ -165,8 +185,8 @@ router.post("/newMagasin", function(req, res){
 
 router.post("/newVendeuse", function(req, res){
     //TODO : photo
-    var query = "INSERT INTO Vendeuse(Nom) VALUES('"+req.body.nom+"');";
-
+    var query = "INSERT INTO Vendeuse(Nom, Magasin_idMagasin) VALUES('"+req.body.nom+"',"+req.body.magasin+");";
+    console.log(query);
     connection.query(query , function(err, rows, fields) {
         if (err) throw err;
         res.send(rows);
@@ -174,7 +194,17 @@ router.post("/newVendeuse", function(req, res){
 });
 
 router.post("/newTerminal", function(req, res){
-    var query = "INSERT INTO Terminal(Terminal.Magasin_idMagasin, Terminal.Actif) VALUES("+req.body.magasin+",1);";
+    var query = "INSERT INTO Terminal(Terminal.Magasin_idMagasin, Terminal.Actif) VALUES("+req.body.idMagasin+",1);";
+    console.log(query);
+    connection.query(query , function(err, rows, fields) {
+        if (err) throw err;
+        res.send(rows);
+    });
+});
+
+
+router.post("/newCustom", function(req, res){
+    var query = "INSERT INTO produticustom(Nom, Prix, Categorie_idCategorie) VALUES("+req.body.new.nom+","+req.body.new.prix+","+req.body.new.categorie+");";
     connection.query(query , function(err, rows, fields) {
         if (err) throw err;
         res.send(rows);
@@ -193,12 +223,29 @@ router.post("/newFerie", function(req, res){
 });
 
 //Switch to remove anything from db
-router.post("/remove/:type/", function(req,res){
+/*
+Une autre manière de faire : diviser en plusieurs fichiers
+var remove = require("./remove");
+router.post("/remove/:type/", remove.remove);*/
+
+router.post("/remove/:type/", function(req, res){
     var rem = req.body.toRemove
     var query = "";
     console.log("Removing : ");
     console.log(rem);
     switch(req.params.type) {
+        case "category":
+            query = "UPDATE Categorie SET display = 0 WHERE idCategorie = '"+rem.idCategorie+"';";
+            break;
+        case "magasin":
+            query = "UPDATE Magasin SET display = 0 WHERE idMagasin = '"+rem.idMagasin+"';";
+            break;
+        case "custom":
+            query = "UPDATE produitcustom SET display = 0 WHERE idProduitCustom = '"+rem.idProduitCustom+"';";
+            break;
+        case "vendeuse":
+            query = "UPDATE vendeuse SET display = 0 WHERE idVendeuse = '"+rem.idVendeuse+"';";
+            break;
         case "terminal":
             query = "UPDATE Terminal SET Actif = 0 WHERE idTerminal = '"+rem.idTerminal+"';";
             break;
@@ -220,8 +267,26 @@ router.post("/modify/:type/", function(req,res){
     var query = "";
     var mod = req.body.toModify;
     switch(req.params.type) {
+        case "produit":
+            query = "UPDATE Client SET Nom = '"+mod.Nom+"', Prix = "+mod.Prix+", Categorie_idCategorie = "+mod.Categorie_idCategorie+" WHERE idProduit = '"+mod.idProduit+"';";
+            break;
+        case "client":
+            query = "UPDATE Produit SET Nom = '"+mod.Nom+"', Tel = "+mod.Tel+", Mail = "+mod.Mail+", TVA = "+mod.TVA+" WHERE idClient = '"+mod.idClient+"';";
+            break;
+        case "category":
+            query = "UPDATE Categorie SET Nom = '"+mod.Nom+"' WHERE idCategorie = '"+mod.idCategorie+"';";
+            break;
+        case "magasin":
+            query = "UPDATE Magasin SET Nom = '"+mod.Nom+"', Adresse = "+mod.Adresse+" WHERE idMagasin = '"+mod.idMagasin+"';";
+            break;
+        case "vendeuse":
+            query = "UPDATE vendeuse SET Nom = '"+mod.Nom+"', Magasin_idMagasin = "+mod.Magasin_idMagasin+" WHERE idVendeuse = '"+mod.idVendeuse+"';";
+            break;
+        case "custom":
+            query = "UPDATE produitcustom SET Nom = '"+mod.Nom+"', Prix = "+mod.Prix+", Categorie_idCategorie = "+mod.categorie+" WHERE idProduitCustom = '"+mod.idProduitCustom+"';";
+            break;
         case "terminal":
-            query = "UPDATE terminal SET Magasin_idMagasin = '"+mod.idMagasin+"' WHERE idTerminal = '"+mod.idTerminal+"';";
+            query = "UPDATE terminal SET Magasin_idMagasin = '"+mod.Magasin_idMagasin+"' WHERE idTerminal = '"+mod.idTerminal+"';";
             break;
         default:
             console.log("Supression d'un type inconnu : "+req.params.type);
