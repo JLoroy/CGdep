@@ -16,11 +16,4 @@ router.get('/', function(req, res, next) {
   res.render('admin', {});
 });
 
-router.get('/data', function(req, res){
-  connection.query('SELECT * FROM client', function(err, rows, fields) {
-    if (err) throw err;
-    res.send(rows);
-  });
-});
-
 module.exports = router;
