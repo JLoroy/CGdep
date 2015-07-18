@@ -139,10 +139,10 @@
                 <tbody>
                 <tr ng-repeat="client in clients">
                     <td>{{client.idClient}}</td>
-                    <td>{{client.Nom}}</td>
-                    <td>{{client.Tel}}</td>
-                    <td>{{client.Mail}}</td>
-                    <td>{{client.TVA}}</td>
+                    <td><input type="text" ng-model="client.Nom"></td>
+                    <td><input type="text" ng-model="client.Tel"></td>
+                    <td><input type="text" ng-model="client.Mail"></td>
+                    <td><input type="text" ng-model="client.TVA"></td>
                     <td>{{client.Inscription | date:'EEEE dd MMMM yyyy'}}</td>
                     <td><button class="btn btn-primary" ng-click="modify(client);getClients();">Modifier</button></td>
                     <td><button class="btn btn-danger" ng-click="delete(client);getClients();">Supprimer</button></td>
@@ -182,6 +182,7 @@
                 </thead>
                 <tbody>
                 <tr>
+                    <td>Nouveau</td>
                     <td><input type="text" ng-model="new.Nom"></td>
                     <td><input type="text" ng-model="new.Prix"></td>
                     <td><select ng-model="new.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories" ng-if="category.display = 1"></select></td>
