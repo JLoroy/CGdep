@@ -1,0 +1,178 @@
+#!/usr/bin/env python
+
+import cgi
+import cgitb
+import MySQLdb as mysqldb
+import session, time, datetime
+from utils import fieldStorageToDict, idgen
+import time
+import string
+import sys, os
+sys.path.append(os.environ["PATH_TRANSLATED"])
+
+cgitb.enable()
+params = fieldStorageToDict(cgi.FieldStorage())
+sess = session.Session(expires=365*24*60*60, cookie_path='/')
+
+try:
+	conn = mysqldb.connect('localhost', 'root', 'CG14paukSQL', 'CGdb')
+except MySQLdb.Error, e:
+	print "Error %d: %s" % (e.args[0], e.args[1])
+	sys.exit(1)
+db = conn.cursor()
+
+print sess.cookie
+print "Content-Type: text/html\n"
+print """<label class="center-block">"""
+
+if params.has_key('clientNom') and params.has_key('date') and params.has_key('total') and params.has_key('pnp') and params.has_key('produit') and params.has_key('quantite')  and params.has_key('commProduit') and params.has_key('vendeuse') :
+	for K,V in params.iteritems() :
+		params[K] = V.replace("'", "\\'")
+	
+	if not params.has_key('clientMail') :
+		params['clientMail'] = ""
+	else :
+		params['clientMail'] = params['clientMail'].strip()
+	if not params.has_key('clientTel') :
+		params['clientTel'] = ""
+	else :
+		params['clientTel'] = params['clientTel'].strip()
+	if not params.has_key('clientTVA') :
+		params['clientTVA'] = ""
+	else :
+		params['clientTVA'] = params['clientTVA'].strip()
+	#CLIENT
+	db.execute("""
+	SELECT Client.idClient, Client.Nom, Client.Tel, Client.Mail, Client.TVA FROM Client WHERE Client.Nom='%s'
+	""" % (params['clientNom']))
+	client = db.fetchone()
+	if client :
+		#CHECK UPDATE OR NOT
+		if not (client[3] == params['clientMail'] and client[2] == params['clientTel'] and client[4]== params['clientTVA'] ):
+			#UPDATE FOR MAIL AND TEL AND TVA
+			db.execute("""
+			UPDATE Client SET Client.Mail='%s', Client.TVA='%s', Client.Tel='%s' WHERE Client.idClient=%s
+			""" % (params['clientMail'], params['clientTVA'], params['clientTel'], client[0]))
+			conn.commit()
+	else :
+		#CREATE CLIENT
+		client = (None, params['clientNom'], params['clientTel'], params['clientMail'], params['clientTVA'])
+		db.execute("""
+		INSERT INTO Client (Client.Nom, Client.Tel, Client.Inscription, Client.Mail, Client.TVA) 
+		VALUES ('%s', '%s', '%s', '%s', '%s')
+		""" % (client[1], client[2], time.strftime("%Y-%m-%d %H:%M:%S"), client[3], client[4]))
+		client = (db.lastrowid, client[1], client[2], client[3], client[4])
+		conn.commit()
+
+	#CHECK PROD ET QUANT
+	produit = filter(None, params['produit'].split(";"))
+	quantite = filter(None, params['quantite'].split(";"))
+	commProduit = filter(None, params['commProduit'].split(";"))
+	custom = filter(None, params['custom'].split(";"))
+	categCustom = filter(None, params['categCustom'].split(";"))
+	nomCustom = filter(None, params['nom'].split(";"))
+	prixCustom = filter(None, params['prix'].split(";"))
+	if not len(produit) == len(quantite) :
+		print "Erreur : Nombre de produit et quantit&eacute diff&eacuterent"
+	else :
+
+		#COMMANDE
+		#TODO : secu total
+		idCommande = 0
+		if params.has_key('remarqueCommande') :
+			db.execute("""
+			INSERT INTO Commande (Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.Client_idClient, Commande.Vendeuse_idVendeuse, Commande.Terminal_idTerminal) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');
+			""" % (time.strftime("%Y-%m-%d %H:%M:%S"), params['date'], params['total'], params['pnp'], params['remarqueCommande'], client[0], params['vendeuse'], sess.data.get('idTerminal')))
+			idCommande = db.lastrowid
+			conn.commit()
+
+			mots = filter(None, params['remarqueCommande'].replace('\n', ' ').replace('\t', ' ').replace('\r', ' ').replace('.', ' ').replace(',', ' ').replace(';', ' ').replace('!', ' ').replace('?', ' ').replace(':', ' ').split(' '))
+			for mot in mots :
+				mot = mot.strip(' \n\t\r')
+				db.execute("""
+				INSERT INTO MotCustom (Mot)
+				SELECT * FROM (SELECT '%s') AS tmp
+				WHERE NOT EXISTS (
+					SELECT Mot FROM MotCustom WHERE MotCustom.Mot = '%s'
+				) LIMIT 1;
+				""" % (mot, mot))
+			conn.commit()
+		else :
+			db.execute("""
+			INSERT INTO Commande (Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Client_idClient, Commande.Vendeuse_idVendeuse, Commande.Terminal_idTerminal) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');
+			""" % (time.strftime("%Y-%m-%d %H:%M:%S"), params['date'], params['total'], params['pnp'], client[0], params['vendeuse'], sess.data.get('idTerminal')))
+
+			idCommande = db.lastrowid
+		conn.commit()
+
+		if params.has_key('modify') :
+			db.execute("""
+			DELETE FROM Commande WHERE Commande.idCommande='%s'
+			""" % params['modify'])
+			conn.commit()
+
+		#PRODUIT COMMANDE
+		for i in range(len(produit)) :
+			if custom[i] == "0" :
+				db.execute("""
+				INSERT INTO ProduitCommande (Quantite, Details, Commande_idCommande, Produit_idProduit) 
+				VALUES ('%s', '%s', '%s', '%s');
+				""" % (quantite[i], '' if commProduit[i] == "None" else commProduit[i], idCommande, produit[i]))
+				conn.commit()
+
+			#PRODUIT CUSTOM --> AJOUT DANS LA TABLE CUSTOM + AUTOCOMPLETION
+			else :
+				db.execute("""
+				SELECT Categorie.idCategorie FROM Categorie WHERE Categorie.Nom='%s'
+				""" % categCustom[i])
+				idCategCustom = db.fetchone()[0]
+				db.execute("""
+				INSERT INTO ProduitCustom (Nom, Prix, Categorie_idCategorie)
+				VALUES ('%s', '%s', '%s');
+				""" % (nomCustom[i], prixCustom[i], idCategCustom))
+				idProduitCustom = db.lastrowid
+				conn.commit()
+				db.execute("""
+				INSERT INTO ProduitCommande (Quantite, Details, Commande_idCommande, 
+				ProduitCustom_idProduitCustom) 
+				VALUES ('%s', '%s', '%s', '%s');
+				""" % (quantite[i], '' if commProduit[i] == "None" else commProduit[i], idCommande, idProduitCustom))
+				conn.commit()
+				
+				mots = filter(None, nomCustom[i].replace('\n', ' ').replace('\t', ' ').replace('\r', ' ').replace('.', ' ').replace(',', ' ').replace(';', ' ').replace('!', ' ').replace('?', ' ').replace(':', ' ').split(' '))
+				for mot in mots :
+					mot = mot.strip(' \n\t\r')
+					db.execute("""
+					INSERT INTO MotCustom (Mot)
+					SELECT * FROM (SELECT '%s') AS tmp
+					WHERE NOT EXISTS (
+						SELECT Mot FROM MotCustom WHERE MotCustom.Mot = '%s'
+					) LIMIT 1;
+					""" % (mot, mot))
+				conn.commit()
+
+		print "Commande enregistr&eacutee avec succ&egraves !"
+
+
+
+
+else :
+	print "Erreur : param&eagravetre manquant"
+
+print "</label>"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

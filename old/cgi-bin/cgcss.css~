@@ -1,0 +1,24 @@
+div.tab-content {
+padding: 15px;
+}
+
+.twitter-typeahead{
+	width: 97%;
+}
+.tt-dropdown-menu{
+	width: 100%;
+}
+body .vcenter{
+	display: inline-block;
+	vertical-align: middle !important;
+	float: none;
+	height: 10em;
+}
+
+.noHover:hover {
+	background-color: #428bca;
+}
+
+.div-absolu {
+	padding: -10px !important;
+}

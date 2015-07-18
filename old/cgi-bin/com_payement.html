@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Le Coin Gourmand</title>
+</head>
+<body>
+<h1 style="text-align: center;"><strong>Le Coin Gourmand</strong></h1>
+
+<h2 style="font-style: italic; text-align: center;">Payement</h2>
+
+<form action="com_val.py">
+<p style="text-align: center;">Commande:</p>
+
+<table align="center" border="0" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>Produit 1</td>
+			<td>Quantit&eacute; 1</td>
+			<td>Prix</td>
+			<td>Prix*Quantit&eacute;</td>
+		</tr>
+		<tr>
+			<td>Prod2</td>
+			<td>Quant2</td>
+			<td>Prix2</td>
+			<td>Prix*Quantit&eacute;</td>
+		</tr>
+		<tr>
+			<td>Prod3</td>
+			<td>Quant3</td>
+			<td>Prix3</td>
+			<td>Prix*Quantit&eacute;</td>
+		</tr>
+		<tr>
+			<td colspan="3">total :&nbsp;</td>
+			<td>[Total]</td>
+		</tr>
+	</tbody>
+</table>
+
+<p style="text-align: center;">Payement :&nbsp;<br />
+<input name="valider" type="submit" value="A la commande" /><input name="valider" type="submit" value="A la reception" /></p>
+</form>
+
+<form action="com_produit.py">
+<p style="text-align: center;"><input name="retour" type="submit" value="Retour" /></p>
+</form>
+</body>
+</html>

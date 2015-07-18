@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+	<title>Le Coin Gourmand</title>
+</head>
+<body>
+<h1 style="text-align: center;"><strong>Le Coin Gourmand</strong></h1>
+
+<h2 style="font-style: italic; text-align: center;">Selection du Client</h2>
+<form action="com_client_val.py">
+<p style="text-align: center;">Client :&nbsp;<input name="client" type="text"  value="%(client)s" autocomplete="on"/><br/> Num&eacutero : <input name="clientTel" type="tel" value="%(clientTel)s" autocomplete="on"/><br/> Mail : <input name="clientMail" type="email" value="%(clientMail)s" /></p>
+
+<p style="text-align: center;"><input name="suivant" type="submit" value="Suivant" /></p>
+</form>
+<p style="text-align: center;">%(error)s</p>
+<form action="com_start.py">
+<p style="text-align: center;"><input name="retour" type="submit" value="Retour" /></p>
+</form>
+
+</body>
+</html>

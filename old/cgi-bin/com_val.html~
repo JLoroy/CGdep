@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Le Coin Gourmand</title>
+</head>
+<body>
+<h1 style="text-align: center;"><strong>Le Coin Gourmand</strong></h1>
+
+<h2 style="font-style: italic; text-align: center;">Recapitulatif</h2>
+
+<form action="com_start.py">
+<p style="text-align: center">Client : %(client)s<br />
+Date : %(date)s &agrave; %(heure)s<br />
+Payement : %(payement)s<br/>
+
+

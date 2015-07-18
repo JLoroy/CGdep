@@ -1,0 +1,360 @@
+#!/usr/bin/env python
+# -*- coding : utf-8 -*-
+
+import cgi
+import cgitb
+import MySQLdb as mysqldb
+import session, time
+from utils import fieldStorageToDict
+import sys, os
+sys.path.append(os.environ["PATH_TRANSLATED"])
+
+cgitb.enable()
+sess = session.Session(expires=24*60*60, cookie_path='/')
+params = fieldStorageToDict(cgi.FieldStorage())
+
+print sess.cookie
+print "Content-Type: text/html\n"
+
+
+
+if sess.data.get('date') == None or sess.data.get('heure') == None or sess.data.get('client') == None:
+    print open("/var/www/cgi-bin/com_error.html", "r").read() % "Choix de la date et de l\'heure"
+else :
+    try:
+        conn = mysqldb.connect('localhost', 'root', 'CG14paukSQL', 'CGdb')
+    except MySQLdb.Error, e:
+        print "Error %d: %s" % (e.args[0], e.args[1])
+        sys.exit(1)
+    db = conn.cursor()
+    
+
+    if not params.has_key('tabState') :
+        params['tabState']= "0"
+
+    print """
+<!doctype html>
+<html>
+<head>
+    <title>Selection de produits</title>
+    <style>.TabCommon {FONT: 18px Verdana; COLOR: white; PADDING: 5px; FONT-WEIGHT: bold; TEXT-ALIGN: center; HEIGHT: 30px; WIDTH: 5000px;}
+.TabContent {PADDING: 5px;}
+.TabContentBottom {PADDING: 10px; BORDER-BOTTOM: 2px outset #99ccff;}
+.TabOff {CURSOR: hand; BACKGROUND-COLOR: brown; BORDER-LEFT: 1px solid #BBBBBB;}
+.TabOn {CURSOR: default; BORDER-TOP: 2px outset #D1D1D1; COLOR: black;}
+.TabBorderBottom{BORDER-BOTTOM: 2px inset #D1D1D1;}
+.TabActiveBorderLeftRight{BORDER-RIGHT: 2px outset #D1D1D1; BORDER-LEFT: 2px outset #D1D1D1;}
+.TabActiveBackground {BACKGROUND-COLOR: White;}
+.supprClass { 
+    background-image: url(http://www.bobspixels.com/kaibab.org/icon1.gif);
+    background-position:  0px 0px;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+    border: 0px;
+    background-color: none;
+color: rgba(0, 0, 255, 0.0);
+    cursor: pointer;
+    outline: 0;
+}
+.supprClass:hover{ 
+      background-position:  0px 0px;
+}
+
+.supprClass:active{
+      background-position:  0px 0px;
+}
+#blanket {
+background-color:#111;
+opacity: 0.65;
+filter:alpha(opacity=65);
+position:absolute;
+z-index: 9001;
+top:0px;
+left:0px;
+width:100%;
+}
+#popUpDiv {
+position:absolute;
+background-color:#eeeeee;
+width:300px;
+height:300px;
+z-index: 9002;
+}
+    </style>
+    <script>
+function TabClick( nTab )
+    {
+    document.mainForm.tabState.value = nTab;
+
+    for (i = 0; i < Content.length; i++)
+        {tabs[i].className = "TabBorderBottom TabCommon TabOff";
+        Content[i].style.display = "none";}
+        Content[nTab].style.display = "block";
+        tabs[nTab].className = "TabCommon TabOn TabActiveBackground TabActiveBorderLeftRight";
+    }
+
+
+function toggle(div_id) {
+    var el = document.getElementById(div_id);
+    if ( el.style.display == 'none' ) { el.style.display = 'block';}
+    else {el.style.display = 'none';}
+}
+function changeForm(){
+    document.mainForm.action = "com_payement.py";
+    document.mainForm.submit();
+}
+
+function blanket_size(popUpDivVar) {
+    if (typeof window.innerWidth != 'undefined') {
+        viewportheight = window.innerHeight;
+    } else {
+        viewportheight = document.documentElement.clientHeight;
+    }
+    if ((viewportheight > document.body.parentNode.scrollHeight) && (viewportheight > document.body.parentNode.clientHeight)) {
+        blanket_height = viewportheight;
+    } else {
+        if (document.body.parentNode.clientHeight > document.body.parentNode.scrollHeight) {
+            blanket_height = document.body.parentNode.clientHeight;
+        } else {
+            blanket_height = document.body.parentNode.scrollHeight;
+        }
+    }
+    var blanket = document.getElementById('blanket');
+    blanket.style.height = blanket_height + 'px';
+    var popUpDiv = document.getElementById(popUpDivVar);
+    popUpDiv_height=blanket_height/2-150;//150 is half popup's height
+    popUpDiv.style.top = popUpDiv_height + 'px';
+}
+function window_pos(popUpDivVar) {
+    if (typeof window.innerWidth != 'undefined') {
+        viewportwidth = window.innerHeight;
+    } else {
+        viewportwidth = document.documentElement.clientHeight;
+    }
+    if ((viewportwidth > document.body.parentNode.scrollWidth) && (viewportwidth > document.body.parentNode.clientWidth)) {
+        window_width = viewportwidth;
+    } else {
+        if (document.body.parentNode.clientWidth > document.body.parentNode.scrollWidth) {
+            window_width = document.body.parentNode.clientWidth;
+        } else {
+            window_width = document.body.parentNode.scrollWidth;
+        }
+    }
+    var popUpDiv = document.getElementById(popUpDivVar);
+    window_width=window_width/2-150;//150 is half popup's width
+    popUpDiv.style.left = window_width + 'px';
+}
+function popup(windowname) {
+    var valeur = event.srcElement.value;
+    if (valeur) {
+     document.mainForm.state.value = valeur;
+    }
+
+
+
+    blanket_size(windowname);
+    window_pos(windowname);
+    toggle('blanket');
+    toggle(windowname);     
+}
+
+
+</script>
+</head>
+<body onload="TabClick(""" + params['tabState'] + """);" style:"position:relative">
+
+
+
+<div>
+<h3 align="center">Commande des produits</h3>
+
+<div>
+
+<form name="mainForm" action="com_produit.py">
+
+<div id="blanket" style="display:none;"></div>
+
+<div align="center" id="popUpDiv" style="display:none;"><input maxlength="2" name="amount" value="1" style="width: 30px;" type="number"  />
+<input href="#" onclick="popup('popUpDiV')" type="submit" value"ok" name"popupVal">
+</div>
+
+
+<div>
+<table align="center" cellpadding="0" cellspacing="0" style="width: 1500px;float: right">
+
+    <tbody>
+        <tr>
+    """
+
+    ongletHTML = """
+            <td class="TabBorderBottom TabCommon TabOff" id="tabs" onclick="TabClick(%s);"><nobr>%s</nobr></td>
+    """
+    
+
+    db.execute('''
+    SELECT * FROM Categorie;
+    ''')
+
+    allCateg = sorted(db.fetchall(), key=lambda tup: tup[0])
+    
+    for i in range(len(allCateg)) :
+        print ongletHTML % (i, allCateg[i][1])
+
+    print """
+            <td class="TabBorderBottom" style="width: 50px;">&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="TabContent TabActiveBackground TabActiveBorderLeftRight TabContentBottom" colspan="5">
+
+    """
+
+    prodButtonHTML = """
+    <td style="width: 160px; text-align: center;"><input href="foo" onclick="popup('popUpDiv')" name="product" type="button" value="%s" /></td>
+    """
+
+    prodict = dict()
+
+    for categ in allCateg :
+        db.execute('''
+        SELECT * FROM Produit WHERE Categorie_idCategorie = %s;
+        ''' % categ[0])
+
+        print """
+        <div id="Content">
+            <table border="1" cellpadding="0" cellspacing="0" style="width: 75%">
+                <tbody>
+        """
+
+        prodList = sorted(db.fetchall(), key=lambda tup: tup[0])
+
+        prodict.update(dict(zip((item[1] for item in prodList), (item[2] for item in prodList))))
+
+        i = 0
+        
+        while i < len(prodList) :
+
+            print """
+            <tr>
+            """
+
+            for j in range(6) :
+                if i < len(prodList) :
+                    print prodButtonHTML % (prodList[i][1])
+                else :
+                    print prodButtonHTML % ("""None" style="display: none""")
+                i = i+1
+                
+            print """
+            </tr>
+            """         
+        print """
+        </tbody>
+        </table>
+        <br />
+        </div>
+        """
+
+    print """
+    </td>
+    </tr>
+    </tbody>
+    </table>
+	<input type="hidden" id="state" name="state"/>
+	<input type="hidden" id="tabState" name="tabState"/>
+    
+    </div>
+
+    <div style="width = 30%; float: left;">
+    <p style=" text-align: center">Produits command&eacute;s :&nbsp;</p>
+    <table align="center" border="1" cellpadding="1" cellspacing="1" style="width: 400px;">
+    <tbody>
+    """
+
+    #Bug protection
+    if sess.data.get('commande') == None :
+        sess.data['commande'] = ''
+    
+    #Recupere l'ancienne liste de produit de la session
+    prodChoose = filter(None, sess.data.get('commande').split(";"))
+    amountChoose = filter(None, sess.data.get('amount').split(";"))
+
+    #Actualise la liste des nombres de chaque produit
+    i = 0
+    while params.has_key('amount'+str(i)) :
+        #Error recovery : refresh after suppression
+        if i >= len(amountChoose) and params.has_key('suppr') :
+            amountChoose = filter(None, sess.data.get('amount').split(";"))
+            break
+        amountChoose[i] = params['amount'+str(i)]
+        i = i+1
+
+    #Check si un bouton de produit a ete clique, si oui, ajoute le produit et la valeur aux structures de donnee
+    if params.has_key('state') :
+        prodChoose.append(params['state'])
+        amountChoose.append(params['amount'])
+    #Check si un bouton supprimer a ete clique et update les listes
+    elif params.has_key('suppr') :
+        indTmp = int(params['suppr'])
+        if not indTmp >= len(prodChoose) :
+            prodChoose.pop(indTmp)
+            amountChoose.pop(indTmp)
+
+    #Error recovery
+    if not len(prodChoose) == len(amountChoose) :
+        print """
+        <tr><td colspan="5" style="font-weight:bold color:red">Une erreur est survenue. La derni&egrave;re sauvegarde de la commande a &eacute;t&eacute; charg&eacute;e. Si l\'erreur persiste, veuillez en faire part &agrave; un administrateur.</td></tr>
+        """
+        prodChoose = filter(None, sess.data.get('commande').split(";"))
+        amountChoose = filter(None, sess.data.get('amount').split(";"))
+    else :
+        #Reconstruction de la session
+        sess.data['commande'] = ''
+        sess.data['amount'] = ''
+        for i in range(len(prodChoose)) :
+            sess.data['commande'] = sess.data.get('commande') + ';' + prodChoose[i]
+            sess.data['amount'] = sess.data.get('amount') + ';' + amountChoose[i]
+
+    #Generation liste commande HTML
+    prodHtml = """
+    <tr>
+    <td style="width:40%%">%s</td>
+    <td align="right" style="width:15%%">%s</td>
+    <td align="right" style="width:15%%">%s</td>
+    <td style="width:20%%"><input name="amount%s" type="number" value="%s" style="width:50%%"/></td>
+    <td style="width:10%%"><input class="supprClass" name="suppr" type="submit" value="%s" /></td>
+    </tr>
+    """
+    total = 0.0;
+    for i in range(len(prodChoose)) :
+        print prodHtml % (prodChoose[i], prodict[prodChoose[i]] , str(float(amountChoose[i])*float(prodict[prodChoose[i]])) , str(i), amountChoose[i], str(i))
+        total = total + float(amountChoose[i])*float(prodict[prodChoose[i]])
+
+    print """
+    </tbody>
+    <tbody>
+    <tr>
+    <td colspan="2" style="font-weight:bold">total :</td> 
+    <td align="right" style="font-weight:bold">
+""" + str(total) + """
+    </td>
+    <td colspan="2" style="font-weight:bold">
+        <center><input name="ceseratout" type="button" style="font-weight:bold" onClick="changeForm()" value="Ce sera tout ?" /></center>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+    </div>
+    </form>
+    </div>
+    <div style="position:absolute; bottom:0">
+    cookie : 
+    """
+    print sess.cookie
+    print "\ndata : "
+    print sess.data
+    print """
+    </div>
+    </body>
+    </html>
+    """

@@ -1,0 +1,243 @@
+Content-Type: text/html\n
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="/jquery.js"></script>
+    <script src="/bootstrap/js/bootstrap.js"></script>
+    <script src="/bootstrap/js/bootstrap-datepicker.js"></script>
+    <script src="/bootstrap/js/typeahead.js"></script>
+    <script src="/bootstrap/js/handlebars.js"></script>
+    <script src="/mlkeyboard/jquery.ml-keyboard.js"></script>
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="/bootstrap/css/datepicker.css" rel="stylesheet" />
+    <link href="/bootstrap/css/typeahead.css" rel="stylesheet" />
+    <link href="/mlkeyboard/jquery.ml-keyboard.css" rel="stylesheet" />
+    <link href="/cgcss.css" rel="stylesheet" />
+    <title>Panneau d'administration</title>
+  </head>
+  <body>
+    <!-- Nav tabs -->
+    <ul id="mainTab" class="nav nav-tabs" role="tablist">
+      <li data-target="start" class="active"><a href="#start" role="tab" data-toggle="tab">Commander</a></li>
+      <li data-target="client"><a href="#client" role="tab" data-toggle="tab">Client</a></li>
+      <li data-target="date" class="disabled"><a href="#date" role="tab" data-toggle="tab">Date et heure</a></li>
+      <li data-target="produit" class="disabled"><a href="#produit" role="tab" data-toggle="tab">Produits</a></li>
+      <li data-target="payement" class="disabled"><a href="#payement" role="tab" data-toggle="tab">Payement</a></li>
+      <li data-target="recapitulatif" class="disabled"><a href="#recapitulatif" role="tab" data-toggle="tab">Recapitulatif</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="start">
+        <div>
+          <button type="button" class="btn btn-primary btn-lg center-block" style="height:30%" id="startBtn">Commander !</button>
+        </div>
+      </div>
+      <div class="tab-pane" id="client">
+        <form id="clientForm" role="form" class="form-horizontal">
+          <div class="form-group">
+            <label for="clientNom" class="col-md-2 control-label">Nom</label>
+            <div class="col-md-6">
+              <input id="clientNom" type="text" class="typeahead form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="clientTel" class="col-md-2 control-label">T&eacutel&eacutephone</label>
+            <div class="col-md-6">
+              <input id="clientTel" type="text" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="clientMail" class="col-md-2 control-label">Mail</label>
+            <div class="col-md-6">
+              <input id="clientMail" type="text" class="form-control">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="tab-pane" id="date">
+        <form id="clientForm" role="form" class="form-horizontal">
+          <div class="form-group">
+            <label for="dateLivraison" class="col-md-2 control-label">Date</label>
+            <div class="input-group col-md-6">
+              <input id="dateLivraison" type="text" placeholder="Entrez une date" class="form-control">
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-remove"></span>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="heureLivraison" class="col-md-2 control-label">Heure</label>
+            <div class="input-group col-md-6">
+              <select class="form-control" id="heureLivraison">
+                <option selected>07:00:00</option>
+                <option>10:00:00</option>
+                <option>14:00:00</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="tab-pane" id="produit">
+        <div class="col-md-4" style="border-right: 1px solid gray;">
+          <form role="form">
+            <div class="form-group">
+              <label for="listProduit" class="control-label">Produits</label>
+              <ul id="listProduit" class="list-group">
+                
+              </ul>
+            </div>
+            <div class="form-group">
+              <label for="totalProduit" class="control-label">Total</label>
+              <input id="prix" type="text" class="form-control prixTot" value="0 EUR" disabled>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-8" style="border-left: 1px solid gray; margin-left: -1px;">
+          <ul class="nav nav-pills" role="tablist">
+            %(categorie)s
+          </ul>
+          <!-- Tab panes -->
+          <div class="tab-content" id="produitBtnDiv">
+            %(produit)s
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="payement">
+        <form id="clientForm" role="form" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-md-2 control-label">Prix total</label>
+            <div class="col-md-6">
+              <input id="prix2" type="text" class="form-control prixTot" value="0 EUR" disabled>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+              <button type="" id="payeCommande" class="btn btn-primary">Pay&eacute &agrave la commande</button>
+              <button type="" id="payeReception" class="btn btn-primary">Pay&eacute &agrave la r&eacuteception</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="tab-pane" id="recapitulatif">
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="col-md-2 control-label">Nom</label>
+            <div class="col-md-6">
+              <p id="recapNom" class="form-control-static"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">T&eacutel&eacutephone</label>
+            <div class="col-md-6">
+              <p id="recapTel" class="form-control-static"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Mail</label>
+            <div class="col-md-6">
+              <p id="recapMail" class="form-control-static"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Date</label>
+            <div class="col-md-6">
+              <p id="recapDate" class="form-control-static"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Heure</label>
+            <div class="col-md-6">
+              <p id="recapHeure" class="form-control-static"></p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Produits</label>
+            <div class="col-md-6">
+              <table class="table form-control-static">
+                <thead>
+                  <th>Nom</th>
+                  <th>Prix unitaire</th>
+                  <th>Quantit&eacute</th>
+                  <th>Total</th>
+                </thead>
+                <tbody id="recapProduit">
+                
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Total</label>
+            <div class="col-md-6">
+              <input id="recapTotal" type="text" class="form-control prixTot" value="" disabled>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-md-2 control-label">Payement</label>
+            <div class="col-md-6">
+              <p id="recapPayement" class="form-control-static"></p>
+            </div>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+
+    <div class="navbar navbar-fixed-bottom">
+      <div class="col-md-2 col-md-offset-1">
+        <button type="button" class="btn btn-danger btn-lg btn-block disabled" id="retour">Retour</button>
+      </div>
+      <div class="col-md-2 col-md-offset-6">
+        <button type="button" class="btn btn-success btn-lg btn-block" id="suivant">Suivant</button>
+      </div>
+    </div>
+
+    <div class="modal fade" id="popupResult">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <p id="popupcontent"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('#dateLivraison').datepicker({
+          format: "yyyy-mm-dd",
+          clearBtn: true,
+          autoclose: true
+        });
+        $('#clientNom, #clientTel, #clientMail, .keyboard').mlKeyboard({
+        });
+      });
+    </script>
+    <script id="produitEntry" type="text/x-handlebars-template">
+      <li class="list-group-item keyboardlauncher" data-idProduit="{{produitID}}">
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label class="control-label col-md-7">{{produitNom}}</label>
+            <div class="input-group col-md-5">
+              <span class="input-group-addon glyphicon glyphicon-minus"></span>
+              <input type="text" class="form-control keyboard" value="1" data-nom="{{produitNom}}" data-prix="{{produitPrix}}" data-idProduit="{{produitID}}">
+              <span class="input-group-addon glyphicon glyphicon-plus"></span>
+              <span class="input-group-addon glyphicon glyphicon-remove" data-idProduit="{{produitID}}"></span>
+            </div>
+          </div>
+        </form>
+      </li>
+    </script>
+    <script id="produitEntryRecap" type="text/x-handlebars-template">
+      <tr>
+        <td>{{produitNom}}</td><td>{{produitPrix}}</td><td>1</td><td>{{produitPrix}}</td>
+      </tr>
+    </script>
+    <script src="/commande_main.js"></script>
+  </body>
+</html>
+"""

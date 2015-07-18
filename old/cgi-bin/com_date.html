@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css" rel="stylesheet" /><script src="//code.jquery.com/jquery-1.10.2.js"></script><script src="//code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+	<link href="/resources/demos/style.css" rel="stylesheet" /><script>
+  $(function() {
+    $( "#datepicker" ).datepicker();
+  });
+  </script>
+	<title>Le Coin Gourmand</title>
+</head>
+<body>
+<h1 style="text-align: center;"><strong>Le Coin Gourmand</strong></h1>
+
+<h2 style="font-style: italic; text-align: center;">Selection de la date</h2>
+
+<form action="com_heure.py">
+<p style="text-align: center;">Date: <input id="datepicker" name="date" type="text" value="%(defaultDate)s"/><br/><input name="suivant" type="submit" value="Valider" style="width:1500px; height:300px color:red; font-size:300px; font-weight:bold"/></p>
+</form>
+
+<p style="text-align: center;">%(error)s</p>
+<form action="com_start.py">
+<p style="text-align: center;"><input name="retour" type="submit" value="Retour" /></p>
+</form>
+</body>
+</html>
