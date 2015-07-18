@@ -234,8 +234,14 @@ router.post("/remove/:type/", function(req, res){
     console.log("Removing : ");
     console.log(rem);
     switch(req.params.type) {
+        case "client":
+            query = "UPDATE Client SET display = 0 WHERE idClient = '"+rem.idClient+"';";
+            break;
         case "category":
             query = "UPDATE Categorie SET display = 0 WHERE idCategorie = '"+rem.idCategorie+"';";
+            break;
+        case "produit":
+            query = "UPDATE Produit SET display = 0 WHERE idProduit = '"+rem.idProduit+"';";
             break;
         case "magasin":
             query = "UPDATE Magasin SET display = 0 WHERE idMagasin = '"+rem.idMagasin+"';";
@@ -268,10 +274,10 @@ router.post("/modify/:type/", function(req,res){
     var mod = req.body.toModify;
     switch(req.params.type) {
         case "produit":
-            query = "UPDATE Client SET Nom = '"+mod.Nom+"', Prix = "+mod.Prix+", Categorie_idCategorie = "+mod.Categorie_idCategorie+" WHERE idProduit = '"+mod.idProduit+"';";
+            query = "UPDATE Produit SET Nom = '"+mod.Nom+"', Prix = "+mod.Prix+", Categorie_idCategorie = "+mod.Categorie_idCategorie+" WHERE idProduit = '"+mod.idProduit+"';";
             break;
         case "client":
-            query = "UPDATE Produit SET Nom = '"+mod.Nom+"', Tel = "+mod.Tel+", Mail = "+mod.Mail+", TVA = "+mod.TVA+" WHERE idClient = '"+mod.idClient+"';";
+            query = "UPDATE Client SET Nom = '"+mod.Nom+"', Tel = "+mod.Tel+", Mail = "+mod.Mail+", TVA = "+mod.TVA+" WHERE idClient = '"+mod.idClient+"';";
             break;
         case "category":
             query = "UPDATE Categorie SET Nom = '"+mod.Nom+"' WHERE idCategorie = '"+mod.idCategorie+"';";
