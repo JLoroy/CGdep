@@ -303,4 +303,16 @@ router.post("/modify/:type/", function(req,res){
         res.send(rows);
     });
 });
+
+router.post('/newsession', function(req, res){
+    sess = req.session;
+    sess.data = req.body.data;
+});
+
+router.post('/getsession', function(req, res){
+    sess = req.session;
+
+    if(sess.data) res = sess.data;
+});
+
 module.exports = router;
