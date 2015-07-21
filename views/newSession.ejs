@@ -9,31 +9,30 @@
     <link href="/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link href="/bootstrap/css/datepicker.css" rel="stylesheet" />
     <link href="/bootstrap/css/typeahead.css" rel="stylesheet" />
-    <link href="/cgcss.css" rel="stylesheet" />
+    <link href="/stylesheets/newSession.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
     <script src="javascripts/newSession.js"></script>
     <title>Nouvelle Session</title>
 </head>
 <body ng-app="newSession">
-    <div class="modal fade" ng-controller="newSessionController">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Nouvelle session</h4>
-                </div>
-                <div class="modal-body">
-                    <ul class="nav nav-pills" role="tablist">
-                        <li ng-repeat="magasin in magasins">
-                            {{magasin.Nom}}
-                            <label class="btn btn-lg btn-primary" ng-repeat="terminal in terminals" ng-if="terminal.Magasin_idMagasin == magasin.idMagasin">
-                                <input type="radio" ng-model="data.terminal" ng-value="terminal.idTerminal">{{Terminal.idTerminal}}
-                            </label>
-                        </li>
-                    </ul>
-                    <button class="btn btn-primary" ng-click="sendSession();">Confirmer</button>
-                </div>
+    <div ng-controller="newSessionController" class="cadre offset">
+        <h2 class="offset">Nouvelle session</h2>
+        <h4 class="offset">Vous ouvrez une nouvelle connection, veuillez indiquer le terminal que vous utilisez.</h4>
+        <div class="row offset" >
+            <div class="thumbnail col-md-2 space" ng-repeat="magasin in magasins" ng-if="magasin.display == 1">
+                <h3>{{magasin.Nom}}</h3>
+                <ul class="list-group">
+                    <li ng-click="data.terminal = terminal; data.magasin = magasin"
+                        class="list-group-item" ng-class="{active: data.terminal == terminal}"
+                        ng-repeat="terminal in terminals"
+                        ng-if="terminal.Actif == 1 && terminal.Magasin_idMagasin == magasin.idMagasin">
+                        <span>{{terminal.idTerminal}}</span>
+                    </li>
+                </ul>
             </div>
         </div>
+        <a ng-href="magasin" class="btn btn-primary" ng-click="sendSession();">Confirmer</a>
+
     </div>
 </body>
 </html>

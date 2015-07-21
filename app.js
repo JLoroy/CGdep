@@ -30,6 +30,7 @@ app.use(session({secret: 'This is not a secret anymore'}));
 app.use('/', routes);
 app.use('/admin', admin);
 app.use('/magasin', magasin);
+app.use('/tic', magasin);
 app.use('/atelier', atelier);
 
 // catch 404 and forward to error handler

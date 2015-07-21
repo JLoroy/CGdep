@@ -1,0 +1,23 @@
+.cadre{
+    border-width : 1px;
+    border-radius : 4px 4px 0 0;
+    border-color : #333333;
+    background-color: #65aeed;
+    margin : 50px;
+}
+
+.offset{
+    padding : 30px;
+}
+
+.space{
+    margin : 20px;
+    border-radius: 8px 8px 0 0;
+}
+
+h4{
+    color: rgba(246, 246, 246, 1);
+}
+h2{
+    color: #f5f5f5;
+}

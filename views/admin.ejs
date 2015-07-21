@@ -45,7 +45,7 @@
         <div class="row">
             <div id="selectorMagasin" class="col-md-12 form-inline">
                 <label ng-repeat="magasin in magasins" class="btn btn-primary active" ng-click="refresh()">
-                    <input class="form-control" type="checkbox" ng-model="selectedMagasins[magasin.idMagasin]">{{magasin.Nom}}
+                    <input class="form-control" type="checkbox" ng-model="params.selectedMagasins[magasin.idMagasin]">{{magasin.Nom}}
                 </label>
             </div>
         </div>
@@ -57,8 +57,8 @@
                         Cr&eacuteation
                     </label>
                     <div class="input-group col-md-8">
-                        <input ng-model="dateCreate" ng-change="refresh()" id="dpCreate" type="text" placeholder="Entrez une date" class="form-control">
-                        <span ng-click="dateCreate='';refresh()" class="input-group-addon glyphicon glyphicon-remove"></span>
+                        <input ng-model="params.dateCreate" ng-change="refresh()" id="dpCreate" type="text" placeholder="Entrez une date" class="form-control">
+                        <span ng-click="params.dateCreate='';refresh()" class="input-group-addon glyphicon glyphicon-remove"></span>
                     </div>
                 </div>
                 <div class="form-group col-md-4">
@@ -66,8 +66,8 @@
                         R&eacuteception
                     </label>
                     <div class="input-group col-md-8">
-                        <input ng-model="dateLivraison" ng-change="refresh()" id="dpLivraison" type="text" placeholder="Entrez une date" class="form-control">
-                        <span ng-click="dateLivraison=''" class="input-group-addon glyphicon glyphicon-remove"></span>
+                        <input ng-model="params.dateLivraison" ng-change="refresh()" id="dpLivraison" type="text" placeholder="Entrez une date" class="form-control">
+                        <span ng-click="params.dateLivraison=''" class="input-group-addon glyphicon glyphicon-remove"></span>
                     </div>
                 </div>
                 <div class="form-group col-md-4">
@@ -75,8 +75,8 @@
                         # R&eacutesultats
                     </label>
                     <div class="input-group col-md-8">
-                        <input ng-model="nbrResult" ng-change="refresh()" type="number" placeholder="Entrez un nombre" class="form-control">
-                        <span ng-click="nbrResult=0" class="input-group-addon glyphicon glyphicon-remove"></span>
+                        <input ng-model="params.nbrResult" ng-change="refresh()" type="number" placeholder="Entrez un nombre" class="form-control">
+                        <span ng-click="params.nbrResult=0" class="input-group-addon glyphicon glyphicon-remove"></span>
                     </div>
                 </div>
             </div>
@@ -117,9 +117,9 @@
             <div class="form-group">
                 <label class="control-label col-md-4">Nom du client</label>
                 <div class="col-md-8 btn-group">
-                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getClients()" aria-haspopup="true" aria-expanded="false">
+                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="params.Nom" ng-change="getClients()" aria-haspopup="true" aria-expanded="false">
                     <ul class="dropdown-menu">
-                        <li ng-repeat="client in clients"><span ng-click="data.query=client.Nom;getClients();">{{client.Nom}}</span></li>
+                        <li ng-repeat="client in clients"><span ng-click="params.Nom=client.Nom;getClients();">{{client.Nom}}</span></li>
                     </ul>
                 </div>
             </div>
@@ -155,7 +155,7 @@
         <div class="row">
             <div id="selectorCategory" class="col-md-12 form-inline">
                 <label ng-repeat="category in categories" class="btn btn-primary active" ng-click="getProduits()">
-                    <input class="form-control" type="checkbox" ng-model="data.selectedCategories[category.idCategorie]">{{category.Nom}}
+                    <input class="form-control" type="checkbox" ng-model="params.selectedCategories[category.idCategorie]">{{category.Nom}}
                 </label>
             </div>
         </div>
@@ -163,9 +163,9 @@
             <div class="form-group">
                 <label class="control-label col-md-4">Produit</label>
                 <div class="col-md-8 btn-group">
-                    <input placeholder="Entrez un nom" type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getProduits()" aria-haspopup="true" aria-expanded="false">
+                    <input placeholder="Entrez un nom" type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="params.Nom" ng-change="getProduits()" aria-haspopup="true" aria-expanded="false">
                     <ul class="dropdown-menu">
-                        <li ng-repeat="produit in produits"><span ng-click="data.query=produit.Nom;getProduits();">{{produit.Nom}}</span></li>
+                        <li ng-repeat="produit in produits"><span ng-click="params.Nom=produit.Nom;getProduits();">{{produit.Nom}}</span></li>
                     </ul>
                 </div>
             </div>
@@ -210,7 +210,7 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td><input type="text" ng-model="new"</td>
+                    <td><input type="text" ng-model="new.nom"</td>
                     <td><button class="btn btn-primary" ng-click="add();getCategories();">Ajouter</button></td>
                 </tr>
                 </tbody>
@@ -223,7 +223,7 @@
                 <th>Supprimer</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="category in categories">
+                <tr ng-repeat="category in categories" ng-if="category.display == 1">
                     <td>{{category.idCategorie}}</td>
                     <td><input type="text" ng-model="category.Nom"></td>
                     <td><button class="btn btn-primary" ng-click="modify(category);getCategories();">Modifier</button></td>
@@ -271,17 +271,26 @@
         </div>
     </div>
     <div class="tab-pane" id="personnel" ng-controller="VendeuseController">
+        <div class="row">
+            <div id="selectorMagasin" class="col-md-12 form-inline">
+                <label ng-repeat="magasin in magasins" class="btn btn-primary active" ">
+                <input class="form-control" type="checkbox" ng-model="params.selectedMagasins[magasin.idMagasin]" ng-click="getVendeuses();">{{magasin.Nom}}
+                </label>
+            </div>
+        </div>
         <div class="form-horizontal col-md-8 col-md-offset-2">
-            <div class="form-group">
+
+            <div class="form-group row">
                 <label class="control-label col-md-4">Personnel</label>
                 <div class="col-md-8 btn-group">
-                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="data.query" ng-change="getVendeuses()" aria-haspopup="true" aria-expanded="false">
+                    <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="params.Nom" ng-change="getVendeuses()" aria-haspopup="true" aria-expanded="false">
                     <ul class="dropdown-menu">
-                        <li ng-repeat="vendeuse in vendeuses"><span ng-click="data.query=vendeuse.Nom;getVendeuses();">{{vendeuse.Nom}}</span></li>
+                        <li ng-repeat="vendeuse in vendeuses" ng-if="vendeuse.display == 1"><span ng-click="params.Nom=vendeuse.Nom;getVendeuses();">{{vendeuse.Nom}}</span></li>
                     </ul>
                 </div>
             </div>
         </div>
+
         <div class="col-md-12">
             <table class="table col-md-4">
                 <thead>
@@ -319,8 +328,8 @@
     <div class="tab-pane" id="terminal" ng-controller="TerminalController">
         <div class="row">
             <div id="selectorMagasin" class="col-md-12 form-inline">
-                <label ng-repeat="magasin in magasins" class="btn btn-primary active" ng-click="refresh()">
-                    <input class="form-control" type="checkbox" ng-model="selectedMagasins[magasin.idMagasin]">{{magasin.Nom}}
+                <label ng-repeat="magasin in magasins" class="btn btn-primary active" ng-click="getTerminals()">
+                    <input class="form-control" type="checkbox" ng-model="params.selectedMagasins[magasin.idMagasin]">{{magasin.Nom}}
                 </label>
             </div>
         </div>
@@ -367,8 +376,8 @@
                 <tbody>
                 <tr class=" input-group col-md-3">
                     <td class=" input-group">
-                        <input id="dpFerie" type="text" placeholder="Entrez une date" class="form-control" ng-model="newdate">
-                        <span class="input-group-addon glyphicon glyphicon-remove" ng-click="newdate=''"></span>
+                        <input id="dpFerie" type="text" placeholder="Entrez une date" class="form-control" ng-model="new.date">
+                        <span class="input-group-addon glyphicon glyphicon-remove" ng-click="new.date=''"></span>
                     </td>
                     <td><button class="btn btn-primary" ng-click="add();getFeries();">Ajouter</button></td>
                 </tr>
