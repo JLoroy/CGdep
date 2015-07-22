@@ -1,13 +1,5 @@
 var app = angular.module('admin',[]);
 
-/*app.controller('MainController', function($scope, $http) {
-    $scope.data = {display:true};
-    $http.get("admin/data").success(function(res){
-        $scope.clients = res;
-        console.log(res);
-    });
-});*/
-
 app.controller('CommandeController', function($scope, $http){
     $scope.params= {selectedMagasins:{},dateCreate:'',dateLivraison:'',nbrResult:0};
     $scope.refresh = function(){

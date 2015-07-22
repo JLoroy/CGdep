@@ -111,8 +111,11 @@
             <form id="clientForm" role="form" class="form-horizontal">
                 <div class="patch-zoom-bug form-group">
                     <label for="clientNom" class="col-md-2 control-label">Nom</label>
-                    <div class="col-md-6" style="width:980px !important;">
-                        <input id="clientNom" type="text" ng-model="client.Nom" class="form-control patch-zoom-bug">
+                    <div class="col-md-6 btn-group" style="width:980px !important;">
+                        <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="params.Nom" ng-change="getClients()" aria-haspopup="true" aria-expanded="false">
+                        <ul class="dropdown-menu">
+                            <li ng-repeat="clientc in clients" ng-if="clientc.display == 1"><span ng-click="params.Nom=clientc.Nom;getClients();">{{clientc.Nom}}</span></li>
+                        </ul>
                     </div>
                 </div>
                 <div class="form-group">

@@ -276,6 +276,13 @@ app.controller('comClient', function($scope, $rootScope, $http){
         }
         else{$rootScope.erreur("Entrez un Client");}
     };
+    $scope.getClients = function(){
+        $http.post("get/client", {
+            params: $scope.params
+        }).success(function(res){
+            $scope.clients = res;
+        });
+    };
     $scope.next = function(){
         $rootScope.setActiveMenu('produit');
     };
