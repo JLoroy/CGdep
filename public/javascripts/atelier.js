@@ -1,9 +1,14 @@
 var app = angular.module('atelier',[]);
 
 app.controller('MainController', function($scope, $http){
-    $scope.query = {
-        date: ''
+    $scope.params = {
+        dateLivraison: '',
+        selectedCategories: {}
     };
+
+    $scope.magasins = [];
+
+    $scope.commandes = {};
 
     //creation du calendar
     $scope.calendar = {1:{},2:{},3:{},4:{}};
@@ -22,4 +27,21 @@ app.controller('MainController', function($scope, $http){
             $scope.day.setDate(($scope.day).getDate()+1);
         }
     }
+
+    $scope.getMagasins = function(){
+        $http.post("get/magasin",{
+        }).success(function(res){
+            $scope.magasins = res;
+        });
+    };
+
+    $scope.getMagasins();
+
+    $scope.refresh = function(){
+        $http.post("get/commande", {
+            params:$scope.params
+        }).success(function(res){
+            $scope.commandes = res;
+        });
+    };
 });

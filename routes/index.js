@@ -23,6 +23,7 @@ router.post("/add/:type/", db.add);//Switch to add anything in db
 router.post("/get/:type/", db.get);//Switch to get anything from db
 router.post("/remove/:type/", db.remove);//Switch to remove anything from db
 router.post("/modify/:type/", db.modify);//Switch to modify anything from db
+router.post("/complex/:type/", db.complex);//Switch to request anything complex from db
 
 router.post('/newsession', function(req, res){
     sess = req.session;

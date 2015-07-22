@@ -178,3 +178,17 @@ exports.modify = function(req, res){
         res.send(rows);
     });
 };
+
+exports.complex = function(req, res){
+    var params = req.body.params;
+    var query = "";
+    switch(req.params.type){
+        case "produitCommande":
+            query = "SELECT Produitcommande.Quantite, Produitcommande.Details, Produitcommande.Produit_idProduit, "+
+                "Produitcommande.Custom, Produitcommande.ProduitCustom_idProduitCustom FROM Produitcommande "+
+                "JOIN";
+            break;
+        default:
+            console.log("Requete complexe d'un type inconnu : "+req.params.type);
+    }
+}
