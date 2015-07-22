@@ -64,6 +64,9 @@ print """
     <title>Interface de commande</title>
   </head>
   <body style="height:100%;">
+
+
+
   <!-- CHOIX VENDEUSE -->
   <div id="choixVendeuse" style="height:100%;">
     <ul class="nav nav-pills" role="tablist">
@@ -129,6 +132,9 @@ for k in range(len(allMag)) :
 print """
     </div>
   </div>
+
+
+
   <!-- MENU PRINCIPAL -->
   <div id="mainMenu" hidden class="fill" style="height:100%;">
     <div class="col-md-6 fill" style="height:100%;">
@@ -410,8 +416,8 @@ for k in range(len(allCateg)) :
 print """
           </div>
           <div class="col-md-offset-3 col-md-6">
-            <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#customModal">Produit personnalis&eacute...</button>
-          </div>
+                            <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#customModal">Produit personnalis&eacute...</button>
+                          </div>
           <div class="modal fade" id="customModal" role="dialog" data-backdrop="static" keyboard="false">
             <div class="modal-dialog modal-lg">
               <div class="modal-content">

@@ -44,7 +44,7 @@
     <div class="tab-pane active" id="commande" ng-controller="CommandeController">
         <div class="row">
             <div id="selectorMagasin" class="col-md-12 form-inline">
-                <label ng-repeat="magasin in magasins" class="btn btn-primary active" ng-click="refresh()">
+                <label ng-repeat="magasin in magasins"  ng-if="magasin.display == 1"class="btn btn-primary active" ng-click="refresh()">
                     <input class="form-control" type="checkbox" ng-model="params.selectedMagasins[magasin.idMagasin]">{{magasin.Nom}}
                 </label>
             </div>
@@ -96,7 +96,7 @@
                 <th>Supprimer</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="commande in commandes">
+                <tr ng-repeat="commande in commandes" ng-if="commande.display == 1">
                     <td>{{commande.idCommande}}</td>
                     <td>{{commande.Creation | date:'EEEE dd MMMM yyyy'}}</td>
                     <td>{{commande.Livraison | date:'EEEE dd MMMM yyyy'}}</td>
@@ -119,7 +119,7 @@
                 <div class="col-md-8 btn-group">
                     <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="params.Nom" ng-change="getClients()" aria-haspopup="true" aria-expanded="false">
                     <ul class="dropdown-menu">
-                        <li ng-repeat="client in clients"><span ng-click="params.Nom=client.Nom;getClients();">{{client.Nom}}</span></li>
+                        <li ng-repeat="client in clients" ng-if="client.display == 1"><span ng-click="params.Nom=client.Nom;getClients();">{{client.Nom}}</span></li>
                     </ul>
                 </div>
             </div>
@@ -137,7 +137,7 @@
                 <th>Supprimer</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="client in clients">
+                <tr ng-repeat="client in clients" ng-if="client.display ==1">
                     <td>{{client.idClient}}</td>
                     <td><input type="text" ng-model="client.Nom"></td>
                     <td><input type="text" ng-model="client.Tel"></td>
@@ -154,7 +154,7 @@
     <div class="tab-pane" id="produit" ng-controller="ProduitController">
         <div class="row">
             <div id="selectorCategory" class="col-md-12 form-inline">
-                <label ng-repeat="category in categories" class="btn btn-primary active" ng-click="getProduits()">
+                <label ng-repeat="category in categories" ng-if="category.display == 1" class="btn btn-primary active" ng-click="getProduits()">
                     <input class="form-control" type="checkbox" ng-model="params.selectedCategories[category.idCategorie]">{{category.Nom}}
                 </label>
             </div>
@@ -165,7 +165,7 @@
                 <div class="col-md-8 btn-group">
                     <input placeholder="Entrez un nom" type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="params.Nom" ng-change="getProduits()" aria-haspopup="true" aria-expanded="false">
                     <ul class="dropdown-menu">
-                        <li ng-repeat="produit in produits"><span ng-click="params.Nom=produit.Nom;getProduits();">{{produit.Nom}}</span></li>
+                        <li ng-repeat="produit in produits" ng-if="produit.display == 1"><span ng-click="params.Nom=produit.Nom;getProduits();">{{produit.Nom}}</span></li>
                     </ul>
                 </div>
             </div>
@@ -185,14 +185,14 @@
                     <td>Nouveau</td>
                     <td><input type="text" ng-model="new.Nom"></td>
                     <td><input type="text" ng-model="new.Prix"></td>
-                    <td><select ng-model="new.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories" ng-if="category.display = 1"></select></td>
+                    <td><select ng-model="new.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories | filter: category.display=1" ng-if="category.display = 1"></select></td>
                     <td><button class="btn btn-primary" ng-click="add();getProduits();">Ajouter</button></td>
                 </tr>
                 <tr ng-repeat="produit in produits">
                     <td>{{produit.idProduit}}</td>
                     <td><input type="text" ng-model="produit.Nom"></td>
                     <td><input type="text" ng-model="produit.Prix"></td>
-                    <td><select ng-model="produit.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories" ng-if="category.display = 1"></select></td>
+                    <td><select ng-model="produit.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories | filter: category.display=1" ng-if="category.display = 1"></select></td>
                     <td><button class="btn btn-primary" ng-click="modify(produit);getProduits();">Modifier</button></td>
                     <td><button class="btn btn-danger" ng-click="delete(produit);getProduits();">Supprimer</button></td>
                 </tr>
@@ -244,8 +244,8 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td><input type="text" ng-model="new.name"></td>
-                    <td><input type="text" ng-model="new.adress"></td>
+                    <td><input type="text" ng-model="new.Nom"></td>
+                    <td><input type="text" ng-model="new.Adresse"></td>
                     <td><button class="btn btn-primary" ng-click="add();getMagasins();">Ajouter</button></td>
                 </tr>
                 </tbody>
@@ -259,7 +259,7 @@
                 <th>Supprimer</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="magasin in magasins"  ng-if="magasin.display = 1" >
+                <tr ng-repeat="magasin in magasins"  ng-if="magasin.display == 1" >
                     <td>{{magasin.idMagasin}}</td>
                     <td><input type="text" ng-model="magasin.Nom"></td>
                     <td><input type="text" ng-model="magasin.Adresse"></td>.
@@ -273,7 +273,7 @@
     <div class="tab-pane" id="personnel" ng-controller="VendeuseController">
         <div class="row">
             <div id="selectorMagasin" class="col-md-12 form-inline">
-                <label ng-repeat="magasin in magasins" class="btn btn-primary active" ">
+                <label ng-repeat="magasin in magasins"  ng-if="magasin.display == 1" class="btn btn-primary active" ">
                 <input class="form-control" type="checkbox" ng-model="params.selectedMagasins[magasin.idMagasin]" ng-click="getVendeuses();">{{magasin.Nom}}
                 </label>
             </div>
@@ -300,7 +300,7 @@
                 <tbody>
                 <tr>
                     <td><input type="text" ng-model="new.Nom" placeholder="Entrez un nom"></td>
-                    <td><select ng-options="magasin.idMagasin as magasin.Nom for magasin in magasins" ng-if="magasin.display = 1" ng-model="new.Magasin_idMagasin">Choisir un magasin</select></td>
+                    <td><select ng-options="magasin.idMagasin as magasin.Nom for magasin in magasins | filter: magasin.display=1" ng-if="magasin.display = 1" ng-model="new.Magasin_idMagasin">Choisir un magasin</select></td>
                     <!--TODO: rajouter photo-->
                     <td><button class="btn btn-primary" ng-click="add();getVendeuses();">Ajouter</button></td>
                 </tr>
@@ -317,7 +317,7 @@
                 <tr ng-repeat="vendeuse in vendeuses" ng-if="vendeuse.display == 1">
                     <td>{{vendeuse.idVendeuse}}</td>
                     <td><input type="text" ng-model="vendeuse.Nom"></td>
-                    <td><select ng-options="magasin.idMagasin as magasin.Nom for magasin in magasins" ng-model="vendeuse.Magasin_idMagasin">{{vendeuse.magasin}}</select></td>
+                    <td><select ng-options="magasin.idMagasin as magasin.Nom for magasin in magasins | filter: magasin.display=1" ng-model="vendeuse.Magasin_idMagasin">{{vendeuse.magasin}}</select></td>
                     <td><button class="btn btn-primary" ng-click="modify(vendeuse);getVendeuses();">Modifier</button></td>
                     <td><button class="btn btn-danger" ng-click="delete(vendeuse);getVendeuses();">Supprimer</button></td>
                 </tr>
@@ -328,7 +328,7 @@
     <div class="tab-pane" id="terminal" ng-controller="TerminalController">
         <div class="row">
             <div id="selectorMagasin" class="col-md-12 form-inline">
-                <label ng-repeat="magasin in magasins" class="btn btn-primary active" ng-click="getTerminals()">
+                <label ng-repeat="magasin in magasins"  ng-if="magasin.display == 1" class="btn btn-primary active" ng-click="getTerminals()">
                     <input class="form-control" type="checkbox" ng-model="params.selectedMagasins[magasin.idMagasin]">{{magasin.Nom}}
                 </label>
             </div>
@@ -341,7 +341,7 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td><select ng-options="magasin.idMagasin as magasin.Nom for magasin in magasins" ng-model="new.Magasin_idMagasin"></select></td>
+                    <td><select ng-options="magasin.idMagasin as magasin.Nom for magasin in magasins | filter: magasin.display=1" ng-model="new.Magasin_idMagasin"></select></td>
                     <td><button class="btn btn-primary" ng-click="add();getTerminals();">Ajouter</button></td>
                 </tr>
                 </tbody>
@@ -356,7 +356,7 @@
                 <tbody>
                 <tr ng-repeat="terminal in terminals" ng-if="terminal.Actif == 1">
                     <td>{{terminal.idTerminal}}</td>
-                    <td><select ng-model="terminal.Magasin_idMagasin" ng-options="magasin.idMagasin as magasin.Nom for magasin in magasins">
+                    <td><select ng-model="terminal.Magasin_idMagasin" ng-options="magasin.idMagasin as magasin.Nom for magasin in magasins | filter: magasin.display=1">
                         </select></td>
                     <td><button class="btn btn-primary" ng-click="modify(terminal);getTerminals();">Modifier</button></td>
                     <td><button class="btn btn-danger" ng-click="delete(terminal);getTerminals();">Supprimer</button></td>
@@ -409,9 +409,9 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td><input type="text" placeholder="Nom" ng-model="new.nom"></td>
-                    <td><input type="number" placeholder="Prix" ng-model="new.prix"></td>
-                    <td><select ng-options="category.idCategorie as category.Nom for category in categories" ng-model="new.Categorie_idCategorie"></select></td>
+                    <td><input type="text" placeholder="Nom" ng-model="new.Nom"></td>
+                    <td><input type="number" placeholder="Prix" ng-model="new.Prix"></td>
+                    <td><select ng-options="category.idCategorie as category.Nom for category in categories | filter: category.display=1" ng-model="new.Categorie_idCategorie"></select></td>
                     <td><button class="btn btn-primary" ng-click="add();getCustoms();">Ajouter</button></td>
                 </tr>
                 </tbody>
@@ -424,11 +424,11 @@
                 <th class="col-md-offset-3 col-md-1">Categorie</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="custom in customs">
+                <tr ng-repeat="custom in customs" ng-if="custom.display == 1">
                     <td>{{custom.idProduitCustom}}</td>
                     <td><input type="text" ng-model="custom.Nom"></td>
                     <td><input type="text" ng-model="custom.Prix"></td>
-                    <td><select ng-options="category.idCategorie as category.Nom for category in categories" ng-model="custom.Categorie_idCategorie">{{custom.categorie}}</select></td>
+                    <td><select ng-options="category.idCategorie as category.Nom for category in categories | filter: category.display=1" ng-model="custom.Categorie_idCategorie">{{custom.categorie}}</select></td>
                     <td><button class="btn btn-primary" ng-click="modify(custom);getCustoms();">Modifier</button></td>
                     <td><button class="btn btn-danger" ng-click="delete(custom);getCustoms();">Supprimer</button></td>
                 </tr>

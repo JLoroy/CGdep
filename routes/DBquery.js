@@ -82,7 +82,7 @@ exports.add = function(req, res){
             query = "INSERT INTO Produit(Nom, Prix, Categorie_idCategorie) VALUES('"+x.Nom+"',"+x.Prix+","+x.Categorie_idCategorie+");";
             break;
         case "magasin":
-            query = "INSERT INTO Magasin(Nom, Adresse) VALUES('"+x.nom+"','"+x.adresse+"');";
+            query = "INSERT INTO Magasin(Nom, Adresse) VALUES('"+x.Nom+"','"+x.Adresse+"');";
             break;
         case "vendeuse":
             query = "INSERT INTO Vendeuse(Nom, Magasin_idMagasin) VALUES('"+x.nom+"',"+x.magasin+");";
@@ -158,13 +158,13 @@ exports.modify = function(req, res){
             query = "UPDATE Categorie SET Nom = '"+mod.Nom+"' WHERE idCategorie = '"+mod.idCategorie+"';";
             break;
         case "magasin":
-            query = "UPDATE Magasin SET Nom = '"+mod.Nom+"', Adresse = "+mod.Adresse+" WHERE idMagasin = '"+mod.idMagasin+"';";
+            query = "UPDATE Magasin SET Nom = '"+mod.Nom+"', Adresse = '"+mod.Adresse+"' WHERE idMagasin = '"+mod.idMagasin+"';";
             break;
         case "vendeuse":
             query = "UPDATE vendeuse SET Nom = '"+mod.Nom+"', Magasin_idMagasin = "+mod.Magasin_idMagasin+" WHERE idVendeuse = '"+mod.idVendeuse+"';";
             break;
         case "custom":
-            query = "UPDATE produitcustom SET Nom = '"+mod.Nom+"', Prix = "+mod.Prix+", Categorie_idCategorie = "+mod.categorie+" WHERE idProduitCustom = '"+mod.idProduitCustom+"';";
+            query = "UPDATE produitcustom SET Nom = '"+mod.Nom+"', Prix = '"+mod.Prix+"', Categorie_idCategorie = "+mod.categorie+" WHERE idProduitCustom = '"+mod.idProduitCustom+"';";
             break;
         case "terminal":
             query = "UPDATE terminal SET Magasin_idMagasin = '"+mod.Magasin_idMagasin+"' WHERE idTerminal = '"+mod.idTerminal+"';";

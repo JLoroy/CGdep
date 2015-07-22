@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html class="fp">
 <head>
 
     <!--
@@ -21,13 +21,22 @@
     <title>Application de commande</title>
 </head>
 <body ng-app="magasin" class="h100">
-<!-- CHOIX VENDEUSE -->
-    <div ng-controller="choixVendeuse" class="h100">
+<div id="wrapper" class="h100">
+    <div id="header" ng-controller="rootScopeVisualController">
+        <div class="alert alert-danger" role="alert" ng-class="{hidden:!displayErreur}">
+            {{messageErreur}}
+            <button type="button" class="btn btn-danger" ng-click="clearErreur()">Ok</button>
+        </div>
+    </div>
 
+
+    <div id="content">
+        <!-- CHOIX VENDEUSE -->
+    <div ng-controller="choixVendeuse" class="h100" ng-class="isActiveMenu('vendeuse')">
         <div ng-show="! ok">Loading</div>
         <div ng-show="ok">
-            <h4>Choisir Vendeuse</h4>
-            <ul class="nav nav-pills" role="tablist">
+            <h4>Selection de la Vendeuse</h4>
+            <ul class="nav nav-pills nav-justified" role="tablist">
                 <li ng-repeat="magasin in magasins" ng-if="magasin.display == 1" ng-class="activeClass(magasin.idMagasin)">
                     <a href="#mag{{magasin.idMagasin}}" ng-click="activeTab = magasin.idMagasin" role="tab" data-toggle="tab">
                         {{magasin.Nom}}
@@ -37,11 +46,14 @@
 
             <!-- Tab panes -->
             <div class="tab-content h100">
-                <table id="mag{{magasin.idMagasin}}" ng-repeat="magasin in magasins" ng-if="magasin.display == 1"
-                       class="table table-bordered col-md-12 tab-pane" style="height:90%;" ng-class="activeClass(magasin.idMagasin)">
-                    <tr>
-                        <td class="col-md-3 btn btn-default btn-lg vcenter" style="height:50% !important;">
-                            {{magasin.Adresse}}
+                <table id="mag{{mag_v.idMagasin}}" ng-repeat="mag_v in vendByMag"
+                       class="table table-bordered tab-pane form-control" style="height:90%;" ng-class="activeClass(mag_v.idMagasin)">
+                    <tr ng-repeat="row_v in mag_v">
+                        <td ng-repeat="v in row_v" class="form-group-lg vcenter" style="height:50% !important;">
+                            <a ng-click="selectVendeuse(v);next()">
+                                <h4>{{v.Nom}}</h4>
+                                <img src="/default.jpg" class="center-block" style="max-width: 100% !important; max-height:100% !important;">
+                            </a>
                         </td>
                     </tr>
                 </table>
@@ -49,18 +61,284 @@
         </div>
     </div>
 
-    <div ng-controller="rootScopeVisualController">
+    <!-- Menu Principal -->
+    <div ng-controller="mainMenu" ng-class="isActiveMenu('main')" class="fill h100">
+        <div class="col-md-6 fill h100">
+            <button type="button" class="fill btn btn-primary btn-lg btn-block h100" ng-click="toCommand()">Commander</button>
+        </div>
+        <div class="col-md-6 fill h100">
+            <button type="button" class="fill btn btn-primary btn-lg btn-block h100" ng-click="toConsult()">Consulter / Modifier</button>
+        </div>
+    </div>
 
+    <div id="APPLICATION COMMANDE" ng-class="isActiveMenu('commande')" class="h100" ng-controller="commandeController">
+        <!-- NAV -->
+        <ul class="nav nav-tabs nav-justified" role="tablist">
+            <li data-target="date"          ng-class="controlTab('date')">          <a role="tab" ng-click="setActiveMenu('date');">        Date</a></li>
+            <li data-target="heure"         ng-class="controlTab('heure')">         <a role="tab" ng-click="setActiveMenu('heure');">       Heure</a></li>
+            <li data-target="client"        ng-class="controlTab('client')">        <a role="tab" ng-click="setActiveMenu('client');">      Client</a></li>
+            <li data-target="produit"       ng-class="controlTab('produit')">       <a role="tab" ng-click="setActiveMenu('produit');">     Produits</a></li>
+            <li data-target="commentaire"   ng-class="controlTab('commentaire')">   <a role="tab" ng-click="setActiveMenu('commentaire');"> Commentaire</a></li>
+            <li data-target="payement"      ng-class="controlTab('payement')">      <a role="tab" ng-click="setActiveMenu('payement');">    Payement</a></li>
+            <li data-target="recapitulatif" ng-class="controlTab('recap')">         <a role="tab" ng-click="setActiveMenu('recap');">       Recapitulatif</a></li>
+        </ul>
+
+
+        <!-- CHOIX DATE -->
+        <div ng-controller="comDate" class="h100" ng-class="isActiveMenu('date')">
+            <h4>Selection de la Date</h4>
+            <div class="h100">
+                <table class="table table-bordered tab-pane form-control" style="height:90%;">
+                    <tr ng-repeat="semaine in calendar">
+                        <td ng-repeat="jour in semaine" class="form-group-lg vcenter" ng-class="isThisActive(jour.date)" >
+                            <a class="btn form-control h100" ng-class="{disabled:!(jour.ok)}" ng-click="selectDate(jour.date);">
+                                <h2>{{jour.date | date: 'dd EEEE'}}</h2>
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <button type="button" class="btn tbn-primary" ng-click="next();">Suivant (Heure)</button>
+
+        </div>
+        <!-- CHOIX HEURE -->
+        <div ng-controller="comHeure" class="h100" ng-class="isActiveMenu('heure')">
+            <h4>Selection de l'Heure</h4>
+            <div class="row">
+                <a class="btn btn-lg" ng-class="isThisActive(heure);" ng-repeat="heure in {06:'6h',07:'7h',08:'8h',09:'9h',10:'10h'}" ng-click="selectHeure(heure);">{{heure}}</a>
+            </div>
+            <button type="button" class="btn tbn-primary" ng-click="next()">Suivant (Client)</button>
+        </div>
+
+        <!-- CHOIX CLIENT -->
+        <div ng-controller="comClient" class="h100" ng-class="isActiveMenu('client')">
+            <h4>Encodage du Client</h4>
+            <form id="clientForm" role="form" class="form-horizontal">
+                <div class="patch-zoom-bug form-group">
+                    <label for="clientNom" class="col-md-2 control-label">Nom</label>
+                    <div class="col-md-6" style="width:980px !important;">
+                        <input id="clientNom" type="text" ng-model="client.Nom" class="form-control patch-zoom-bug">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="clientTel" class="col-md-2 control-label">T&eacutel&eacutephone</label>
+                    <div class="col-md-6">
+                        <input id="clientTel" type="tel" ng-model="client.Tel" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="clientMail" class="col-md-2 control-label">Mail</label>
+                    <div class="col-md-6">
+                        <input id="clientMail" type="email"  ng-model="client.Mail" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="clientTVA" class="col-md-2 control-label">TVA</label>
+                    <div class=" input-group col-md-6" style="padding-right:14px !important; padding-left:14px !important;">
+                        <span class="input-group-addon">BE</span>
+                        <input id="clientTVA" ng-model="client.TVA" type="number" max="9999999999" class="form-control">
+                    </div>
+                </div>
+            </form>
+            {{client.Nom}}
+            <button type="button" class="btn tbn-primary fr" ng-click="selectClient();">Suivant (Produit)</button>
+        </div>
+        <!-- CHOIX Produits -->
+        <div ng-controller="comProduit" class="h100" ng-class="isActiveMenu('produit')">
+            <h4>Selection des Produits</h4>
+            <div class="col-md-4" style="border-right: 1px solid gray;">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="listProduit" class="control-label">Produits</label>
+                        <ul id="listProduit" class="list-group">
+                            <li class="form-control" ng-repeat="p in listProduit">{{p.prod.Nom}}<span style="float:right;">{{p.qty}}</span></li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalProduit" class="control-label">Total</label>
+                        <input ng-model="total" id="prix" type="text" class="form-control prixTot" value="0 EUR" disabled>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-8" style="border-left: 1px solid gray; margin-left: -1px;padding-left:0px !important;padding-right:0px !important;">
+                <div class="col-md-2" style="padding-top:10px !important;">"
+                    <div class="col-md-12" style="padding-top:5px !important;padding-left:0px !important;padding-right:0px !important;">
+                        <button ng-repeat="category in categories" ng-if="category.display == 1" role="tab" data-toggle="tab"
+                                class="btn-produit-categ btn btn-default btn-block btn-lg" style="height:90px !important;"
+                                ng-click="selectCategorie(category.idCategorie)">
+                            {{category.Nom}}
+                        </button>
+                    </div>
+                </div>
+                <div class="tab-content col-md-10" id="produitBtnDiv" ng-repeat="category in presentation" >
+                    <div class="tab-pane" ng-class="tabCategorie(category.idCategorie)">
+                        <table class="table table-bordered col-md-12">
+                            <tr ng-repeat="row_p in category">
+                                <td ng-repeat="produit in row_p" class="col-md-3" style="border:none; !important">
+                                    <button type="button" class="btn btn-default btn-lg btn-block" ng-click="addProduit(produit.thisProd);console.log(produit);">{{produit.thisProd.Nom}}</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-offset-3 col-md-6">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#customModal">Produit personnalis&eacute...</button>
+                </div>
+            </div>
+
+            <button type="button" class="btn tbn-primary" ng-click="next()">Suivant (Commentaire)</button>
+        </div>
+        <!-- CHOIX Commentaire -->
+        <div ng-controller="comCommentaire" class="h100" ng-class="isActiveMenu('commentaire')">
+            <h4>Commentaire</h4>
+            <div class="tab-pane fade" id="commentaire">
+                <form id="clientForm" role="form" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="commentaireCommande" class="col-md-2 control-label">Commentaire</label>
+                        <div class="input-group col-md-6">
+                            <textarea class="typeahead form-control" id="comcom" rows="10" placeholder="Commentaire général"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <button type="button" class="btn tbn-primary" ng-click="next()">Suivant (Payement)</button>
+        </div>
+        <!-- CHOIX payement-->
+        <div ng-controller="comPayement" class="h100" ng-class="isActiveMenu('payement')">
+            <h4>Selection du Payement</h4>
+            <div class="fill tab-pane fade" id="payement" style="height:90%;">
+                <form id="clientForm" role="form" class="fill form-horizontal" style="height:100%;">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Prix total</label>
+                        <div class="col-md-6">
+                            <input id="prix2" type="text" class="form-control prixTot" value="0 EUR" disabled>
+                        </div>
+                    </div>
+                    <div class="fill form-group" style="height:100%;">
+                        <div class="fill col-md-12" style="height:100%;">
+                            <div class="fill col-md-6" style="height:80%;">
+                                <button type="" id="payeCommande" class="fill btn btn-primary btn-block" style="height:100%;">Pay&eacute</button>
+                            </div>
+                            <div class="col-md-6" style="height:80%;">
+                                <button type="" id="payeReception" class="fill btn btn-primary btn-block" style="height:100%;">Non pay&eacute</button>
+                            </div>
+                            <div class="col-md-12" style="height:20%; margin-top:10px;">
+                                <button type="" id="payeFacture" class="fill btn btn-primary btn-block" style="height:100%;">&Agrave facturer</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- CHOIX Recap -->
+        <div ng-controller="comRecap" class="h100" ng-class="isActiveMenu('recap')">
+            <h4>Recapitulatif</h4>
+            <div class="tab-pane fade" id="recapitulatif">
+                <div id="toPrint">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Nom</label>
+                            <div class="col-md-6">
+                                <p id="recapNom" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">T&eacutel&eacutephone</label>
+                            <div class="col-md-6">
+                                <p id="recapTel" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Mail</label>
+                            <div class="col-md-6">
+                                <p id="recapMail" class="form-control-static">Aucune</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">TVA</label>
+                            <div class="col-md-6">
+                                <p id="recapTVA" class="form-control-static">Aucune</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Date</label>
+                            <div class="col-md-6">
+                                <p id="recapDate" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Heure</label>
+                            <div class="col-md-6">
+                                <p id="recapHeure" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Produits</label>
+                            <div class="col-md-6">
+                                <table class="table form-control-static">
+                                    <thead>
+                                    <th>Nom</th>
+                                    <th>Prix unitaire</th>
+                                    <th>Quantit&eacute</th>
+                                    <th>Total</th>
+                                    </thead>
+                                    <tbody id="recapProduit">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Total</label>
+                            <div class="col-md-6">
+                                <p id="recapTotal" class="form-control-static prixTotP"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Commentaire</label>
+                            <div class="col-md-6">
+                                <p id="recapCommentaire" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Payement</label>
+                            <div class="col-md-6">
+                                <p id="recapPayement" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Vendeuse</label>
+                            <div class="col-md-6">
+                                <p id="recapVendeuse" class="form-control-static"></p>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <button id="doPrint" class="btn btn-lg btn-primary">Imprimer</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="footer" ng-controller="rootScopeVisualController">
         <h4>RootScope : </h4>
-        <table>
+        <table class="table table-bordered">
             <thead>
             <th>Magasin</th>
-            <th>magasins</th>
+            <th>ActiveMenu</th>
+            <th>Vendeuse</th>
+            <th>Livraison</th>
+            <th>Client</th>
             </thead>
             <tbody>
-            <tr>
-                <td><input type="text" ng-model="sess.magasin.Nom"></td>
-                <td><input type="text" ng-model="magasins.length"></td>
+            <tr class="warning">
+                <td>{{sess.magasin.Nom}}</td>
+                <td>{{activeMenu}}</td>
+                <td>{{commande.Vendeuse_idVendeuse}}</td>
+                <td>{{commande.dateLivraison| date:'EEEE dd/MM'}} à {{commande.heureLivraison}}</td>
+                <td>{{commande.Client_idClient}}</td>
             </tr>
 
             </tbody>
@@ -69,5 +347,5 @@
 
 
 
-
+</div>
 </body>

@@ -171,7 +171,7 @@ app.controller('VendeuseController', function($scope, $http){
             toRemove: toRem
         });
     };
-    $http.post("magasins").success(function(res){
+    $http.post("get/magasin").success(function(res){
         $scope.magasins = res;
     });
     $scope.getVendeuses();
@@ -217,7 +217,7 @@ app.controller('TerminalController', function($scope, $http){
 app.controller('FerieController', function($scope, $http){
     $scope.new= {};
     $scope.getFeries = function(){
-        $http.post("feries",{
+        $http.post("get/ferie",{
         }).success(function(res){
             $scope.feries = res;
         });
@@ -246,18 +246,18 @@ app.controller('FerieController', function($scope, $http){
 app.controller('CustomController', function($scope, $http){
     $scope.new = {};
     $scope.getCustoms = function(){
-        $http.post("customs",{
+        $http.post("get/custom",{params:{}
         }).success(function(res){
             $scope.customs = res;
         });
-        $http.post("categories",{
+        $http.post("get/category",{
             }).success(function(res){
                 $scope.categories = res;
             }
         )
     };
     $scope.add = function(){
-        if($scope.new) {
+        if($scope.new.Nom) {
             console.log($scope.new);
             $http.post("add/custom",{
                 new: $scope.new

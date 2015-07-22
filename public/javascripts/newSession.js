@@ -8,10 +8,10 @@ app.controller('newSessionController', function($scope, $http){
             data: $scope.data
         });
     };
-    $http.post("/terminals", {}).success(function(res){
+    $http.post("get/terminal", {}).success(function(res){
         $scope.terminals = res;
     });
-    $http.post("/magasins", {}).success(function(res){
+    $http.post("get/magasin", {}).success(function(res){
         $scope.magasins = res;
     });
 });

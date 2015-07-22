@@ -27,15 +27,11 @@ router.post("/modify/:type/", db.modify);//Switch to modify anything from db
 router.post('/newsession', function(req, res){
     sess = req.session;
     sess.data = req.body.data;
-    console.log("new session...");
-    console.log(sess);
     res.render('magasin', {session: sess});
 });
 
 router.post('/getsession', function(req, res){
     sess = req.session;
-    console.log("get session...\nSess Data :");
-    console.log(sess.data);
     if(sess.data) res.send(sess.data);
 });
 

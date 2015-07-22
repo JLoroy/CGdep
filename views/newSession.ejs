@@ -15,10 +15,11 @@
     <title>Nouvelle Session</title>
 </head>
 <body ng-app="newSession">
-    <div ng-controller="newSessionController" class="cadre offset">
+    <div ng-controller="newSessionController" class=" cadre offset">
         <h2 class="offset">Nouvelle session</h2>
         <h4 class="offset">Vous ouvrez une nouvelle connection, veuillez indiquer le terminal que vous utilisez.</h4>
-        <div class="row offset" >
+
+        <div class="row offset panel-body" >
             <div class="thumbnail col-md-2 space" ng-repeat="magasin in magasins" ng-if="magasin.display == 1">
                 <h3>{{magasin.Nom}}</h3>
                 <ul class="list-group">
