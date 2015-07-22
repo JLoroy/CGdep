@@ -74,44 +74,39 @@
     <div id="APPLICATION COMMANDE" ng-class="isActiveMenu('commande')" class="h100" ng-controller="commandeController">
         <!-- NAV -->
         <ul class="nav nav-tabs nav-justified" role="tablist">
-            <li data-target="date"          ng-class="controlTab('date')">          <a role="tab" ng-click="setActiveMenu('date');">        Date</a></li>
-            <li data-target="heure"         ng-class="controlTab('heure')">         <a role="tab" ng-click="setActiveMenu('heure');">       Heure</a></li>
-            <li data-target="client"        ng-class="controlTab('client')">        <a role="tab" ng-click="setActiveMenu('client');">      Client</a></li>
-            <li data-target="produit"       ng-class="controlTab('produit')">       <a role="tab" ng-click="setActiveMenu('produit');">     Produits</a></li>
-            <li data-target="commentaire"   ng-class="controlTab('commentaire')">   <a role="tab" ng-click="setActiveMenu('commentaire');"> Commentaire</a></li>
-            <li data-target="payement"      ng-class="controlTab('payement')">      <a role="tab" ng-click="setActiveMenu('payement');">    Payement</a></li>
-            <li data-target="recapitulatif" ng-class="controlTab('recap')">         <a role="tab" ng-click="setActiveMenu('recap');">       Recapitulatif</a></li>
+            <li data-target="date"          ng-disabled="commande.livraison.date==''">  <a role="tab" ng-click="setActiveMenu('date');">        Date</a></li>
+            <li data-target="heure"         ng-disabled="commande.livraison.heure=''">         <a role="tab" ng-click="setActiveMenu('heure');">       Heure</a></li>
+            <li data-target="client"        ng-disabled="commande.client.Nom=''>        <a role="tab" ng-click="setActiveMenu('client');">      Client</a></li>
+            <li data-target="produit"       ng-disabled="commande.Montant=''">       <a role="tab" ng-click="setActiveMenu('produit');">     Produits</a></li>
+            <li data-target="commentaire"   ng-disabled="commande.Remarque='')">   <a role="tab" ng-click="setActiveMenu('commentaire');"> Commentaire</a></li>
+            <li data-target="payement"      ng-disabled="commande.PNP=''">      <a role="tab" ng-click="setActiveMenu('payement');">    Payement</a></li>
+            <li data-target="recapitulatif" ng-disabled="commande.PNP=''">         <a role="tab" ng-click="setActiveMenu('recap');">       Recapitulatif</a></li>
         </ul>
 
 
         <!-- CHOIX DATE -->
-        <div ng-controller="comDate" class="h100" ng-class="isActiveMenu('date')">
+        <div class="h100" ng-class="isActiveMenu('date')">
             <h4>Selection de la Date</h4>
-            <div class="h100">
-                <table class="table table-bordered tab-pane form-control" style="height:90%;">
-                    <tr ng-repeat="semaine in calendar">
-                        <td ng-repeat="jour in semaine" class="form-group-lg vcenter" ng-class="isThisActive(jour.date)" >
-                            <a class="btn form-control h100" ng-class="{disabled:!(jour.ok)}" ng-click="selectDate(jour.date);">
+                <table class="table table-bordered tab-pane form-control h100" style="height:90%;">
+                    <tr ng-repeat="semaine in calendar" style="height:25%;">
+                        <td style="width:14%" ng-repeat="jour in semaine" class="h100 form-group-lg vcenter" ng-class="activeDate(jour.date)" >
+                            <a class="btn form-control h100" ng-disabled="!(jour.ok)" ng-click="selectDate(jour.date);">
                                 <h2>{{jour.date | date: 'dd EEEE'}}</h2>
                             </a>
                         </td>
                     </tr>
                 </table>
-            </div>
-            <button type="button" class="btn tbn-primary" ng-click="next();">Suivant (Heure)</button>
-
         </div>
         <!-- CHOIX HEURE -->
-        <div ng-controller="comHeure" class="h100" ng-class="isActiveMenu('heure')">
+        <div class="h100" ng-class="isActiveMenu('heure')">
             <h4>Selection de l'Heure</h4>
-            <div class="row">
-                <a class="btn btn-lg" ng-class="isThisActive(heure);" ng-repeat="heure in {06:'6h',07:'7h',08:'8h',09:'9h',10:'10h'}" ng-click="selectHeure(heure);">{{heure}}</a>
+            <div class="row" ng-repeat="heure in {06:'6h',07:'7h',08:'8h',09:'9h',10:'10h',11:'11h',12:'12h',13:'13h',14:'14h',15:'15h'}" style="padding:10px;">
+                <a class="btn btn-lg" ng-class="activeHeure(heure);" ng-click="selectHeure(heure);">{{heure}}</a>
             </div>
-            <button type="button" class="btn tbn-primary" ng-click="next()">Suivant (Client)</button>
         </div>
 
         <!-- CHOIX CLIENT -->
-        <div ng-controller="comClient" class="h100" ng-class="isActiveMenu('client')">
+        <div class="h100" ng-class="isActiveMenu('client')">
             <h4>Encodage du Client</h4>
             <form id="clientForm" role="form" class="form-horizontal">
                 <div class="patch-zoom-bug form-group">

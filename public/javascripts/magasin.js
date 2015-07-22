@@ -66,6 +66,7 @@ app.controller('choixVendeuse', function($scope, $rootScope, $http){
         });
     });
     $scope.selectVendeuse = function(v){
+        $rootScope.vendeuse = v;
         $rootScope.commande.Vendeuse_idVendeuse = v.idVendeuse;
         $rootScope.commande.Vendeuse_NomVendeuse = v.Nom;
     };
@@ -86,16 +87,37 @@ app.controller('mainMenu', function($scope, $rootScope, $http){
 
 
 app.controller('commandeController', function($scope, $rootScope, $http){
+    //object commande global (pour sortir du rootScope)
+    $scope.commande = {
+        Remarque: "",
+        PNP:"",
+        Montant:"",
+        livraison:{
+            date:"",
+            heure:"",
+        },
+        vendeuse: {
+            Nom: $rootScope.vendeuse.Nom,
+            idVendeuse: $rootScope.vendeuse.idVendeuse
+        },
+        client: {
+            Nom:"",
+            Tel:"",
+            Mail:"",
+            TVA:""
+        },
+        produits:[]
+    };
 
     $scope.controlTab = function(tab){
         classes = "";
         if($rootScope.activeMenu == tab) classes += "active ";
         switch(tab){
             case "date":
-                classes += $rootScope.commande.dateLivraison?"":"disabled";
+                classes += $scope.commande.livraison.date?"":"disabled";
                 break;
             case "heure":
-                classes += $rootScope.commande.heureLivraison?"":"disabled";
+                classes += $scope.commande.livraison.date?"":"disabled";
                 break;
             case "client":
                 classes += $rootScope.commande.client?"":"disabled";
@@ -115,11 +137,86 @@ app.controller('commandeController', function($scope, $rootScope, $http){
         }
         return classes;
     };
+
+    $scope.next = function (from) {
+        switch(from){
+            case 'date':
+                $scope.activeTab='heure';
+                break;
+            case 'heure':
+                $scope.activeTab='client';
+                break;
+            case 'client':
+                $scope.activeTab='produit';
+                break;
+            case 'produit':
+                $scope.activeTab='commentaire';
+                break;
+            case 'commentaire':
+                $scope.activeTab='payement';
+                break;
+            case 'payement':
+                $scope.activeTab='recap';
+                break;
+            default:
+                $scope.activeTab='date';
+        }
+    };
+
+    //<!-- ONLY FOR DATE-->
+    //rajoute la classe active si c'est la date active
+    $scope.activeDate = function(date){
+        return $scope.commande.livraison.date == date?"active":"";
+    };
+    //fonction qui va set la date de la commande a la date choisie
+    $scope.selectDate = function(date){
+        $scope.livraison.date = date;
+        $scope.next('date');
+    };
+    //creation du calendar
+    $scope.calendar = {1:{},2:{},3:{},4:{}};
+    $scope.today = new Date();
+    $scope.day = new Date();
+    var past = (($scope.today).getDay());
+    $scope.day.setDate(($scope.today).getDate()+1-past);
+    for(i=1; i<=4; i++) {
+        for(j=1; j<=7; j++){
+            $scope.calendar[i][j] = {};
+            $scope.calendar[i][j].date = new Date($scope.day);
+            if(past){//on disable les past premiers jours
+                $scope.calendar[i][j].ok = false;
+                past--;}
+            else{$scope.calendar[i][j].ok = true;}
+            $scope.day.setDate(($scope.day).getDate()+1);
+        }
+    }
+
+
+    //<!-- ONLY FOR DATE-->
+    //permet de verifier si le bouton de l'heure a été celui cliqué. Si oui, on rajotue la classe active
+    $scope.activeHeure = function(heure){
+        return $scope.commande.livraison.heure == heure?"active":"";
+    };
+    //fonction qui set l'heure de la commande à l'heure cliquée
+    $scope.selectHeure = function(heure){
+        $scope.commande.livraison.heure = heure;
+        $scope.next();
+    };
+
+
+    //<!-- ONLY FOR Client-->
+    $scope.selectClient = function(){
+        if($scope.commande.client.Nom) {
+            //todo : rajouter le tel obligatoire (ici)
+            $scope.next();
+        }
+        else{$rootScope.erreur("Entrez un Client");}
+    };
 });
+
 app.controller('comDate', function($scope, $rootScope, $http) {
-    //verifier commande.Livraison
-    $scope.isThisActive = function(date){
-        return $rootScope.commande.dateLivraison == date?"active":"";
+    $scope.activeDate = function(date){
+        return $scope.commande.livraison.date == date?"active":"";
     };
     //fonction pour passer de date à heure
     $scope.next = function () {
