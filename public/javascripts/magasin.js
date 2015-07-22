@@ -67,6 +67,7 @@ app.controller('choixVendeuse', function($scope, $rootScope, $http){
     });
     $scope.selectVendeuse = function(v){
         $rootScope.commande.Vendeuse_idVendeuse = v.idVendeuse;
+        $rootScope.commande.Vendeuse_NomVendeuse = v.Nom;
     };
     $scope.next = function(){
         $rootScope.activeMenu = "main";
@@ -183,7 +184,7 @@ app.controller('comClient', function($scope, $rootScope, $http){
     };
 });
 app.controller('comProduit', function($scope, $rootScope, $http){
-    $scope.n_by_row = 5;
+    $scope.n_by_row = 4;
     $scope.presentation = {};
     $scope.activeCategorie = "";
     $scope.listProduit = [];
@@ -248,14 +249,16 @@ app.controller('comCommentaire', function($scope, $rootScope, $http){
     };
 });
 app.controller('comPayement', function($scope, $rootScope, $http){
+    $scope.Montant = $rootScope.commande.Montant;
     $scope.selectPNP = function(PNP){
         $rootScope.commande.PNP = PNP;
         $scope.next();
     }
     $scope.next = function(){
         if($rootScope.commande.PNP) $rootScope.activeMenu = "recap";
-        else $rootScope.erreur("PNP");
+        else $rootScope.erreur("choisir PNP");
     };
 });
 app.controller('comRecap', function($scope, $rootScope, $http){
+    //$scope.commande = $rootScope.commande;
 });
