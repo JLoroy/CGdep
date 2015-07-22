@@ -37,11 +37,21 @@ app.controller('MainController', function($scope, $http){
 
     $scope.getMagasins();
 
+    $scope.getCategories = function(){
+        $http.post("get/category",{
+        }).success(function(res){
+            $scope.categories = res;
+        });
+    };
+
+    $scope.getCategories();
+
     $scope.refresh = function(){
-        $http.post("get/commande", {
+        $http.post("complex/produitCommande", {
             params:$scope.params
         }).success(function(res){
             $scope.commandes = res;
+            console.log(res);
         });
     };
 });

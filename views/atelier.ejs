@@ -22,11 +22,11 @@
 </head>
 <body ng-app="atelier">
 <div class="h100" ng-controller="MainController">
-    <div class="h100" ng-if="query.date == ''">
+    <div class="h100" ng-if="params.dateLivraison == ''">
         <table class="table table-bordered tab-pane form-control" style="height:90%;">
             <tr ng-repeat="semaine in calendar">
                 <td ng-repeat="jour in semaine" class="form-group-lg vcenter" ng-class="isThisActive(jour.date)" >
-                    <a class="btn form-control h100" ng-class="{disabled:!(jour.ok)}" ng-click="query.date = jour.date; refresh()">
+                    <a class="btn form-control h100" ng-class="{disabled:!(jour.ok)}" ng-click="params.dateLivraison = (jour.date | date:'yyyy-MM-dd') ; refresh()">
                         <h2>{{jour.date | date: 'dd EEEE'}}</h2>
                     </a>
                 </td>
@@ -35,24 +35,31 @@
     </div>
 
 
-    <div ng-if="query.date != ''" style="padding:10px; !important">
+    <div ng-if="params.dateLivraison != ''" style="padding:10px; !important">
         <button type="button" id="dateModif" class="btn btn-lg btn-primary col-md-1">
             Date...
         </button>
         <div class="col-md-8 col-md-offset-1 form-inline" style="text-align:center !important;">
-            <label ng-repeat="categorie in categories"  ng-if="categorie.display == 1"class="btn btn-lg btn-primary active" ng-click="refresh()">
-                <input class="form-control" type="checkbox" ng-model="params.selectedCategories[categorie.idCategorie]">{{categorie.Nom}}
+            <label ng-repeat="categorie in categories"  ng-if="categorie.display == 1"class="btn btn-lg btn-primary active">
+                <input class="form-control" type="checkbox" ng-model="params.selectedCategories[categorie.idCategorie]" ng-change="refresh()">{{categorie.Nom}}
             </label>
         </div>
         <button type="button" id="imprimer" class="btn btn-lg btn-primary col-md-1 col-md-offset-1">Imprimer</button>
         <table id="toPrint" class="table">
             <thead>
                 <th class="col-md-3">Produit</th>
-                <th ng-repeat="magasin in magasins">{{magasin.nom}}</th>
+                <th ng-repeat="magasin in magasins">{{magasin.Nom}}</th>
                 <th>Total</th>
             </thead>
             <tbody>
-                <tr data-toggle="collapse" data-target="#tr%s_%s"><td>%s%s</td>
+                <tr ng-repeat-start="(key, value) in commandes" data-toggle="collapse" data-target="#tr{{key}}">
+                    <td>{{value.Nom}}</td>
+                    <td ng-repeat="magasin in value.Magasin">{{magasin.Total}}</td>
+                    <td>{{value.Total}}</td>
+                </tr>
+                <tr ng-repeat-end id="tr{{key}}" class="collapse" style="background-color: whitesmoke;">
+                    <td>Such a collapse</td>
+                </tr>
             </tbody>
         </table>
     </div>
