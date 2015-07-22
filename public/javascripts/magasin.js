@@ -228,20 +228,30 @@ app.controller('comProduit', function($scope, $rootScope, $http){
             tot += (p.qty * p.prod.Prix);
         }
         console.log("total :"+tot);
-        $scope.total = tot;
+        $scope.total = tot.toFixed(2);
     };
     $scope.next = function(){
+        $rootScope.commande.Montant = $scope.total;
         if($rootScope.commande.Montant >= 0) $rootScope.activeMenu = "commentaire";
         else $rootScope.erreur("Veuillez entrer des produits");
     };
 });
 app.controller('comCommentaire', function($scope, $rootScope, $http){
+    $scope.commentaire = "";
+    $scope.selectCommentaire = function(){
+        $rootScope.commande.Remarque = $scope.commentaire;
+        $scope.next();
+    };
     $scope.next = function(){
         if(!($rootScope.commande.Remarque)) $rootScope.commande.Remarque = "";
         $rootScope.activeMenu = "payement";
     };
 });
 app.controller('comPayement', function($scope, $rootScope, $http){
+    $scope.selectPNP = function(PNP){
+        $rootScope.commande.PNP = PNP;
+        $scope.next();
+    }
     $scope.next = function(){
         if($rootScope.commande.PNP) $rootScope.activeMenu = "recap";
         else $rootScope.erreur("PNP");

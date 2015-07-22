@@ -192,85 +192,83 @@
         <!-- CHOIX Commentaire -->
         <div ng-controller="comCommentaire" class="h100" ng-class="isActiveMenu('commentaire')">
             <h4>Commentaire</h4>
-            <div class="tab-pane fade" id="commentaire">
                 <form id="clientForm" role="form" class="form-horizontal">
                     <div class="form-group">
                         <label for="commentaireCommande" class="col-md-2 control-label">Commentaire</label>
                         <div class="input-group col-md-6">
-                            <textarea class="typeahead form-control" id="comcom" rows="10" placeholder="Commentaire général"></textarea>
+                            <textarea class="typeahead form-control" ng-model="commentaire" id="comcom" rows="10" placeholder="Commentaire général""></textarea>
                         </div>
                     </div>
                 </form>
-            </div>
-            <button type="button" class="btn tbn-primary" ng-click="next()">Suivant (Payement)</button>
+            <button type="button" class="btn tbn-primary" ng-click="selectCommentaire();">Suivant (Payement)</button>
         </div>
         <!-- CHOIX payement-->
         <div ng-controller="comPayement" class="h100" ng-class="isActiveMenu('payement')">
             <h4>Selection du Payement</h4>
-            <div class="fill tab-pane fade" id="payement" style="height:90%;">
                 <form id="clientForm" role="form" class="fill form-horizontal" style="height:100%;">
                     <div class="form-group">
                         <label class="col-md-2 control-label">Prix total</label>
                         <div class="col-md-6">
-                            <input id="prix2" type="text" class="form-control prixTot" value="0 EUR" disabled>
+                            <input id="prix2" type="text" class="form-control prixTot" ng-model="commande.Montant" value="0 EUR" disabled>
                         </div>
                     </div>
                     <div class="fill form-group" style="height:100%;">
                         <div class="fill col-md-12" style="height:100%;">
-                            <div class="fill col-md-6" style="height:80%;">
-                                <button type="" id="payeCommande" class="fill btn btn-primary btn-block" style="height:100%;">Pay&eacute</button>
+                            <div class="fill col-md-6" style="height:70%;">
+                                <button type="" id="payeCommande" ng-class="isActive('P')" ng-click="selectPNP('P')" class="fill btn btn-block" style="height:100%;">Pay&eacute</button>
                             </div>
                             <div class="col-md-6" style="height:80%;">
-                                <button type="" id="payeReception" class="fill btn btn-primary btn-block" style="height:100%;">Non pay&eacute</button>
+                                <button type="" id="payeReception" ng-class="isActive('NP')" ng-click="selectPNP('NP')" class="fill btn btn-block" style="height:100%;">Non pay&eacute</button>
                             </div>
-                            <div class="col-md-12" style="height:20%; margin-top:10px;">
-                                <button type="" id="payeFacture" class="fill btn btn-primary btn-block" style="height:100%;">&Agrave facturer</button>
+                            <div class="col-md-6" style="height:20%; margin-top:10px;">
+                                <button type="" id="payeFacture" ng-class="isActive('AFP')" ng-click="selectPNP('AFP')" class="fill btn btn-block" style="height:100%;">&Agrave facturer</button>
+                            </div>
+                            <div class="col-md-6" style="height:20%; margin-top:10px;">
+                                <button type="" id="nonPayeFacture" ng-class="isActive('AFNP')" ng-click="selectPNP('AFNP')" class="fill btn btn-block" style="height:100%;">&Agrave facturer, non payeacute</button>
                             </div>
                         </div>
                     </div>
                 </form>
-            </div>
         </div>
         <!-- CHOIX Recap -->
         <div ng-controller="comRecap" class="h100" ng-class="isActiveMenu('recap')">
             <h4>Recapitulatif</h4>
-            <div class="tab-pane fade" id="recapitulatif">
                 <div id="toPrint">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <label class="col-md-2 control-label">Nom</label>
                             <div class="col-md-6">
-                                <p id="recapNom" class="form-control-static"></p>
+                                <p id="recapNom" ng-model="commande.client.Nom" class="form-control-static"></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">T&eacutel&eacutephone</label>
                             <div class="col-md-6">
-                                <p id="recapTel" class="form-control-static"></p>
+                                <p id="recapTel"  ng-model="commande.client.Tel" class="form-control-static"></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Mail</label>
                             <div class="col-md-6">
-                                <p id="recapMail" class="form-control-static">Aucune</p>
+                                <p id="recapMail"  ng-model="commande.client.Mail" class="form-control-static">Aucune</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">TVA</label>
                             <div class="col-md-6">
-                                <p id="recapTVA" class="form-control-static">Aucune</p>
+                                <p id="recapTVA"  ng-model="commande.client.TVA" class="form-control-static">Aucune</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Date</label>
                             <div class="col-md-6">
-                                <p id="recapDate" class="form-control-static"></p>
+                                <p id="recapDate"  ng-model="commande.dateLivraison | date :'EEEE dd MM YY' " class="form-control-static"></p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Heure</label>
                             <div class="col-md-6">
-                                <p id="recapHeure" class="form-control-static"></p>
+                                <p id="recapHeure"  ng-model="commande.heureLivraion" class="form-control-static"></p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -292,7 +290,7 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Total</label>
                             <div class="col-md-6">
-                                <p id="recapTotal" class="form-control-static prixTotP"></p>
+                                <p id="recapTotal" ng-model="commande.Montant" class="form-control-static prixTotP"></p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -317,7 +315,6 @@
                     </form>
                 </div>
                 <button id="doPrint" class="btn btn-lg btn-primary">Imprimer</button>
-            </div>
         </div>
 
     </div>
