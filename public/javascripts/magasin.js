@@ -2,7 +2,7 @@ var app = angular.module('magasin',[]);
 
 
 app.run(function ($rootScope, $http){
-    $rootScope.commande = {}
+    $rootScope.commande = {};
     $rootScope.activeMenu = "vendeuse";
     $rootScope.messageErreur = "";
     $rootScope.displayErreur = false;
@@ -203,7 +203,7 @@ app.controller('comProduit', function($scope, $rootScope, $http){
                 if($rootScope.produits[prod].display == 1){
                     i = $scope.presentation[thisProd.Categorie_idCategorie].i;
                     if(i%$scope.n_by_row == 0) $scope.presentation[thisProd.Categorie_idCategorie][i/$scope.n_by_row |0] = {};
-                    $scope.presentation[thisProd.Categorie_idCategorie][i/$scope.n_by_row |0][i%$scope.n_by_row] = {thisProd};
+                    $scope.presentation[thisProd.Categorie_idCategorie][i/$scope.n_by_row |0][i%$scope.n_by_row] = {thisProd:thisProd};
                     $scope.presentation[thisProd.Categorie_idCategorie].i= i+1;
                 }
             }
@@ -253,7 +253,7 @@ app.controller('comPayement', function($scope, $rootScope, $http){
     $scope.selectPNP = function(PNP){
         $rootScope.commande.PNP = PNP;
         $scope.next();
-    }
+    };
     $scope.next = function(){
         if($rootScope.commande.PNP) $rootScope.activeMenu = "recap";
         else $rootScope.erreur("choisir PNP");
