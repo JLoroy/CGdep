@@ -178,6 +178,13 @@ app.controller('comClient', function($scope, $rootScope, $http){
         }
         else{$rootScope.erreur("Entrez un Client");}
     };
+    $scope.getClients = function(){
+        $http.post("get/client", {
+            params: $scope.params
+        }).success(function(res){
+            $scope.clients = res;
+        });
+    };
     $scope.next = function(){
         $rootScope.setActiveMenu('produit');
     };
@@ -202,7 +209,7 @@ app.controller('comProduit', function($scope, $rootScope, $http){
                 if($rootScope.produits[prod].display == 1){
                     i = $scope.presentation[thisProd.Categorie_idCategorie].i;
                     if(i%$scope.n_by_row == 0) $scope.presentation[thisProd.Categorie_idCategorie][i/$scope.n_by_row |0] = {};
-                    $scope.presentation[thisProd.Categorie_idCategorie][i/$scope.n_by_row |0][i%$scope.n_by_row] = {thisProd};
+                    $scope.presentation[thisProd.Categorie_idCategorie][i/$scope.n_by_row |0][i%$scope.n_by_row] = {thisProd:thisProd};
                     $scope.presentation[thisProd.Categorie_idCategorie].i= i+1;
                 }
             }
