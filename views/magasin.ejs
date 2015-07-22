@@ -241,37 +241,37 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Nom</label>
                             <div class="col-md-6">
-                                <p id="recapNom" ng-model="commande.client.Nom" class="form-control-static"></p>
+                                <p id="recapNom" ng-model="commande.client.Nom" class="form-control-static">{{commande.client.Nom}}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">T&eacutel&eacutephone</label>
                             <div class="col-md-6">
-                                <p id="recapTel"  ng-model="commande.client.Tel" class="form-control-static"></p>
+                                <p id="recapTel"  ng-model="commande.client.Tel" class="form-control-static">{{commande.client.Tel}}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Mail</label>
                             <div class="col-md-6">
-                                <p id="recapMail"  ng-model="commande.client.Mail" class="form-control-static">Aucune</p>
+                                <p id="recapMail"  ng-model="commande.client.Mail" class="form-control-static">{{commande.client.Mail}}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">TVA</label>
                             <div class="col-md-6">
-                                <p id="recapTVA"  ng-model="commande.client.TVA" class="form-control-static">Aucune</p>
+                                <p id="recapTVA"  ng-model="commande.client.TVA" class="form-control-static">{{commande.client.TVA}}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Date</label>
                             <div class="col-md-6">
-                                <p id="recapDate"  ng-model="commande.dateLivraison | date :'EEEE dd MM YY' " class="form-control-static"></p>
+                                <p id="recapDate"  ng-model="commande.dateLivraison | date :'EEEE dd MM YY' " class="form-control-static">{{commande.dateLivraison | date :'EEEE dd MM'}}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Heure</label>
                             <div class="col-md-6">
-                                <p id="recapHeure"  ng-model="commande.heureLivraion" class="form-control-static"></p>
+                                <p id="recapHeure"  ng-model="commande.heureLivraion" class="form-control-static">{{commande.heureLivraison}}</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -293,25 +293,25 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Total</label>
                             <div class="col-md-6">
-                                <p id="recapTotal" ng-model="commande.Montant" class="form-control-static prixTotP"></p>
+                                <p id="recapTotal" ng-model="commande.Montant" class="form-control-static prixTotP">{{commande.Montant}}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Commentaire</label>
                             <div class="col-md-6">
-                                <p id="recapCommentaire" class="form-control-static"></p>
+                                <p id="recapCommentaire" class="form-control-static">{{commande.Remarque}}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Payement</label>
                             <div class="col-md-6">
-                                <p id="recapPayement" class="form-control-static"></p>
+                                <p id="recapPayement" class="form-control-static">{{commande.PNP}}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-2 control-label">Vendeuse</label>
                             <div class="col-md-6">
-                                <p id="recapVendeuse" class="form-control-static"></p>
+                                <p id="recapVendeuse" class="form-control-static">{{commande.Vendeuse_NomVendeuse}}</p>
                             </div>
                         </div>
 
@@ -331,6 +331,9 @@
             <th>Vendeuse</th>
             <th>Livraison</th>
             <th>Client</th>
+            <th>Produits</th>
+            <th>Commentaire</th>
+            <th>PNP</th>
             </thead>
             <tbody>
             <tr class="warning">
@@ -338,7 +341,9 @@
                 <td>{{activeMenu}}</td>
                 <td>{{commande.Vendeuse_idVendeuse}}</td>
                 <td>{{commande.dateLivraison| date:'EEEE dd/MM'}} à {{commande.heureLivraison}}</td>
-                <td>{{commande.Client_idClient}}</td>
+                <td>{{commande.client.Nom}}</td>
+                <td>{{activeMenu}}</td>
+                <td>{{activeMenu}}</td>
             </tr>
 
             </tbody>
