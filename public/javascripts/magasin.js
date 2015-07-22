@@ -225,7 +225,7 @@ app.controller('comProduit', function($scope, $rootScope, $http){
     $scope.calculTotal = function(){
         var tot = 0;
         for(i = 0; i<$scope.listProduit.length; i++){
-            p = $scope.listProduit[i]
+            p = $scope.listProduit[i];
             tot += (p.qty * p.prod.Prix);
         }
         console.log("total :"+tot);
