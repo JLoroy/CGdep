@@ -14,7 +14,7 @@ app.controller('CommandeController', function($scope, $http){
         $scope.magasins = res;
     });
     $scope.modify = function(toMod){
-        console.log(toMod)
+        console.log(toMod);
         $http.post("modify/commande", {
             toModify: toMod
         })
@@ -23,7 +23,7 @@ app.controller('CommandeController', function($scope, $http){
         $http.post("remove/commande",{
             toRemove: toRem
         });
-    }
+    };
     $scope.refresh();
 });
 
@@ -37,7 +37,7 @@ app.controller('ClientController', function($scope, $http){
         });
     };
     $scope.modify = function(toMod){
-        console.log(toMod)
+        console.log(toMod);
         $http.post("modify/client", {
             toModify: toMod
         })
@@ -46,7 +46,7 @@ app.controller('ClientController', function($scope, $http){
         $http.post("remove/client",{
             toRemove: toRem
         });
-    }
+    };
     $scope.getClients();
 });
 
@@ -55,7 +55,7 @@ app.controller('ProduitController', function($scope, $http){
     $scope.new = {};
     $scope.getProduits = function(){
         $http.post("get/produit", {
-            params : $scope.params,
+            params : $scope.params
         }).success(function(res){
             $scope.produits = res;
         });
@@ -64,14 +64,14 @@ app.controller('ProduitController', function($scope, $http){
         $scope.categories = res;
     });
     $scope.add = function(){
-        console.log($scope.new)
+        console.log($scope.new);
         $http.post("add/produit", {
             new: $scope.new
-        })
+        });
         $scope.new={};
     };
     $scope.modify = function(toMod){
-        console.log(toMod)
+        console.log(toMod);
         $http.post("modify/produit", {
             toModify: toMod
         })
@@ -98,7 +98,7 @@ app.controller('CategoryController', function($scope, $http){
         $scope.new={};
     };
     $scope.modify = function(toMod){
-        console.log(toMod)
+        console.log(toMod);
         $http.post("modify/category", {
             toModify: toMod
         })
@@ -107,7 +107,7 @@ app.controller('CategoryController', function($scope, $http){
         $http.post("remove/category",{
             toRemove: toRem
         });
-    }
+    };
     $scope.getCategories();
 });
 
@@ -134,7 +134,7 @@ app.controller('MagasinController', function($scope, $http){
         $http.post("remove/magasin",{
             toRemove: toRem
         });
-    }
+    };
     $scope.getMagasins();
 });
 
@@ -203,7 +203,7 @@ app.controller('TerminalController', function($scope, $http){
         $http.post("remove/terminal",{
             toRemove: toRem
         });
-    }
+    };
     $scope.getTerminals();
 });
 
@@ -231,7 +231,7 @@ app.controller('FerieController', function($scope, $http){
         $http.post("remove/ferie",{
             toRemove: toRem
         });
-    }
+    };
     $scope.getFeries();
 });
 
@@ -265,11 +265,11 @@ app.controller('CustomController', function($scope, $http){
         $http.post("remove/custom",{
             toRemove: toRem
         });
-    }
+    };
     $scope.modify = function(toMod){
         $http.post("modify/custom",{
             toModify: toMod
         });
-    }
+    };
     $scope.getCustoms();
 });

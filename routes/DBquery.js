@@ -8,12 +8,54 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 
+var newEntryAtelier = function(produit, Produits, isCustom){
+    var idP = "idProduit" + (isCustom?"Custom":"");
+    var id = produit[idP].toString()+(isCustom?"C":"P");
+    if(!Produits[id]) {
+        Produits[id] = {
+            isCustom: false,
+            id: produit[idP],
+            Nom: produit.Nom,
+            Total: 0,
+            Categorie: produit.Categorie_idCategorie,
+            Magasin: {},
+            Details: []
+        };
+    }
+    Produits[id].Total = Produits[id].Total+produit.Quantite;
+    if(!Produits[id].Magasin[produit.Magasin_idMagasin]){
+        Produits[id].Magasin[produit.Magasin_idMagasin] = {Total: 0};
+    }
+    Produits[id].Magasin[produit.Magasin_idMagasin].Total = Produits[id].Magasin[produit.Magasin_idMagasin].Total+produit.Quantite;
+    if(!produit.Details == ''){
+        Produits[id].Details.push({
+            Quantite: produit.Quantite,
+            Magasin: produit.MagasinNom,
+            Detail: produit.Details
+        });
+    }
+    return Produits;
+};
+
+var refactorProduitCommande = function(produits, customs){
+    var result = {};
+    for(produit in produits){
+        result = newEntryAtelier(produits[produit], result, false);
+    }
+    for(produit in customs){
+        result = newEntryAtelier(customs[produit], result, true);
+    }
+    return result;
+};
+
 function select_query(choices, column){
     query = "(FALSE ";
     var isSelect = false;
     for(var key in choices){
-        if(choices[key]) query = query+" OR "+column+"=" + key;
-        isSelect = true;
+        if(choices[key]) {
+            query = query+" OR "+column+"=" + key;
+            isSelect = true;
+        }
     }
     return query + (isSelect?")":"OR TRUE)");
 }
@@ -178,3 +220,39 @@ exports.modify = function(req, res){
         res.send(rows);
     });
 };
+
+exports.complex = function(req, res){
+    var params = req.body.params;
+    console.log(params.selectedCategories);
+    var query = "";
+    switch(req.params.type){
+        case "produitCommande":
+            query = "SELECT Produitcommande.Quantite, Produitcommande.Details, Produitcommande.Produit_idProduit, "+
+                "Produit.Nom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin FROM Produitcommande "+
+                "JOIN Produit ON produitCommande.Produit_idProduit = idProduit "+
+                "JOIN Commande ON produitCommande.Commande_idCommande = idCommande " +
+                "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal "+
+                "WHERE "+select_query(params.selectedCategories,"Produit.Categorie_idCategorie");
+            if(params.dateLivraison) query = query + " AND Commande.Livraison LIKE '" + params.dateLivraison + "%'";
+            console.log("complex 1 : "+query);
+            connection.query(query , function(errP, rowsP, fields) {
+                if (errP) throw errP;
+                query = "SELECT Produitcommande.Quantite, Produitcommande.Details, Produitcommande.ProduitCustom_idProduitCustom, "+
+                    "ProduitCustom.Nom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, Terminal.Magasin_idMagasin FROM Produitcommande "+
+                    "JOIN ProduitCustom ON produitCommande.ProduitCustom_idProduitCustom = idProduitCustom "+
+                    "JOIN Commande ON produitCommande.Commande_idCommande = idCommande " +
+                    "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal "+
+                    "WHERE "+select_query(params.selectedCategories,"ProduitCustom.Categorie_idCategorie");
+                if(params.dateLivraison) query = query + " AND Commande.Livraison LIKE '" + params.dateLivraison + "%'";
+                console.log("complex 2 : "+query);
+                connection.query(query , function(errC, rowsC, fields) {
+                    if (errC) throw errC;
+                    var result = refactorProduitCommande(rowsP, rowsC);
+                    res.send(result);
+                });
+            });
+            break;
+        default:
+            console.log("Requete complexe d'un type inconnu : "+req.params.type);
+    }
+}
