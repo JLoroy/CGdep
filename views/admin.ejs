@@ -96,7 +96,7 @@
                 <th>Supprimer</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="commande in commandes" ng-if="commande.display == 1">
+                <tr ng-repeat="commande in commandes" <!--ng-if="commande.display == 1"-->>
                     <td>{{commande.idCommande}}</td>
                     <td>{{commande.Creation | date:'EEEE dd MMMM yyyy'}}</td>
                     <td>{{commande.Livraison | date:'EEEE dd MMMM yyyy'}}</td>

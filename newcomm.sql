@@ -1,0 +1,1 @@
+UPDATE commande SET Livraison='2015-07-31 12:00:00' WHERE idCommande < 50;

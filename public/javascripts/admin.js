@@ -7,6 +7,7 @@ app.controller('CommandeController', function($scope, $http){
             params:$scope.params
         }).success(function(res){
             $scope.commandes = res;
+            console.log(res.length);
         });
     };
     $http.post("get/magasin").success(function(res){
