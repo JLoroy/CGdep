@@ -45,14 +45,14 @@
             </ul>
 
             <!-- Tab panes -->
-            <div class="tab-content h100">
+            <div class="tab-content"  style="max-width: 100% !important; max-height:70% !important;">
                 <table id="mag{{mag_v.idMagasin}}" ng-repeat="mag_v in vendByMag"
-                       class="table table-bordered tab-pane form-control" style="height:90%;" ng-class="activeClass(mag_v.idMagasin)">
+                       class="table table-bordered tab-pane form-control" ng-class="activeClass(mag_v.idMagasin)">
                     <tr ng-repeat="row_v in mag_v">
-                        <td ng-repeat="v in row_v" class="form-group-lg vcenter" style="height:50% !important;">
+                        <td ng-repeat="v in row_v" class="form-group-lg vcenter" style="max-width: 100% !important; max-height:70% !important;">
                             <a ng-click="selectVendeuse(v);next()">
                                 <h4>{{v.Nom}}</h4>
-                                <img src="/default.jpg" class="center-block" style="max-width: 100% !important; max-height:100% !important;">
+                                <img src="/default.jpg" class="center-block" style="max-width: 100% !important; max-height:70% !important;">
                             </a>
                         </td>
                     </tr>
@@ -142,6 +142,7 @@
                 </div>
             </form>
             <button type="button" class="btn tbn-primary fr" ng-click="selectClient();">Suivant (Produit)</button>
+            <button type="button" class="btn tbn-primary fr" ng-click="commande.client.Nom='Commande de Test';selectClient();">Commande de Test)</button>
         </div>
         <!-- CHOIX Produits -->
         <div class="h100" ng-class="isActiveMenu('produit')">
@@ -151,7 +152,20 @@
                     <div class="form-group">
                         <label for="listProduit" class="control-label">Produits</label>
                         <ul id="listProduit" class="list-group">
-                            <li class="form-control" ng-repeat="p in commande.produits">{{p.prod.Nom}}<span style="float:right;">{{p.qty}}</span></li>
+                            <li class="list-group-item" ng-repeat="p in commande.produits">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-7" data-toggle="modal" data-target="#modalProduit" ng-click="removeProduit(p);openModalProduit(p.prod,p.qty,'modify',p.params);">{{p.prod.Nom}}</label>
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon glyphicon glyphicon-minus" ng-click="p.qty = p.qty -1;"></span>
+                                            <input type="number" class="form-control" value="1" ng-model="p.qty">
+                                            <span class="input-group-addon glyphicon glyphicon-plus" ng-click="p.qty = p.qty +1;"></span>
+                                            <span class="input-group-addon glyphicon glyphicon-remove clearInput" ng-click="removeProduit(p);"></span>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                     <!-- PRIX
@@ -162,10 +176,10 @@
                 </form>
             </div>
             <div class="col-md-8" style="border-left: 1px solid gray; margin-left: -1px;padding-left:0px !important;padding-right:0px !important;">
-                <div class="col-md-2" style="padding-top:10px !important;">"
+                <div class="col-md-2" style="padding-top:10px !important;">
                     <div class="col-md-12" style="padding-top:5px !important;padding-left:0px !important;padding-right:0px !important;">
                         <button ng-repeat="category in categories" ng-if="category.display == 1" role="tab" data-toggle="tab"
-                                class="btn-produit-categ btn btn-default btn-block btn-lg" style="height:90px !important;"
+                                class="btn btn-block btn-lg" style="height:90px !important;" ng-class="buttonCategorie(category.idCategorie)"
                                 ng-click="selectCategorie(category.idCategorie)">
                             {{category.Nom}}
                         </button>
@@ -173,13 +187,34 @@
                 </div>
                 <div class="tab-content col-md-10" id="produitBtnDiv" ng-repeat="category in produitTable" >
                     <div class="tab-pane" ng-class="tabCategorie(category.idCategorie)">
-                        <table class="table table-bordered col-md-12">
+                        <table class="table table-bordered col-md-12 table-condensed">
                             <tr ng-repeat="row_p in category">
                                 <td ng-repeat="produit in row_p" class="col-md-3" style="border:none; !important">
-                                    <button type="button" class="btn btn-default btn-lg btn-block" ng-click="addProduit(produit.thisProd,1);">{{produit.thisProd.Nom}}</button>
+                                    <button type="button" data-toggle="modal" data-target="#modalProduit" class="btn btn-default btn-lg btn-block" ng-click="openModalProduit(produit.thisProd,1,'add',{});">{{produit.thisProd.Nom}}</button>
                                 </td>
                             </tr>
                         </table>
+                    </div>
+                </div>
+                <!-- MODAL produit Quantite-->
+                <div class="modal fade"  data-backdrop="static" keyboard="false" role="dialog" and aria-labelledby="modalProduit" id="modalProduit" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body form-group">
+                                <h3>Quantité</h3>
+                                <div class="input-group">
+                                    <span class="input-group-addon glyphicon glyphicon-minus" ng-click="modal.qty = modal.qty - 1;"></span>
+                                    <input type="number" class="form-control input-lg" ng-model="modal.qty">
+                                    <span class="input-group-addon glyphicon glyphicon-plus" ng-click="modal.qty = modal.qty + 1;"></span>
+                                </div>
+                                <textarea class="form-control" rows="3" placeholder="Entrez votre commentaire" ng-model="modal.params.commentaire"></textarea>
+
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" data-dismiss="modal" class="btn btn-danger" ng-click="cancelModalProduit();" >Annuler</a>
+                                <a type="button" data-dismiss="modal" class="btn btn-success" ng-click="addProduit(modal.prod, modal.qty, modal.params)" >Confirmer</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-offset-3 col-md-6">
@@ -187,6 +222,7 @@
                     <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#customModal">Produit personnalis&eacute...</button>
                 </div>
             </div>
+
 
             <button type="button" class="btn tbn-primary" ng-click="confirmProduit()">Suivant (Commentaire)</button>
         </div>
@@ -207,12 +243,12 @@
         <div class="h100" ng-class="isActiveMenu('payement')">
             <h4>Selection du Payement</h4>
                 <form id="clientForm" role="form" class="fill form-horizontal" style="height:100%;">
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label class="col-md-2 control-label">Prix total</label>
                         <div class="col-md-6">
                             <input id="prix2" type="text" class="form-control prixTot" ng-model="commande.montant" value="0 EUR" disabled>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="fill form-group" style="height:100%;">
                         <div class="fill col-md-12" style="height:100%;">
                             <div class="fill col-md-6" style="height:70%;">
@@ -232,10 +268,10 @@
                 </form>
         </div>
         <!-- CHOIX Recap -->
-        <div class="h100" ng-class="isActiveMenu('recap')">
+        <div class="h100" style="width:100%" ng-class="isActiveMenu('recap')">
             <h4>Recapitulatif</h4>
-                <div id="toPrint">
-                    <form class="form-horizontal" role="form">
+                <div id="toPrint" class="col-md-offset-1" style="width:100%;height:70%;">
+                    <form class="form-horizontal col-md-3" role="form">
                         <div class="form-group">
                             <label class="col-md-2 control-label">Nom</label>
                             <div class="col-md-6">
@@ -272,39 +308,7 @@
                                 <p id="recapHeure" class="form-control-static">{{commande.heure}}</p>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">Produits</label>
-                            <div class="col-md-6">
-                                <table class="table form-control-static">
-                                    <thead>
-                                    <th>Nom</th>
-                                    <th>Prix unitaire</th>
-                                    <th>Quantit&eacute</th>
-                                    <th>Total</th>
-                                    </thead>
-                                    <tbody id="recapProduit">
-                                        <tr ng-repeat="produit in commande.produits">
-                                            <td>{{produit.prod.Nom}}</td>
-                                            <td>{{produit.prod.Prix}}</td>
-                                            <td>{{produit.qty}}</td>
-                                            <td>{{produit.prod.Prix * produit.qty}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">Total</label>
-                            <div class="col-md-6">
-                                <p ng-model="montant" class="form-control-static prixTotP">{{commande.montant}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">Commentaire</label>
-                            <div class="col-md-6">
-                                <p class="form-control-static">{{commande.remarque}}</p>
-                            </div>
-                        </div>
+
                         <div class="form-group">
                             <label class="col-md-2 control-label">Payement</label>
                             <div class="col-md-6">
@@ -317,14 +321,51 @@
                                 <p class="form-control-static">{{vendeuse.Nom}}</p>
                             </div>
                         </div>
-
                     </form>
+                    <form class="form-horizontal col-md-8" role="form" style="border-left: 1px solid gray; margin-left: -1px;padding-left:0px !important;padding-right:0px !important;">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Produits</label>
+                            <div class="col-md-6">
+                                <table class="table form-control-static">
+                                    <thead>
+                                    <th>Nom</th>
+                                    <th>Commentaire</th>
+                                    <!--<th>Prix unitaire</th>-->
+                                    <th>Quantit&eacute</th>
+                                    <!--<th>Total</th>-->
+                                    </thead>
+                                    <tbody id="recapProduit">
+                                    <tr ng-repeat="produit in commande.produits">
+                                        <td>{{produit.prod.Nom}}</td>
+                                        <td>{{produit.params.commentaire}}</td>
+                                        <!--<td>{{produit.prod.Prix}}</td>-->
+                                        <td>{{produit.qty}}</td>
+                                        <!--<td>{{produit.prod.Prix * produit.qty}}</td>-->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--<div class="form-group">
+                            <label class="col-md-2 control-label">Total</label>
+                            <div class="col-md-6">
+                                <p ng-model="montant" class="form-control-static prixTotP">{{commande.montant}}</p>
+                            </div>
+                        </div>-->
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Commentaire</label>
+                            <div class="col-md-6">
+                                <p class="form-control-static">{{commande.remarque}}</p>
+                            </div>
+                        </div>
+                    </form>
+                    <button id="doPrint" class="btn btn-lg btn-primary col-md-1">Imprimer</button>
                 </div>
-                <button id="doPrint" class="btn btn-lg btn-primary">Imprimer</button>
+            <div style="width:100%;"><a class="btn btn-lg btn-success">Envoyer la commande</a></div>
         </div>
 
         <div id="footer">
-            <h4>RootScope : </h4>
+            <h4>Values : </h4>
             <table class="table table-bordered">
                 <thead>
                 <th>Magasin</th>
@@ -337,6 +378,8 @@
                 <th>Montant</th>
                 <th>Commentaire</th>
                 <th>PNP</th>
+                <th>Modal</th>
+                <th>Modal qty</th>
                 </thead>
                 <tbody>
                 <tr class="warning">
@@ -350,6 +393,8 @@
                     <td>{{commande.montant}}</td>
                     <td>{{commande.remarque}}</td>
                     <td>{{commande.PNP}}</td>
+                    <td>{{modal.prod.Nom}}</td>
+                    <td>{{modal.qty}}</td>
                 </tr>
 
                 </tbody>

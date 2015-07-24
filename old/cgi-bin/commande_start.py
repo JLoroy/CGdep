@@ -811,7 +811,7 @@ data-heure="{{Heure}}">
             <label class="control-label col-md-7" data-toggle="modal" data-target="#popupProduit{{entryID}}">{{produitNom}}</label>
             <div class="input-group col-md-5">
               <span class="input-group-addon glyphicon glyphicon-minus"></span>
-              <input id="inputQuantiteProduit{{entryID}}" type="number" class="form-control" value="1" data-nom="{{produitNom}}" data-prix="{{produitPrix}}" data-idProduit="{{produitID}}" data-custom="{{custom}}" data-categcustom="{{categCustom}}">
+              <input id="inputentiteProduit{{entryID}}" type="number" class="form-control" value="1" data-nom="{{produitNom}}" data-prix="{{produitPrix}}" data-idProduit="{{produitID}}" data-custom="{{custom}}" data-categcustom="{{categCustom}}">
               <span class="input-group-addon glyphicon glyphicon-plus"></span>
               <span class="input-group-addon glyphicon glyphicon-remove clearInput" data-idProduit="{{produitID}}"></span>
             </div>

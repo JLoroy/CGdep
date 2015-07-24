@@ -215,11 +215,13 @@ app.controller('commandeController', function($scope, $rootScope, $http){
 
 
     //<!-- ONLY FOR PRODUIT-->
+    $scope.modal = {prod:{},qty:'',mode:'',params:{}};
     $scope.n_by_row = 4;
     $scope.produitTable = {};
     $scope.activeCategorie = "1";//todo issue if categorie 1 is deleted
     $scope.total = 0;
     //todo:REFACTOR this into complex/produitTable
+    //todo: changer l'ordre alphabetique
     $http.post("/get/produit", {params:{}}).success(function(res){
         $rootScope.produits = res;
         $http.post("/get/category", {params:{}}).success(function(res){
@@ -246,10 +248,31 @@ app.controller('commandeController', function($scope, $rootScope, $http){
     $scope.tabCategorie = function(idCategorie){
         return idCategorie == $scope.activeCategorie?"active":"hidden";
     };
-    $scope.addProduit = function(toAdd, quantity){
-        $scope.commande.produits.push({prod:toAdd, qty:quantity});
+    $scope.buttonCategorie = function(idCategorie){
+        return idCategorie == $scope.activeCategorie?"active btn-primary":"btn-default";
+    };
+    $scope.openModalProduit = function(toAdd,qty,mode,params){
+        $scope.modal.mode = mode;
+        $scope.modal.prod = toAdd;
+        $scope.modal.qty = qty;
+        $scope.modal.params = params;
+    };
+    $scope.cancelModalProduit = function(){
+        if($scope.modal.mode == 'modify'){
+            $scope.addProduit($scope.modal.prod, $scope.modal.qty, $scope.modal.params);
+        }
+        $scope.modal = {prod:{},qty:'',mode:'',params:{}};
+    }
+    $scope.addProduit = function(toAdd, quantity, params){
+        console.log($scope.modal)
+        $scope.modal = {prod:{},qty:'',mode:'',params:{}};
+        $scope.commande.produits.push({prod:toAdd, qty:quantity, params:params});
         $scope.calculTotal();
-        console.log($scope.commande.produits);
+    };
+    $scope.removeProduit = function(p){
+        var index = $scope.commande.produits.indexOf(p);
+        $scope.commande.produits.splice(index,1);
+        $scope.calculTotal();
     };
     $scope.calculTotal = function(){
         var tot = 0;
@@ -257,7 +280,6 @@ app.controller('commandeController', function($scope, $rootScope, $http){
             var p = $scope.commande.produits[i];
             tot += (p.qty * p.prod.Prix);
         }
-        console.log(tot);
         $scope.commande.montant = tot.toFixed(2);
     };
     $scope.confirmProduit = function(){
