@@ -102,22 +102,21 @@ app.controller('commandeController', function($scope, $rootScope, $http){
         if($rootScope.activeMenu == tab) classes += "active ";
         switch(tab){
             case "date":
-                classes += $scope.commande.date!=''?"":"disabled";
                 break;
             case "heure":
-                classes += $scope.commande.heure!=''?"":"disabled";
+                classes += $scope.commande.date!=''?"":"disabled";
                 break;
             case "client":
-                classes += $scope.commande.client.Mail!=''?"":"disabled";
+                classes += $scope.commande.heure!=''?"":"disabled";
                 break;
             case "produit":
-                classes += $scope.commande.montant!=''?"":"disabled";
+                classes += $scope.commande.client.Nom!=''?"":"disabled";
                 break;
             case "commentaire":
-                classes += $scope.commande.remarque!=''?"":"disabled";
+                classes += $scope.commande.montant!=''?"":"disabled";
                 break;
             case "payement":
-                classes += $scope.commande.PNP!=''?"":"disabled";
+                classes += $scope.commande.remarque!=''?"":"disabled";
                 break;
             case "recap":
                 classes += $scope.commande.PNP!=''?"":"disabled";
@@ -129,25 +128,60 @@ app.controller('commandeController', function($scope, $rootScope, $http){
     };
 
     $scope.next = function (from) {
-        var tab = '';
+        var tab = from;
         switch(from){
             case 'date':
-                tab='heure';
+                if($scope.commande.date!='')tab='heure';
+                else $rootScope.erreur("Date non valide");
                 break;
             case 'heure':
-                tab='client';
+                if($scope.commande.heure!='')tab='client';
+                else $rootScope.erreur("Heure non valide");
                 break;
             case 'client':
-                tab='produit';
+                if($scope.commande.client.Nom!='')tab='produit';
+                else $rootScope.erreur("Veuillez rentrer un nom et un numero de telephone");
                 break;
             case 'produit':
-                tab='commentaire';
+                if($scope.commande.montant!='')tab='commentaire';
+                else $rootScope.erreur("Veuillez entrer des produits");
                 break;
             case 'commentaire':
                 tab='payement';
                 break;
             case 'payement':
-                tab='recap';
+                if($scope.commande.pnp!='')tab='recap';
+                else $rootScope.erreur("Payement non valide");
+                break;
+            default:
+                tab='date';
+        }
+        $rootScope.activeMenu = tab;
+
+    };
+
+    $scope.previous = function (from) {
+        var tab = from;
+        switch(from){
+            case 'date':
+                break;
+            case 'heure':
+                tab='date';
+                break;
+            case 'client':
+                tab='heure';
+                break;
+            case 'produit':
+                tab='client';
+                break;
+            case 'commentaire':
+                tab='produit';
+                break;
+            case 'payement':
+                tab='commentaire';
+                break;
+            case 'recap':
+                tab='payement';
                 break;
             default:
                 tab='date';
@@ -198,13 +232,6 @@ app.controller('commandeController', function($scope, $rootScope, $http){
 
 
     //<!-- ONLY FOR ClIENT-->
-    $scope.selectClient = function(){
-        if($scope.commande.client.Nom != '') {
-            //todo : rajouter le tel obligatoire (ici)
-            $scope.next('client');
-        }
-        else{$rootScope.erreur("Entrez un Client");}
-    };
     $scope.getClients = function(){
         $http.post("get/client", {
          params: {Nom:$scope.commande.client.Nom}
@@ -215,7 +242,7 @@ app.controller('commandeController', function($scope, $rootScope, $http){
 
 
     //<!-- ONLY FOR PRODUIT-->
-    $scope.modal = {prod:{},qty:'',mode:'',params:{}};
+    $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',params:{}};
     $scope.n_by_row = 4;
     $scope.produitTable = {};
     $scope.activeCategorie = "1";//todo issue if categorie 1 is deleted
@@ -250,23 +277,30 @@ app.controller('commandeController', function($scope, $rootScope, $http){
     };
     $scope.buttonCategorie = function(idCategorie){
         return idCategorie == $scope.activeCategorie?"active btn-primary":"btn-default";
-    };
-    $scope.openModalProduit = function(toAdd,qty,mode,params){
+    };/*
+    $scope.getParams('categ'){
+        var params = {};
+        switch(categ){
+
+        }
+    }*/
+    $scope.openModalProduit = function(toAdd,qty,mode,commentaire, params){
         $scope.modal.mode = mode;
         $scope.modal.prod = toAdd;
         $scope.modal.qty = qty;
+        $scope.modal.commentaire = commentaire;
         $scope.modal.params = params;
     };
     $scope.cancelModalProduit = function(){
         if($scope.modal.mode == 'modify'){
-            $scope.addProduit($scope.modal.prod, $scope.modal.qty, $scope.modal.params);
+            $scope.addProduit($scope.modal.prod, $scope.modal.qty, $scope.modal.commentaire, $scope.modal.params);
         }
-        $scope.modal = {prod:{},qty:'',mode:'',params:{}};
+        $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',params:{}};
     }
-    $scope.addProduit = function(toAdd, quantity, params){
+    $scope.addProduit = function(toAdd, quantity, commentaire, params){
         console.log($scope.modal)
-        $scope.modal = {prod:{},qty:'',mode:'',params:{}};
-        $scope.commande.produits.push({prod:toAdd, qty:quantity, params:params});
+        $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',params:{}};
+        $scope.commande.produits.push({prod:toAdd, qty:quantity, commentaire:commentaire, params:params});
         $scope.calculTotal();
     };
     $scope.removeProduit = function(p){
@@ -282,11 +316,6 @@ app.controller('commandeController', function($scope, $rootScope, $http){
         }
         $scope.commande.montant = tot.toFixed(2);
     };
-    $scope.confirmProduit = function(){
-        if ($scope.commande.montant > 0 ) $scope.next('produit');
-        else $rootScope.erreur("Veuillez entrer des produits");
-    }
-
     //COMMENTAIRE
     $scope.selectCommentaire = function(){
         $scope.next('commentaire');
