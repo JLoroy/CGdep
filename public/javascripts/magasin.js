@@ -351,7 +351,7 @@ app.controller('commandeController', function($scope, $rootScope, $http){
     //RECAP
     $scope.sendCommande = function() {
         $scope.commande.vendeuse = $rootScope.vendeuse;
-        $http.post("/getsession", $scope.commande).success(function(res){
+        $http.post("/complex/commande", {params:$scope.commande}).success(function(res){
 
         });
     };

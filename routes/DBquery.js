@@ -253,16 +253,17 @@ exports.complex = function(req, res){
             });
             break;
         case "commande" :
-            /*commande : {
+
+            /*params : {
                 date:'',
                 heure:'',
                 client:{Nom:'',Tel:'',Mail:'',TVA:''},
                 produits:[{
                     prod : {
                         Nom: '',
-                        idProduit: '',
-                        Prix: '',
-                        idCategorie: '',
+                        (idProduit: ''),
+                        (Prix: ''),
+                        Categorie_idCategorie: '',
                         (custom: '')},
                     qty: '',
                     commentaire: ''}
@@ -273,7 +274,14 @@ exports.complex = function(req, res){
                 vendeuse: '',
                 (idCommande: '')
             }*/
+            //New Client ?
+            //New Custom Product ?
+            //New Custom Words ?
 
+            //IF modify Command
+            if(params.idCommande){
+
+            }
 
             break:
         default:
