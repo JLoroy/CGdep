@@ -244,7 +244,18 @@ app.controller('commandeController', function($scope, $rootScope, $http){
     };
 
 
-    //<!-- ONLY FOR PRODUIT-->
+    //<!-- ONLY FOR PRODUIT
+    // produit = [
+    //      { prod : {
+    //          Nom: '',
+    //          (idProduit: ''),
+    //          (Prix: ''),
+    //          Categorie_idCategorie: '',
+    //          (custom: '')},
+    //      qty: '',
+    //      commentaire: ''}
+    // ,...]
+    // -->
     $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
     $scope.n_by_row = 4;
     $scope.produitTable = {};
@@ -335,5 +346,13 @@ app.controller('commandeController', function($scope, $rootScope, $http){
     };
     $scope.activePNP = function(PNP){
         return $scope.commande.PNP == PNP?"active btn-success":"btn-primary";
+    };
+
+    //RECAP
+    $scope.sendCommande = function() {
+        $scope.commande.vendeuse = $rootScope.vendeuse;
+        $http.post("/getsession", $scope.commande).success(function(res){
+
+        });
     };
 });

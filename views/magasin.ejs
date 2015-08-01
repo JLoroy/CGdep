@@ -76,14 +76,15 @@
         <div class="h5">
             <ul class="nav nav-tabs nav-justified" role="tablist">
                 <li><a role="tab" class="btn btn-primary" ng-click="previous(activeMenu)">Précédent</a></li>
-            <li ng-class="{disabled:commande.date==''}">  <a role="tab" ng-click="setActiveMenu('date');">        Date</a></li>
-            <li ng-class="{disabled:commande.heure==''}">         <a role="tab" ng-click="setActiveMenu('heure');">       Heure</a></li>
-            <li ng-class="{disabled:commande.client.Nom==''}">        <a role="tab" ng-click="setActiveMenu('client');">      Client</a></li>
-            <li ng-class="{disabled:commande.montant==''}">       <a role="tab" ng-click="setActiveMenu('produit');">     Produits</a></li>
-            <li ng-class="{disabled:commande.remarque==''}">   <a role="tab" ng-click="setActiveMenu('commentaire');"> Commentaire</a></li>
-            <li ng-class="{disabled:commande.PNP==''}">      <a role="tab" ng-click="setActiveMenu('payement');">    Payement</a></li>
-            <li ng-class="{disabled:commande.PNP==''}">         <a role="tab" ng-click="setActiveMenu('recap');">       Recapitulatif</a></li>
-                <li><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Suivant</a></li>
+                <li ng-class="{disabled:commande.date==''}">  <a role="tab" ng-click="setActiveMenu('date');">        Date</a></li>
+                <li ng-class="{disabled:commande.heure==''}">         <a role="tab" ng-click="setActiveMenu('heure');">       Heure</a></li>
+                <li ng-class="{disabled:commande.client.Nom==''}">        <a role="tab" ng-click="setActiveMenu('client');">      Client</a></li>
+                <li ng-class="{disabled:commande.montant==''}">       <a role="tab" ng-click="setActiveMenu('produit');">     Produits</a></li>
+                <li ng-class="{disabled:commande.remarque==''}">   <a role="tab" ng-click="setActiveMenu('commentaire');"> Commentaire</a></li>
+                <li ng-class="{disabled:commande.PNP==''}">      <a role="tab" ng-click="setActiveMenu('payement');">    Payement</a></li>
+                <li ng-class="{disabled:commande.PNP==''}">         <a role="tab" ng-click="setActiveMenu('recap');">       Recapitulatif</a></li>
+                <li ng-if="activeMenu != 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Suivant</a></li>
+                <li ng-if="activeMenu == 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Envoyer la commande</a></li>
         </ul>
         </div>
 
