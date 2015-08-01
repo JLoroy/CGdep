@@ -135,7 +135,7 @@
                     <div class="col-md-6" style="width:980px !important;">
                         <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="commande.client.Nom" ng-change="getClients()" aria-haspopup="true" aria-expanded="false">
                         <ul class="dropdown-menu">
-                            <li ng-repeat="clientc in clients" ng-if="clientc.display == 1"><a ng-click="commande.client.Nom=clientc.Nom;getClients();">{{clientc.Nom}}</a></li>
+                            <li ng-repeat="clientc in clients" ng-if="clientc.display == 1"><a ng-click="commande.client=clientc;getClients();">{{clientc.Nom}}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
                     </div>
                 </div>
             </form>
-            <button type="button" class="btn tbn-primary fr" ng-click="commande.client.Nom='Commande de Test';next('client');">Commande de Test)</button>
+            <button type="button" class="btn tbn-primary fr" ng-click="commande.client.Nom='Commande de Test';next('client');">Commande de Test</button>
         </div>
         <!-- CHOIX Produits -->
         <div class="h80" ng-class="isActiveMenu('produit')">
@@ -175,7 +175,7 @@
                                     <div class="form-group row">
                                         <div class="input-group col-md-5">
                                             <span ng-if="p.prod.custom" class="input-group-addon alert-warning glyphicon glyphicon-wrench"></span>
-                                            <label class="control-label" data-toggle="modal" data-target="#modalProduit" ng-click="removeProduit(p);openModalProduit(p.prod,p.qty,'modify',p.commentaire,p.params);">{{p.prod.Nom}}</label>
+                                            <label class="control-label" data-toggle="modal" data-target="#modalProduit" ng-click="removeProduit(p);openModalProduit(p.prod,p.qty,'modify',p.commentaire);">{{p.prod.Nom}}</label>
                                         </div>
                                         <div class="input-group col-md-5">
                                             <span class="input-group-addon glyphicon glyphicon-minus" ng-click="p.qty = p.qty -1;"></span>
@@ -211,7 +211,7 @@
                         <table class="table table-bordered col-md-12 table-condensed">
                             <tr ng-repeat="row_p in category">
                                 <td ng-repeat="produit in row_p" class="col-md-3" style="border:none; !important">
-                                    <button type="button" data-toggle="modal" data-target="#modalProduit" class="btn btn-default btn-lg btn-block" ng-click="openModalProduit(produit.thisProd,1,'add','',{});">{{produit.thisProd.Nom}}</button>
+                                    <button type="button" data-toggle="modal" data-target="#modalProduit" class="btn btn-default btn-lg btn-block" ng-click="openModalProduit(produit.thisProd,1,'add','');">{{produit.thisProd.Nom}}</button>
                                 </td>
                             </tr>
                         </table>
@@ -223,17 +223,21 @@
                         <div class="modal-content">
                             <div class="modal-body form-group">
                                 <div ng-if="modal.prod.custom" class="input-group form" role="form">
+                                    <h3 class="col-md-12">Produit Personnalisé</h3>
+                                    <h4 class="col-md-3">Nom :</h4>
                                     <input type="text" ng-model="modal.prod.Nom" class="form-control">
-                                    <select ng-options="category.idCategorie as category.Nom for category in categories" ng-model="modal.prod.idCategorie" class="form-control"></select>
+                                    <h4  class="col-md-3">Categorie :</h4>
+                                    <select ng-options="category.idCategorie as category.Nom for category in categories" ng-model="modal.prod.Categorie_idCategorie" class="form-control"></select>
                                 </div>
+                                    <h4 class="col-md-3">Quantité</h4>
+                                    <div class="input-group form-control">
+                                        <span class="input-group-addon glyphicon glyphicon-minus" ng-click="modal.qty = modal.qty - 1;"></span>
+                                        <input type="number" class="form-control input-lg" ng-model="modal.qty">
+                                        <span class="input-group-addon glyphicon glyphicon-plus" ng-click="modal.qty = modal.qty + 1;"></span>
+                                    </div>
+                                    <h4 class="col-md-3">Commentaire</h4>
+                                    <textarea class="form-control" rows="3" placeholder="Entrez votre commentaire" ng-model="modal.commentaire"></textarea>
 
-                                <h3>Quantité</h3>
-                                <div class="input-group form-control">
-                                    <span class="input-group-addon glyphicon glyphicon-minus" ng-click="modal.qty = modal.qty - 1;"></span>
-                                    <input type="number" class="form-control input-lg" ng-model="modal.qty">
-                                    <span class="input-group-addon glyphicon glyphicon-plus" ng-click="modal.qty = modal.qty + 1;"></span>
-                                </div>
-                                <textarea class="form-control" rows="3" placeholder="Entrez votre commentaire" ng-model="modal.commentaire"></textarea>
                                 <div id="Options-Modal-Dynamique" class="input-group form-control" ng-repeat="(key,value) in modal.params">
                                     <span class="input-group-addon glyphicon glyphicon-minus" ng-click="modal.qty = modal.qty - 1;"></span>
                                     <input type="number" class="form-control input-lg" ng-model="modal.qty">
@@ -241,14 +245,15 @@
                             </div>
                             <div class="modal-footer">
                                 <a type="button" data-dismiss="modal" class="btn btn-danger" ng-click="cancelModalProduit();" >Annuler</a>
-                                <a type="button" data-dismiss="modal" class="btn btn-success" ng-click="addProduit(modal.prod, modal.qty, modal.commentaire, modal.params)" >Confirmer</a>
+                                <a type="button" data-dismiss="modal" class="btn btn-success" ng-click="addProduit(modal.prod, modal.qty, modal.commentaire)" >Confirmer</a>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-offset-3 col-md-6">
                     <!--todo-->
-                    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#modalProduit"  ng-click="openModalProduit({Nom:'', idCategorie:'',custom:'true'},1,'custom','',{});">Produit personnalis&eacute...</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#modalProduit"
+                            ng-click="openModalProduit({Nom:'', Categorie_idCategorie:'',custom:'true'},1,'custom','');">Produit personnalis&eacute...</button>
                 </div>
             </div>
         </div>
@@ -299,50 +304,50 @@
                 <div id="toPrint" class="col-md-offset-1" style="width:100%;height:70%;">
                     <form class="form-horizontal col-md-3" role="form">
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Nom</label>
+                            <label class="col-md-3 control-label">Nom</label>
                             <div class="col-md-6">
                                 <p id="recapNom" class="form-control-static">{{commande.client.Nom}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">T&eacutel&eacutephone</label>
+                            <label class="col-md-3 control-label">T&eacutel&eacutephone</label>
                             <div class="col-md-6">
                                 <p id="recapTel"   class="form-control-static">{{commande.client.Tel}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Mail</label>
+                            <label class="col-md-3 control-label">Mail</label>
                             <div class="col-md-6">
                                 <p id="recapMail" ng-click="activeMenu='client'" class="form-control-static">{{commande.client.Mail}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">TVA</label>
+                            <label class="col-md-3 control-label">TVA</label>
                             <div class="col-md-6">
                                 <p id="recapTVA"  class="form-control-static">{{commande.client.TVA}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Date</label>
+                            <label class="col-md-3 control-label">Date</label>
                             <div class="col-md-6">
                                 <p id="recapDate" class="form-control-static">{{commande.date | date :'EEEE dd MM'}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Heure</label>
+                            <label class="col-md-3 control-label">Heure</label>
                             <div class="col-md-6">
                                 <p id="recapHeure" class="form-control-static">{{commande.heure}}</p>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Payement</label>
+                            <label class="col-md-3 control-label">Payement</label>
                             <div class="col-md-6">
                                 <p class="form-control-static">{{commande.PNP}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Vendeuse</label>
+                            <label class="col-md-3 control-label">Vendeuse</label>
                             <div class="col-md-6">
                                 <p class="form-control-static">{{vendeuse.Nom}}</p>
                             </div>

@@ -4,8 +4,15 @@ var app = angular.module('magasin',[]);
 app.run(function ($rootScope, $http){
     $rootScope.vendeuse = {Nom:'', idVendeuse:''};
     $rootScope.activeMenu = "vendeuse";
+
+    //Erreur
     $rootScope.messageErreur = "";
     $rootScope.displayErreur = false;
+    $rootScope.erreur = function(message){
+        $rootScope.messageErreur = message;
+        $rootScope.displayErreur = true;
+    }
+
     $rootScope.setActiveMenu = function(menu){
         $rootScope.activeMenu = menu;
     };
@@ -16,10 +23,6 @@ app.run(function ($rootScope, $http){
                 commentaire:5, payement:6, recap:7}?"":"hidden";
         }
         return menu==$rootScope.activeMenu?"active":"hidden";
-    }
-    $rootScope.erreur = function(message){
-        $rootScope.messageErreur = message;
-        $rootScope.displayErreur = true;
     }
     $rootScope.calculLivraison = function(){
         $rootScope.commande.Livraison=$rootScope.commande.dateLivraison+$rootScope.commande.heureLivraison
@@ -37,7 +40,7 @@ app.controller('choixVendeuse', function($scope, $rootScope, $http){
     //
     $scope.ok = false;
     $scope.activeTab = 1;
-    $scope.n_by_row = 5;
+    $scope.n_by_row = 6;
 
     //todo:REFACTOR this into complex/vendByMag
     $http.post("get/magasin", {}).success(function(res){
@@ -242,7 +245,7 @@ app.controller('commandeController', function($scope, $rootScope, $http){
 
 
     //<!-- ONLY FOR PRODUIT-->
-    $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',params:{}};
+    $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
     $scope.n_by_row = 4;
     $scope.produitTable = {};
     $scope.activeCategorie = "1";//todo issue if categorie 1 is deleted
@@ -284,24 +287,29 @@ app.controller('commandeController', function($scope, $rootScope, $http){
 
         }
     }*/
-    $scope.openModalProduit = function(toAdd,qty,mode,commentaire, params){
+    $scope.openModalProduit = function(toAdd,qty,mode,commentaire){
         $scope.modal.mode = mode;
         $scope.modal.prod = toAdd;
         $scope.modal.qty = qty;
         $scope.modal.commentaire = commentaire;
-        $scope.modal.params = params;
+        $scope.modal.original.prod = toAdd;
+        $scope.modal.original.qty = qty;
+        $scope.modal.original.commentaire = commentaire;
+
+        console.log($scope.modal);
     };
     $scope.cancelModalProduit = function(){
         if($scope.modal.mode == 'modify'){
-            $scope.addProduit($scope.modal.prod, $scope.modal.qty, $scope.modal.commentaire, $scope.modal.params);
+            $scope.addProduit($scope.modal.original.prod, $scope.modal.original.qty, $scope.modal.original.commentaire);
         }
-        $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',params:{}};
+        $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
     }
-    $scope.addProduit = function(toAdd, quantity, commentaire, params){
-        console.log($scope.modal)
-        $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',params:{}};
-        $scope.commande.produits.push({prod:toAdd, qty:quantity, commentaire:commentaire, params:params});
-        $scope.calculTotal();
+    $scope.addProduit = function(toAdd, quantity, commentaire){
+        if(toAdd.Nom != '' && toAdd.Categorie_idCategorie != '' && quantity >= 1) {
+            $scope.modal = {prod: {}, qty: '', mode: '', commentaire: '',original:{prod:{},qty:1,commentaire:''}};
+            $scope.commande.produits.push({prod: toAdd, qty: quantity, commentaire: commentaire});
+            $scope.calculTotal();
+        }
     };
     $scope.removeProduit = function(p){
         var index = $scope.commande.produits.indexOf(p);
