@@ -252,6 +252,30 @@ exports.complex = function(req, res){
                 });
             });
             break;
+        case "commande" :
+            /*commande : {
+                date:'',
+                heure:'',
+                client:{Nom:'',Tel:'',Mail:'',TVA:''},
+                produits:[{
+                    prod : {
+                        Nom: '',
+                        idProduit: '',
+                        Prix: '',
+                        idCategorie: '',
+                        (custom: '')},
+                    qty: '',
+                    commentaire: ''}
+                    ,...],
+                remarque:'',
+                PNP:'',
+                montant:'',
+                vendeuse: '',
+                (idCommande: '')
+            }*/
+
+
+            break:
         default:
             console.log("Requete complexe d'un type inconnu : "+req.params.type);
     }
