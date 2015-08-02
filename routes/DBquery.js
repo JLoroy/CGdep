@@ -228,26 +228,31 @@ exports.complex = function(req, res){
     switch(req.params.type){
         case "produitCommande":
             query = "SELECT Produitcommande.Quantite, Produitcommande.Details, Produitcommande.Produit_idProduit, "+
-                "Produit.Nom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin FROM Produitcommande "+
+                "Produit.Nom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin, " +
+                "Magasin.Nom AS MagasinNom FROM Produitcommande "+
                 "JOIN Produit ON produitCommande.Produit_idProduit = idProduit "+
                 "JOIN Commande ON produitCommande.Commande_idCommande = idCommande " +
                 "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal "+
+                "JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin "+
                 "WHERE "+select_query(params.selectedCategories,"Produit.Categorie_idCategorie");
             if(params.dateLivraison) query = query + " AND Commande.Livraison LIKE '" + params.dateLivraison + "%'";
             console.log("complex 1 : "+query);
             connection.query(query , function(errP, rowsP, fields) {
                 if (errP) throw errP;
                 query = "SELECT Produitcommande.Quantite, Produitcommande.Details, Produitcommande.ProduitCustom_idProduitCustom, "+
-                    "ProduitCustom.Nom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, Terminal.Magasin_idMagasin FROM Produitcommande "+
+                    "ProduitCustom.Nom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, " +
+                    "Magasin.Nom AS MagasinNom, Terminal.Magasin_idMagasin FROM Produitcommande "+
                     "JOIN ProduitCustom ON produitCommande.ProduitCustom_idProduitCustom = idProduitCustom "+
                     "JOIN Commande ON produitCommande.Commande_idCommande = idCommande " +
-                    "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal "+
+                    "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal " +
+                    "JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin "+
                     "WHERE "+select_query(params.selectedCategories,"ProduitCustom.Categorie_idCategorie");
                 if(params.dateLivraison) query = query + " AND Commande.Livraison LIKE '" + params.dateLivraison + "%'";
                 console.log("complex 2 : "+query);
                 connection.query(query , function(errC, rowsC, fields) {
                     if (errC) throw errC;
                     var result = refactorProduitCommande(rowsP, rowsC);
+                    console.log(result);
                     res.send(result);
                 });
             });

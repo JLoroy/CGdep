@@ -52,14 +52,18 @@
                 <th>Total</th>
             </thead>
             <tbody>
-                <tr ng-repeat-start="(key, value) in commandes" data-toggle="collapse" data-target="#tr{{key}}">
-                    <td>{{value.Nom}}</td>
-                    <td ng-repeat="magasin in value.Magasin">{{magasin.Total}}</td>
+                <tr ng-repeat-start="(key, value) in commandes" data-toggle="collapse" data-target=".trdetail{{key}}">
+                    <td>{{value.Nom}} <span ng-if="value.Details.length > 0" class="label label-info">+</span></td>
+                    <td ng-repeat="magasin in magasins">{{value.Magasin[magasin.idMagasin]?value.Magasin[magasin.idMagasin].Total:0;}}</td>
                     <td>{{value.Total}}</td>
                 </tr>
-                <tr ng-repeat-end id="tr{{key}}" class="collapse" style="background-color: whitesmoke;">
-                    <td>Such a collapse</td>
+                <tr ng-repeat="detail in value.Details" class="collapse trdetail{{key}}" style="background-color: whitesmoke;">
+                    <td colspan="{{magasins.length + 2}}">
+                        <span class="label label-info">{{detail.Magasin}} : {{detail.Quantite}}</span>
+                        <span class="label label-info">{{detail.Detail}}</span>
+                    </td>
                 </tr>
+                <tr ng-repeat-end hidden></tr>
             </tbody>
         </table>
     </div>

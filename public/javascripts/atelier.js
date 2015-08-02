@@ -1,12 +1,12 @@
 var app = angular.module('atelier',[]);
 
-app.controller('MainController', function($scope, $http){
+app.controller('MainController', function($scope, $rootScope, $http){
     $scope.params = {
         dateLivraison: '',
         selectedCategories: {}
     };
 
-    $scope.magasins = [];
+    $rootScope.magasins = [];
 
     $scope.commandes = {};
 
@@ -31,7 +31,8 @@ app.controller('MainController', function($scope, $http){
     $scope.getMagasins = function(){
         $http.post("get/magasin",{
         }).success(function(res){
-            $scope.magasins = res;
+            $rootScope.magasins = res;
+            console.log(res);
         });
     };
 
