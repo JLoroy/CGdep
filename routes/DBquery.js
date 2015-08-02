@@ -259,7 +259,7 @@ exports.complex = function(req, res){
             break;
 
 
-        case "commande" :
+        //case "commande" :
 
             /*params : {
                 date:'',
@@ -284,7 +284,7 @@ exports.complex = function(req, res){
 
             //region CLIENT
             // Client ( idClient, Inscription, Mail, Tel, Nom, TVA, display)
-            var Client_idClient = 1;
+            /*var Client_idClient = 1;
 
             //1) on check si le client existe déjà (sur base du numéro de tel)
             var query_client = "SELECT * FROM Client WHERE Tel='"+params.client.Tel+"';";
@@ -399,14 +399,14 @@ console.log("DATE DE LA LIVRAISON (check pour voir si c'est la bonne formulation
                     }
                 }
                 query_insert_produitCommande += firstProduitCommande?   ""    :",";firstProduitCommande = false;
-                query_insert_produitCommande += " ("+p.qty+","+p.commentaire+","+Commande_/*todo*/idCommande+","+p.prod.custom?0:p.prod.idProduit/*todo*/+","+0+","+p.prod.custom?p.prod.idProduitCustom:0/*todo*/")"
+                query_insert_produitCommande += " ("+p.qty+","+p.commentaire+","+Commande_todoidCommande+","+p.prod.custom?0:p.prod.idProduittodo+","+0+","+p.prod.custom?p.prod.idProduitCustom:0todo")"
             }
             console.log(query_insert_produitCommande);
             connection.query(query_insert_produitCommande , function(err, rows, fields) {if (err) throw err;});
             //endregion
 //todo : comment recup l'id du produit custom, et comment gere les produit custom ou pas dans les produitcommande
 
-            break;
+            break;*/
         default:
             console.log("Requete complexe d'un type inconnu : "+req.params.type);
     }
