@@ -4,8 +4,15 @@ var app = angular.module('magasin',[]);
 app.run(function ($rootScope, $http){
     $rootScope.vendeuse = {Nom:'', idVendeuse:''};
     $rootScope.activeMenu = "vendeuse";
+
+    //Erreur
     $rootScope.messageErreur = "";
     $rootScope.displayErreur = false;
+    $rootScope.erreur = function(message){
+        $rootScope.messageErreur = message;
+        $rootScope.displayErreur = true;
+    }
+
     $rootScope.setActiveMenu = function(menu){
         $rootScope.activeMenu = menu;
     };
@@ -16,10 +23,6 @@ app.run(function ($rootScope, $http){
                 commentaire:5, payement:6, recap:7}?"":"hidden";
         }
         return menu==$rootScope.activeMenu?"active":"hidden";
-    }
-    $rootScope.erreur = function(message){
-        $rootScope.messageErreur = message;
-        $rootScope.displayErreur = true;
     }
     $rootScope.calculLivraison = function(){
         $rootScope.commande.Livraison=$rootScope.commande.dateLivraison+$rootScope.commande.heureLivraison
@@ -37,7 +40,7 @@ app.controller('choixVendeuse', function($scope, $rootScope, $http){
     //
     $scope.ok = false;
     $scope.activeTab = 1;
-    $scope.n_by_row = 5;
+    $scope.n_by_row = 6;
 
     //todo:REFACTOR this into complex/vendByMag
     $http.post("get/magasin", {}).success(function(res){
@@ -102,22 +105,21 @@ app.controller('commandeController', function($scope, $rootScope, $http){
         if($rootScope.activeMenu == tab) classes += "active ";
         switch(tab){
             case "date":
-                classes += $scope.commande.date!=''?"":"disabled";
                 break;
             case "heure":
-                classes += $scope.commande.heure!=''?"":"disabled";
+                classes += $scope.commande.date!=''?"":"disabled";
                 break;
             case "client":
-                classes += $scope.commande.client.Mail!=''?"":"disabled";
+                classes += $scope.commande.heure!=''?"":"disabled";
                 break;
             case "produit":
-                classes += $scope.commande.montant!=''?"":"disabled";
+                classes += $scope.commande.client.Nom!=''?"":"disabled";
                 break;
             case "commentaire":
-                classes += $scope.commande.remarque!=''?"":"disabled";
+                classes += $scope.commande.montant!=''?"":"disabled";
                 break;
             case "payement":
-                classes += $scope.commande.PNP!=''?"":"disabled";
+                classes += $scope.commande.remarque!=''?"":"disabled";
                 break;
             case "recap":
                 classes += $scope.commande.PNP!=''?"":"disabled";
@@ -129,25 +131,60 @@ app.controller('commandeController', function($scope, $rootScope, $http){
     };
 
     $scope.next = function (from) {
-        var tab = '';
+        var tab = from;
         switch(from){
             case 'date':
-                tab='heure';
+                if($scope.commande.date!='')tab='heure';
+                else $rootScope.erreur("Date non valide");
                 break;
             case 'heure':
-                tab='client';
+                if($scope.commande.heure!='')tab='client';
+                else $rootScope.erreur("Heure non valide");
                 break;
             case 'client':
-                tab='produit';
+                if($scope.commande.client.Nom!='')tab='produit';
+                else $rootScope.erreur("Veuillez rentrer un nom et un numero de telephone");
                 break;
             case 'produit':
-                tab='commentaire';
+                if($scope.commande.montant!='')tab='commentaire';
+                else $rootScope.erreur("Veuillez entrer des produits");
                 break;
             case 'commentaire':
                 tab='payement';
                 break;
             case 'payement':
-                tab='recap';
+                if($scope.commande.pnp!='')tab='recap';
+                else $rootScope.erreur("Payement non valide");
+                break;
+            default:
+                tab='date';
+        }
+        $rootScope.activeMenu = tab;
+
+    };
+
+    $scope.previous = function (from) {
+        var tab = from;
+        switch(from){
+            case 'date':
+                break;
+            case 'heure':
+                tab='date';
+                break;
+            case 'client':
+                tab='heure';
+                break;
+            case 'produit':
+                tab='client';
+                break;
+            case 'commentaire':
+                tab='produit';
+                break;
+            case 'payement':
+                tab='commentaire';
+                break;
+            case 'recap':
+                tab='payement';
                 break;
             default:
                 tab='date';
@@ -198,13 +235,6 @@ app.controller('commandeController', function($scope, $rootScope, $http){
 
 
     //<!-- ONLY FOR ClIENT-->
-    $scope.selectClient = function(){
-        if($scope.commande.client.Nom != '') {
-            //todo : rajouter le tel obligatoire (ici)
-            $scope.next('client');
-        }
-        else{$rootScope.erreur("Entrez un Client");}
-    };
     $scope.getClients = function(){
         $http.post("get/client", {
          params: {Nom:$scope.commande.client.Nom}
@@ -214,12 +244,25 @@ app.controller('commandeController', function($scope, $rootScope, $http){
     };
 
 
-    //<!-- ONLY FOR PRODUIT-->
+    //<!-- ONLY FOR PRODUIT
+    // produit = [
+    //      { prod : {
+    //          Nom: '',
+    //          (idProduit: ''),
+    //          (Prix: ''),
+    //          Categorie_idCategorie: '',
+    //          (custom: '')},
+    //      qty: '',
+    //      commentaire: ''}
+    // ,...]
+    // -->
+    $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
     $scope.n_by_row = 4;
     $scope.produitTable = {};
     $scope.activeCategorie = "1";//todo issue if categorie 1 is deleted
     $scope.total = 0;
     //todo:REFACTOR this into complex/produitTable
+    //todo: changer l'ordre alphabetique
     $http.post("/get/produit", {params:{}}).success(function(res){
         $rootScope.produits = res;
         $http.post("/get/category", {params:{}}).success(function(res){
@@ -246,10 +289,43 @@ app.controller('commandeController', function($scope, $rootScope, $http){
     $scope.tabCategorie = function(idCategorie){
         return idCategorie == $scope.activeCategorie?"active":"hidden";
     };
-    $scope.addProduit = function(toAdd, quantity){
-        $scope.commande.produits.push({prod:toAdd, qty:quantity});
+    $scope.buttonCategorie = function(idCategorie){
+        return idCategorie == $scope.activeCategorie?"active btn-primary":"btn-default";
+    };/*
+    $scope.getParams('categ'){
+        var params = {};
+        switch(categ){
+
+        }
+    }*/
+    $scope.openModalProduit = function(toAdd,qty,mode,commentaire){
+        $scope.modal.mode = mode;
+        $scope.modal.prod = toAdd;
+        $scope.modal.qty = qty;
+        $scope.modal.commentaire = commentaire;
+        $scope.modal.original.prod = toAdd;
+        $scope.modal.original.qty = qty;
+        $scope.modal.original.commentaire = commentaire;
+
+        console.log($scope.modal);
+    };
+    $scope.cancelModalProduit = function(){
+        if($scope.modal.mode == 'modify'){
+            $scope.addProduit($scope.modal.original.prod, $scope.modal.original.qty, $scope.modal.original.commentaire);
+        }
+        $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
+    }
+    $scope.addProduit = function(toAdd, quantity, commentaire){
+        if(toAdd.Nom != '' && toAdd.Categorie_idCategorie != '' && quantity >= 1) {
+            $scope.modal = {prod: {}, qty: '', mode: '', commentaire: '',original:{prod:{},qty:1,commentaire:''}};
+            $scope.commande.produits.push({prod: toAdd, qty: quantity, commentaire: commentaire});
+            $scope.calculTotal();
+        }
+    };
+    $scope.removeProduit = function(p){
+        var index = $scope.commande.produits.indexOf(p);
+        $scope.commande.produits.splice(index,1);
         $scope.calculTotal();
-        console.log($scope.commande.produits);
     };
     $scope.calculTotal = function(){
         var tot = 0;
@@ -257,14 +333,8 @@ app.controller('commandeController', function($scope, $rootScope, $http){
             var p = $scope.commande.produits[i];
             tot += (p.qty * p.prod.Prix);
         }
-        console.log(tot);
         $scope.commande.montant = tot.toFixed(2);
     };
-    $scope.confirmProduit = function(){
-        if ($scope.commande.montant > 0 ) $scope.next('produit');
-        else $rootScope.erreur("Veuillez entrer des produits");
-    }
-
     //COMMENTAIRE
     $scope.selectCommentaire = function(){
         $scope.next('commentaire');
@@ -276,5 +346,13 @@ app.controller('commandeController', function($scope, $rootScope, $http){
     };
     $scope.activePNP = function(PNP){
         return $scope.commande.PNP == PNP?"active btn-success":"btn-primary";
+    };
+
+    //RECAP
+    $scope.sendCommande = function() {
+        $scope.commande.vendeuse = $rootScope.vendeuse;
+        $http.post("/getsession", $scope.commande).success(function(res){
+
+        });
     };
 });

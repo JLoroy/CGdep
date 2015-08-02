@@ -149,10 +149,14 @@ app.controller('VendeuseController', function($scope, $http){
         });
     };
     $scope.add = function(){
-        $http.post("add/vendeuse", {
-            new: $scope.new
-        });
-        $scope.new = {};
+        //todo rajouter cette ligne dans les autres controllers
+        if($scope.new.Nom & $scope.new.Magasin_idMagasin) {
+            $http.post("add/vendeuse", {
+                new: $scope.new
+            });
+            $scope.new = {};
+        }
+        //todo : le else
     };
     $scope.modify = function(toMod){
         $http.post("modify/vendeuse", {

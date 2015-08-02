@@ -1,1 +1,1 @@
-UPDATE commande SET Livraison='2015-07-31 12:00:00' WHERE idCommande < 50;
+UPDATE commande SET Livraison='2015-08-09 12:00:00' WHERE idCommande < 90;

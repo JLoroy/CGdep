@@ -30,7 +30,7 @@
     </div>
 
 
-    <div id="content">
+    <div id="content" class="h100">
         <!-- CHOIX VENDEUSE -->
     <div ng-controller="choixVendeuse" class="h100" ng-class="isActiveMenu('vendeuse')">
         <div ng-show="! ok">Loading</div>
@@ -45,14 +45,14 @@
             </ul>
 
             <!-- Tab panes -->
-            <div class="tab-content h100">
+            <div class="tab-content"  style="max-width: 100% !important; max-height:70% !important;">
                 <table id="mag{{mag_v.idMagasin}}" ng-repeat="mag_v in vendByMag"
-                       class="table table-bordered tab-pane form-control" style="height:90%;" ng-class="activeClass(mag_v.idMagasin)">
+                       class="table table-bordered tab-pane form-control" ng-class="activeClass(mag_v.idMagasin)">
                     <tr ng-repeat="row_v in mag_v">
-                        <td ng-repeat="v in row_v" class="form-group-lg vcenter" style="height:50% !important;">
+                        <td ng-repeat="v in row_v" class="form-group-lg vcenter" style="max-width: 100% !important; max-height:70% !important;">
                             <a ng-click="selectVendeuse(v);next()">
                                 <h4>{{v.Nom}}</h4>
-                                <img src="/default.jpg" class="center-block" style="max-width: 100% !important; max-height:100% !important;">
+                                <img src="/default.jpg" class="center-block" style="max-width: 100% !important; max-height:70% !important;">
                             </a>
                         </td>
                     </tr>
@@ -62,7 +62,7 @@
     </div>
 
     <!-- Menu Principal -->
-    <div ng-controller="mainMenu" ng-class="isActiveMenu('main')" class="fill h100">
+    <div ng-controller="mainMenu" ng-class="isActiveMenu('main')" class="h100">
         <div class="col-md-6 fill h100">
             <button type="button" class="fill btn btn-primary btn-lg btn-block h100" ng-click="toCommand()">Commander</button>
         </div>
@@ -73,23 +73,27 @@
 
     <div id="APPLICATION COMMANDE" ng-class="isActiveMenu('commande')" class="h100" ng-controller="commandeController">
         <!-- NAV -->
-        <ul class="nav nav-tabs nav-justified" role="tablist">
-            <li ng-class="{disabled:commande.date==''}">  <a role="tab" ng-click="setActiveMenu('date');">        Date</a></li>
-            <li ng-class="{disabled:commande.heure==''}">         <a role="tab" ng-click="setActiveMenu('heure');">       Heure</a></li>
-            <li ng-class="{disabled:commande.client.Nom==''}">        <a role="tab" ng-click="setActiveMenu('client');">      Client</a></li>
-            <li ng-class="{disabled:commande.montant==''}">       <a role="tab" ng-click="setActiveMenu('produit');">     Produits</a></li>
-            <li ng-class="{disabled:commande.remarque==''}">   <a role="tab" ng-click="setActiveMenu('commentaire');"> Commentaire</a></li>
-            <li ng-class="{disabled:commande.PNP==''}">      <a role="tab" ng-click="setActiveMenu('payement');">    Payement</a></li>
-            <li ng-class="{disabled:commande.PNP==''}">         <a role="tab" ng-click="setActiveMenu('recap');">       Recapitulatif</a></li>
+        <div class="h5">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li><a role="tab" class="btn btn-primary" ng-click="previous(activeMenu)">Précédent</a></li>
+                <li ng-class="{disabled:commande.date==''}">  <a role="tab" ng-click="setActiveMenu('date');">        Date</a></li>
+                <li ng-class="{disabled:commande.heure==''}">         <a role="tab" ng-click="setActiveMenu('heure');">       Heure</a></li>
+                <li ng-class="{disabled:commande.client.Nom==''}">        <a role="tab" ng-click="setActiveMenu('client');">      Client</a></li>
+                <li ng-class="{disabled:commande.montant==''}">       <a role="tab" ng-click="setActiveMenu('produit');">     Produits</a></li>
+                <li ng-class="{disabled:commande.remarque==''}">   <a role="tab" ng-click="setActiveMenu('commentaire');"> Commentaire</a></li>
+                <li ng-class="{disabled:commande.PNP==''}">      <a role="tab" ng-click="setActiveMenu('payement');">    Payement</a></li>
+                <li ng-class="{disabled:commande.PNP==''}">         <a role="tab" ng-click="setActiveMenu('recap');">       Recapitulatif</a></li>
+                <li ng-if="activeMenu != 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Suivant</a></li>
+                <li ng-if="activeMenu == 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Envoyer la commande</a></li>
         </ul>
-
+        </div>
 
         <!-- CHOIX DATE -->
-        <div class="h100" ng-class="isActiveMenu('date')">
+        <div class="h80" ng-class="isActiveMenu('date')">
             <h4>Selection de la Date</h4>
-                <table class="table table-bordered tab-pane form-control h100" style="height:90%;">
+                <table class="table table-bordered table-condensed tab-pane form-control h90">
                     <tr ng-repeat="semaine in calendar">
-                        <td style="width:14%" ng-repeat="jour in semaine" class="form-group-lg vcenter">
+                        <td ng-repeat="jour in semaine" class="form-group vcenter">
                             <a  ng-class="activeDate(jour.date)"  class="btn form-control h100" ng-disabled="!(jour.ok)" ng-click="selectDate(jour.date);">
                                 <h2>{{jour.date | date: 'dd EEEE'}}</h2>
                             </a>
@@ -98,17 +102,33 @@
                 </table>
         </div>
         <!-- CHOIX HEURE -->
-        <div class="h100" ng-class="isActiveMenu('heure')">
+        <div class="h80" ng-class="isActiveMenu('heure')">
             <h4>Selection de l'Heure</h4>
-            <form role="form" class="form-horizontal">
-                <div class="row form-group" ng-repeat="heure in {a:'6h',b:'7h',c:'8h',d:'9h',e:'10h',f:'11h',g:'12h',h:'13h',i:'14h',j:'15h',k:'16h',l:'17h'}" style="padding:10px;">
+            <table class="table table-bordered table-condensed tab-pane form-control h90">
+                <tr>
+                    <td ng-repeat="heure in {a:'6h',b:'7h',c:'8h',d:'9h',e:'10h',f:'11h',g:'12h'}" class="form-group vcenter">
+                        <a class="h100 btn btn-lg form-control"  ng-class="activeHeure(heure);"  ng-click="selectHeure(heure);">
+                            <h3>{{heure}}</h3>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td ng-repeat="heure in {h:'13h',i:'14h',j:'15h',k:'16h',l:'17h',m:'18h',n:'19h'}" class="form-group vcenter">
+                        <a class="h100 btn btn-lg form-control"  ng-class="activeHeure(heure);"  ng-click="selectHeure(heure);">
+                            <h3>{{heure}}</h3>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <!--<form role="form" class="form-horizontal">
+                <div class="form-group" ng-repeat="heure in {a:'6h',b:'7h',c:'8h',d:'9h',e:'10h',f:'11h',g:'12h',h:'13h',i:'14h',j:'15h',k:'16h',l:'17h'}" style="padding:10px;">
                     <a class="col-md-2 btn btn-lg form-control"  ng-class="activeHeure(heure);"  ng-click="selectHeure(heure);"><h3>{{heure}}</h3></a>
                 </div>
-            </form>
+            </form>-->
         </div>
 
         <!-- CHOIX CLIENT -->
-        <div class="h100" ng-class="isActiveMenu('client')">
+        <div class="h80" ng-class="isActiveMenu('client')">
             <h4>Encodage du Client</h4>
             <form id="clientForm" role="form" class="form-horizontal">
                 <div class="patch-zoom-bug form-group">
@@ -116,7 +136,7 @@
                     <div class="col-md-6" style="width:980px !important;">
                         <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="commande.client.Nom" ng-change="getClients()" aria-haspopup="true" aria-expanded="false">
                         <ul class="dropdown-menu">
-                            <li ng-repeat="clientc in clients" ng-if="clientc.display == 1"><a ng-click="commande.client.Nom=clientc.Nom;getClients();">{{clientc.Nom}}</a></li>
+                            <li ng-repeat="clientc in clients" ng-if="clientc.display == 1"><a ng-click="commande.client=clientc;getClients();">{{clientc.Nom}}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -141,17 +161,33 @@
                     </div>
                 </div>
             </form>
-            <button type="button" class="btn tbn-primary fr" ng-click="selectClient();">Suivant (Produit)</button>
+            <button type="button" class="btn tbn-primary fr" ng-click="commande.client.Nom='Commande de Test';next('client');">Commande de Test</button>
         </div>
         <!-- CHOIX Produits -->
-        <div class="h100" ng-class="isActiveMenu('produit')">
+        <div class="h80" ng-class="isActiveMenu('produit')">
             <h4>Selection des Produits</h4>
             <div class="col-md-4" style="border-right: 1px solid gray;">
                 <form role="form">
                     <div class="form-group">
                         <label for="listProduit" class="control-label">Produits</label>
                         <ul id="listProduit" class="list-group">
-                            <li class="form-control" ng-repeat="p in commande.produits">{{p.prod.Nom}}<span style="float:right;">{{p.qty}}</span></li>
+                            <li class="list-group-item" ng-repeat="p in commande.produits">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group row">
+                                        <div class="input-group col-md-5">
+                                            <span ng-if="p.prod.custom" class="input-group-addon alert-warning glyphicon glyphicon-wrench"></span>
+                                            <label class="control-label" data-toggle="modal" data-target="#modalProduit" ng-click="removeProduit(p);openModalProduit(p.prod,p.qty,'modify',p.commentaire);">{{p.prod.Nom}}</label>
+                                        </div>
+                                        <div class="input-group col-md-5">
+                                            <span class="input-group-addon glyphicon glyphicon-minus" ng-click="p.qty = p.qty -1;"></span>
+                                            <input type="number" class="form-control" value="1" ng-model="p.qty">
+                                            <span class="input-group-addon glyphicon glyphicon-plus" ng-click="p.qty = p.qty +1;"></span>
+                                            <span class="input-group-addon glyphicon glyphicon-remove clearInput" ng-click="removeProduit(p);"></span>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                     <!-- PRIX
@@ -162,10 +198,10 @@
                 </form>
             </div>
             <div class="col-md-8" style="border-left: 1px solid gray; margin-left: -1px;padding-left:0px !important;padding-right:0px !important;">
-                <div class="col-md-2" style="padding-top:10px !important;">"
+                <div class="col-md-2" style="padding-top:10px !important;">
                     <div class="col-md-12" style="padding-top:5px !important;padding-left:0px !important;padding-right:0px !important;">
                         <button ng-repeat="category in categories" ng-if="category.display == 1" role="tab" data-toggle="tab"
-                                class="btn-produit-categ btn btn-default btn-block btn-lg" style="height:90px !important;"
+                                class="btn btn-block btn-lg" style="height:90px !important;" ng-class="buttonCategorie(category.idCategorie)"
                                 ng-click="selectCategorie(category.idCategorie)">
                             {{category.Nom}}
                         </button>
@@ -173,25 +209,57 @@
                 </div>
                 <div class="tab-content col-md-10" id="produitBtnDiv" ng-repeat="category in produitTable" >
                     <div class="tab-pane" ng-class="tabCategorie(category.idCategorie)">
-                        <table class="table table-bordered col-md-12">
+                        <table class="table table-bordered col-md-12 table-condensed">
                             <tr ng-repeat="row_p in category">
                                 <td ng-repeat="produit in row_p" class="col-md-3" style="border:none; !important">
-                                    <button type="button" class="btn btn-default btn-lg btn-block" ng-click="addProduit(produit.thisProd,1);">{{produit.thisProd.Nom}}</button>
+                                    <button type="button" data-toggle="modal" data-target="#modalProduit" class="btn btn-default btn-lg btn-block" ng-click="openModalProduit(produit.thisProd,1,'add','');">{{produit.thisProd.Nom}}</button>
                                 </td>
                             </tr>
                         </table>
                     </div>
                 </div>
+                <!-- MODAL produit Quantite-->
+                <div class="modal fade"  data-backdrop="static" keyboard="false" role="dialog" and aria-labelledby="modalProduit" id="modalProduit" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body form-group">
+                                <div ng-if="modal.prod.custom" class="input-group form" role="form">
+                                    <h3 class="col-md-12">Produit Personnalisé</h3>
+                                    <h4 class="col-md-3">Nom :</h4>
+                                    <input type="text" ng-model="modal.prod.Nom" class="form-control">
+                                    <h4  class="col-md-3">Categorie :</h4>
+                                    <select ng-options="category.idCategorie as category.Nom for category in categories" ng-model="modal.prod.Categorie_idCategorie" class="form-control"></select>
+                                </div>
+                                    <h4 class="col-md-3">Quantité</h4>
+                                    <div class="input-group form-control">
+                                        <span class="input-group-addon glyphicon glyphicon-minus" ng-click="modal.qty = modal.qty - 1;"></span>
+                                        <input type="number" class="form-control input-lg" ng-model="modal.qty">
+                                        <span class="input-group-addon glyphicon glyphicon-plus" ng-click="modal.qty = modal.qty + 1;"></span>
+                                    </div>
+                                    <h4 class="col-md-3">Commentaire</h4>
+                                    <textarea class="form-control" rows="3" placeholder="Entrez votre commentaire" ng-model="modal.commentaire"></textarea>
+
+                                <div id="Options-Modal-Dynamique" class="input-group form-control" ng-repeat="(key,value) in modal.params">
+                                    <span class="input-group-addon glyphicon glyphicon-minus" ng-click="modal.qty = modal.qty - 1;"></span>
+                                    <input type="number" class="form-control input-lg" ng-model="modal.qty">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <a type="button" data-dismiss="modal" class="btn btn-danger" ng-click="cancelModalProduit();" >Annuler</a>
+                                <a type="button" data-dismiss="modal" class="btn btn-success" ng-click="addProduit(modal.prod, modal.qty, modal.commentaire)" >Confirmer</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-offset-3 col-md-6">
                     <!--todo-->
-                    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#customModal">Produit personnalis&eacute...</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#modalProduit"
+                            ng-click="openModalProduit({Nom:'', Categorie_idCategorie:'',custom:'true'},1,'custom','');">Produit personnalis&eacute...</button>
                 </div>
             </div>
-
-            <button type="button" class="btn tbn-primary" ng-click="confirmProduit()">Suivant (Commentaire)</button>
         </div>
         <!-- CHOIX Commentaire -->
-        <div class="h100" ng-class="isActiveMenu('commentaire')">
+        <div class="h80" ng-class="isActiveMenu('commentaire')">
             <h4>Commentaire</h4>
                 <form id="clientForm" role="form" class="form-horizontal">
                     <div class="form-group">
@@ -204,15 +272,15 @@
             <button type="button" class="btn tbn-primary" ng-click="selectCommentaire();">Suivant (Payement)</button>
         </div>
         <!-- CHOIX payement-->
-        <div class="h100" ng-class="isActiveMenu('payement')">
+        <div class="h80" ng-class="isActiveMenu('payement')">
             <h4>Selection du Payement</h4>
                 <form id="clientForm" role="form" class="fill form-horizontal" style="height:100%;">
-                    <div class="form-group">
+                    <!--<div class="form-group">
                         <label class="col-md-2 control-label">Prix total</label>
                         <div class="col-md-6">
                             <input id="prix2" type="text" class="form-control prixTot" ng-model="commande.montant" value="0 EUR" disabled>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="fill form-group" style="height:100%;">
                         <div class="fill col-md-12" style="height:100%;">
                             <div class="fill col-md-6" style="height:70%;">
@@ -232,128 +300,102 @@
                 </form>
         </div>
         <!-- CHOIX Recap -->
-        <div class="h100" ng-class="isActiveMenu('recap')">
+        <div class="h80" ng-class="isActiveMenu('recap')">
             <h4>Recapitulatif</h4>
-                <div id="toPrint">
-                    <form class="form-horizontal" role="form">
+                <div id="toPrint" class="col-md-offset-1" style="width:100%;height:70%;">
+                    <form class="form-horizontal col-md-3" role="form">
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Nom</label>
+                            <label class="col-md-3 control-label">Nom</label>
                             <div class="col-md-6">
                                 <p id="recapNom" class="form-control-static">{{commande.client.Nom}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">T&eacutel&eacutephone</label>
+                            <label class="col-md-3 control-label">T&eacutel&eacutephone</label>
                             <div class="col-md-6">
                                 <p id="recapTel"   class="form-control-static">{{commande.client.Tel}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Mail</label>
+                            <label class="col-md-3 control-label">Mail</label>
                             <div class="col-md-6">
                                 <p id="recapMail" ng-click="activeMenu='client'" class="form-control-static">{{commande.client.Mail}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">TVA</label>
+                            <label class="col-md-3 control-label">TVA</label>
                             <div class="col-md-6">
                                 <p id="recapTVA"  class="form-control-static">{{commande.client.TVA}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Date</label>
+                            <label class="col-md-3 control-label">Date</label>
                             <div class="col-md-6">
                                 <p id="recapDate" class="form-control-static">{{commande.date | date :'EEEE dd MM'}}</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Heure</label>
+                            <label class="col-md-3 control-label">Heure</label>
                             <div class="col-md-6">
                                 <p id="recapHeure" class="form-control-static">{{commande.heure}}</p>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Payement</label>
+                            <div class="col-md-6">
+                                <p class="form-control-static">{{commande.PNP}}</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Vendeuse</label>
+                            <div class="col-md-6">
+                                <p class="form-control-static">{{vendeuse.Nom}}</p>
+                            </div>
+                        </div>
+                    </form>
+                    <form class="form-horizontal col-md-8" role="form" style="border-left: 1px solid gray; margin-left: -1px;padding-left:0px !important;padding-right:0px !important;">
                         <div class="form-group">
                             <label class="col-md-2 control-label">Produits</label>
                             <div class="col-md-6">
                                 <table class="table form-control-static">
                                     <thead>
+                                    <th></th>
                                     <th>Nom</th>
-                                    <th>Prix unitaire</th>
+                                    <th>Commentaire</th>
+                                    <!--<th>Prix unitaire</th>-->
                                     <th>Quantit&eacute</th>
-                                    <th>Total</th>
+                                    <!--<th>Total</th>-->
                                     </thead>
                                     <tbody id="recapProduit">
-                                        <tr ng-repeat="produit in commande.produits">
-                                            <td>{{produit.prod.Nom}}</td>
-                                            <td>{{produit.prod.Prix}}</td>
-                                            <td>{{produit.qty}}</td>
-                                            <td>{{produit.prod.Prix * produit.qty}}</td>
-                                        </tr>
+                                    <tr ng-repeat="produit in commande.produits">
+                                        <td><span ng-if="produit.prod.custom" class="glyphicon glyphicon-wrench"></span></td>
+                                        <td>{{produit.prod.Nom}}</td>
+                                        <td>{{produit.commentaire}}</td>
+                                        <!--<td>{{produit.prod.Prix}}</td>-->
+                                        <td>{{produit.qty}}</td>
+                                        <!--<td>{{produit.prod.Prix * produit.qty}}</td>-->
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!--<div class="form-group">
                             <label class="col-md-2 control-label">Total</label>
                             <div class="col-md-6">
                                 <p ng-model="montant" class="form-control-static prixTotP">{{commande.montant}}</p>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="form-group">
                             <label class="col-md-2 control-label">Commentaire</label>
                             <div class="col-md-6">
                                 <p class="form-control-static">{{commande.remarque}}</p>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">Payement</label>
-                            <div class="col-md-6">
-                                <p class="form-control-static">{{commande.PNP}}</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">Vendeuse</label>
-                            <div class="col-md-6">
-                                <p class="form-control-static">{{vendeuse.Nom}}</p>
-                            </div>
-                        </div>
-
                     </form>
+                    <button id="doPrint" class="btn btn-lg btn-primary col-md-1">Imprimer</button>
                 </div>
-                <button id="doPrint" class="btn btn-lg btn-primary">Imprimer</button>
-        </div>
-
-        <div id="footer">
-            <h4>RootScope : </h4>
-            <table class="table table-bordered">
-                <thead>
-                <th>Magasin</th>
-                <th>ActiveMenu</th>
-                <th>Vendeuse</th>
-                <th>Livraison Date</th>
-                <th>Livraison Heure</th>
-                <th>Client</th>
-                <th>Produits</th>
-                <th>Montant</th>
-                <th>Commentaire</th>
-                <th>PNP</th>
-                </thead>
-                <tbody>
-                <tr class="warning">
-                    <td>{{sess.magasin.Nom}}</td>
-                    <td>{{activeMenu}}</td>
-                    <td>{{vendeuse.Nom}}</td>
-                    <td>{{commande.date| date:'EEEE dd/MM'}}</td>
-                    <td>{{commande.heure}}</td>
-                    <td>{{commande.client.Nom}}</td>
-                    <td>{{commande.produits.length}}</td>
-                    <td>{{commande.montant}}</td>
-                    <td>{{commande.remarque}}</td>
-                    <td>{{commande.PNP}}</td>
-                </tr>
-
-                </tbody>
-            </table>
+            <div style="width:100%;"><a class="btn btn-lg btn-success">Envoyer la commande</a></div>
         </div>
     </div>
 
@@ -362,3 +404,4 @@
 
 </div>
 </body>
+</html>

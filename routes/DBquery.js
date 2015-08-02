@@ -118,7 +118,7 @@ exports.add = function(req, res){
     var query = "";
     switch(req.params.type) {
         case "category":
-            query = "INSERT INTO Categorie(Nom) VALUES('"+x.nom+"');";
+            query = "INSERT INTO Categorie(Nom) VALUES('"+x.Nom+"');";
             break;
         case "produit":
             query = "INSERT INTO Produit(Nom, Prix, Categorie_idCategorie) VALUES('"+x.Nom+"',"+x.Prix+","+x.Categorie_idCategorie+");";
@@ -127,13 +127,13 @@ exports.add = function(req, res){
             query = "INSERT INTO Magasin(Nom, Adresse) VALUES('"+x.Nom+"','"+x.Adresse+"');";
             break;
         case "vendeuse":
-            query = "INSERT INTO Vendeuse(Nom, Magasin_idMagasin) VALUES('"+x.nom+"',"+x.magasin+");";
+            query = "INSERT INTO Vendeuse(Nom, Magasin_idMagasin) VALUES('"+x.Nom+"',"+x.Magasin_idMagasin+");";
             break;
         case "terminal":
             query = "INSERT INTO Terminal(Magasin_idMagasin) VALUES("+x.Magasin_idMagasin+");";
             break;
         case "custom":
-            query = "INSERT INTO ProduitCustom(Nom, Prix, Categorie_idCategorie) VALUES("+x.nom+","+x.prix+","+x.categorie+");";
+            query = "INSERT INTO ProduitCustom(Nom, Prix, Categorie_idCategorie) VALUES("+x.Nom+","+x.Prix+","+x.Categorie_idCategorie+");";
             break;
         case "ferie":
             query =  "INSERT INTO Ferie(date) VALUES('"+x.date+"');";
@@ -257,6 +257,30 @@ exports.complex = function(req, res){
                 });
             });
             break;
+        case "commande" :
+            /*commande : {
+                date:'',
+                heure:'',
+                client:{Nom:'',Tel:'',Mail:'',TVA:''},
+                produits:[{
+                    prod : {
+                        Nom: '',
+                        idProduit: '',
+                        Prix: '',
+                        idCategorie: '',
+                        (custom: '')},
+                    qty: '',
+                    commentaire: ''}
+                    ,...],
+                remarque:'',
+                PNP:'',
+                montant:'',
+                vendeuse: '',
+                (idCommande: '')
+            }*/
+
+
+            break:
         default:
             console.log("Requete complexe d'un type inconnu : "+req.params.type);
     }
