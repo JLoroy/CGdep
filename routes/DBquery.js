@@ -8,6 +8,15 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 
+var fs = require('fs');
+var util = require('util');
+var now = (new Date()).getTime();
+var log_file = fs.createWriteStream("logs/"+now+'debug.log', {flags : 'w'});
+var debug = function(m){
+    console.log(m);
+    log_file.write(util.format(m) + '\n');
+}
+
 var newEntryAtelier = function(produit, Produits, isCustom){
     var idP = "idProduit" + (isCustom?"Custom":"");
     var id = produit[idP].toString()+(isCustom?"C":"P");
@@ -47,6 +56,174 @@ var refactorProduitCommande = function(produits, customs){
     }
     return result;
 };
+
+function newMots(params){
+    //any description has new words ? motcuston(idMotCustom, Mot)
+    //get all words in a dico {mot:mot}
+    var oldMots = {};
+    var newMots = {};
+    var query_oldMots = "SELECT * FROM motcustom;"
+    connection.query(query_oldMots , function(err, rows, fields) {
+        if (err) throw err;
+        for(var i = 0; i < rows.length; i++){
+            var mot = rows[i].Mot;
+            oldMots[mot]=mot;
+        }
+        for(var indice = 0; indice < params.produits.length; indice++){
+            //new word?
+            var p = params.produits[indice];
+            p.commentaire.split(' ').some(function(mot){
+                //si le mot n'est pas déjà dans le dico, le rajouter
+                if(!(oldMots[mot]) && mot!=''){
+                    newMots[mot]=mot;
+                }
+            })
+        }
+        //pour la remarque générale aussi :
+        params.Remarque.split(' ').some(function(mot){
+            //si le mot n'est pas déjà dans le dico, le rajouter
+            if(!(oldMots[mot])){
+                newMots[mot]=mot;
+            }
+        })
+        //rajouter les mots custom
+        var query_insert_mots = "INSERT INTO motcustom(Mot) VALUES ";
+        var firstMot = true;
+        for (var m in newMots){
+            query_insert_mots += firstMot?   ""   :",";firstMot = false;
+            query_insert_mots += " ('"+newMots[m]+"')";
+        }
+        query_insert_mots += ";"
+        if(Object.keys(newMots).length > 0) {
+            debug(query_insert_mots);
+            connection.query(query_insert_mots, function (err, rows, fields) {
+                if (err) throw err;
+            });
+        }
+    });
+}
+function com_client(params, idTerminal){
+    // Client ( idClient, Inscription, Mail, Tel, Nom, TVA, display)
+    var Client_idClient = 1;
+
+    //1) on check si le client existe déjà (sur base du numéro de tel)
+    var query_client = "SELECT * FROM Client WHERE Nom='"+params.client.Nom+"';";
+    connection.query(query_client , function(err, rows, fields) {
+        if (err) throw err;
+        if (rows.length > 0){
+
+            //2) si il existe, on garde son idClient (et on l'update)
+            Client_idClient = rows[0].idClient;
+            var query_update_client = "UPDATE Client SET Tel='"+params.client.Tel +"', Mail = '"+params.client.Mail +"', Nom = '"+params.client.Nom +"', TVA = '"+params.client.TVA +"' WHERE idClient = '"+Client_idClient +"';"
+            debug(query_update_client);
+            connection.query(query_update_client , function(err, rows, fields) {if (err) throw err;});
+            com_commande(params, idTerminal, Client_idClient);
+        }
+        else{
+            //3) sinon, on le crée
+            /*                    var query_insert_client = "INSERT INTO Client(Inscription, Mail, Tel, Nom, TVA) VALUES ('"+ connection.escape(new Date())+"','"+params.client.Mail+"','"+params.client.Tel+"','"+params.client.Nom+"','"+params.client.TVA+"');";
+             debug(query_insert_client);
+             connection.query(query_insert_client , function(err, rows, fields) {if (err) throw err;});*/
+            connection.query('INSERT INTO Client SET ?', {
+                Inscription: new Date(),
+                Nom:params.client.Nom,
+                Mail:params.client.Mail,
+                Tel:params.client.Tel,
+                TVA:params.client.TVA
+            }, function(err, result) {
+                if (err) throw err;
+                Client_idClient = rows.insertId;
+                debug("clientID :"+result.insertId);
+                com_commande(params, idTerminal, Client_idClient);
+            });
+
+
+        }
+    });
+}
+function com_commande(params, Terminal_idTerminal, Client_idClient){
+    // Commande ( idCommande, Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal, display)
+    console.log(params);
+    //todo gerer la date
+    var Livraison = connection.escape(new Date());
+    debug(Livraison);
+    //IF modify Command
+    if(params.idCommande){
+        var query_delete_produitsCommandes = "DELETE FROM ProduitCommande WHERE Commande_idCommande = "+params.idCommande+";";
+        var query_update_commande = "UPDATE Commande SET " +
+            "Livraison = '"+Livraison+"',"+
+            "Montant = "+params.Montant+","+
+            "PNP = '"+params.PNP+"',"+
+            "Remarque = '"+params.Remarque+"',"+
+            "Client_idClient = '"+Client_idClient+"',"+
+            "Vendeuse.idVendeuse = '"+params.vendeuse.idVendeuse+"',"+
+            "Terminal.idTerminal = '"+Terminal_idTerminal+"';"
+        //les deux d'un coup, oui oui
+        debug(query_delete_produitsCommandes+query_update_commande);
+        connection.query(query_delete_produitsCommandes+query_update_commande , function(err, rows, fields) {
+            if (err) throw err;
+            com_produitcommandes(params);
+        });
+    }
+    //ELSE new Command
+    else{
+        var Creation = connection.escape(new Date());
+        var query_insert_commande = "INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ("+
+            ""+Creation+","+""+Livraison+","+"'"+params.montant+"',"+"'"+params.PNP+"',"+"'"+params.Remarque+"',"+
+            "'"+Client_idClient+"',"+"'"+params.vendeuse.idVendeuse+"',"+"'"+Terminal_idTerminal+"');"
+        debug(query_insert_commande);
+        connection.query(query_insert_commande , function(err, rows, fields) {
+            if (err) throw err;
+            params.idCommande = rows.insertId;
+            com_produitcommandes(params);
+        });
+
+    }
+}
+function com_produitcommandes(params){
+    var firstProduitCommande = true;
+    var numberProdCustom = 0;
+    var numberProd = 0;
+    //new Produit commandes
+    //produitcommande(idProduitCommande, Quantite, Details, Commande_idCommande, Produit_idProduit, Custom, ProduitCustom_idProduitCustom)
+    var query_insert_produitCommande = "INSERT INTO produitcommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES ";
+    for(var indice = 0; indice < params.produits.length; indice ++){
+        var p = params.produits[indice];
+        //si il est custom, on le rajoute et on indique son id
+        if(p.prod.custom){
+            //todo check if il existe deja (dans le cas d'une modification de commande)
+            if(!p.prod.idProduitCustom) {
+                var query_insert_produitCustom = "INSERT INTO produitcustom(Nom, Prix, Categorie_idCategorie) VALUES ('" + p.prod.Nom + "'," + 1 + "," + p.prod.Categorie_idCategorie + ");";
+                debug(query_insert_produitCustom);
+                connection.query(query_insert_produitCustom, function (err, rows, fields) {
+                    if (err) throw err;
+                    p.prod.idProduitCustom = rows.insertId;
+                    debug("produit custom numero "+ p.prod.idProduitCustom);
+                    connection.query("INSERT INTO produitcommande SET ?",{
+                        Quantite: p.qty,
+                        Details: p.commentaire,
+                        Commande_idCommande: params.idCommande,
+                        ProduitCustom_idProduitCustom: p.prod.idProduitCustom,
+                        Custom:0
+                    }, function(err,rows,fields){
+                        if (err) throw err;
+                        debug(p.prod.Nom+" ajouté");
+                    })
+                });
+            }
+        }
+        else{
+            //Query normale
+            query_insert_produitCommande += firstProduitCommande?   ""    :",";firstProduitCommande = false;
+            query_insert_produitCommande += " ("+p.qty+",'"+p.commentaire+"',"+params.idCommande+","+p.prod.idProduit+",0);";
+            numberProd++;
+        }
+    }
+    debug(query_insert_produitCommande);
+    if(numberProd>0){
+        connection.query(query_insert_produitCommande , function(err, rows, fields) {if (err) throw err;});
+    }
+}
 
 function select_query(choices, column){
     query = "(FALSE ";
@@ -223,10 +400,11 @@ exports.modify = function(req, res){
 
 exports.complex = function(req, res){
     var params = req.body.params;
-    console.log(params.selectedCategories);
-    var query = "";
     switch(req.params.type){
         case "produitCommande":
+
+            var query = "";
+            console.log(params.selectedCategories);
             query = "SELECT Produitcommande.Quantite, Produitcommande.Details, Produitcommande.Produit_idProduit, "+
                 "Produit.Nom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin, " +
                 "Magasin.Nom AS MagasinNom FROM Produitcommande "+
@@ -260,7 +438,7 @@ exports.complex = function(req, res){
 
 
         case "commande" :
-
+            debug("DEBUG COMMANDE ##########################");
             /*params : {
                 date:'',
                 heure:'',
@@ -281,131 +459,20 @@ exports.complex = function(req, res){
                 vendeuse: '',
                 (idCommande: '')
             }*/
-
-            //region CLIENT
-            // Client ( idClient, Inscription, Mail, Tel, Nom, TVA, display)
-            var Client_idClient = 1;
-
-            //1) on check si le client existe déjà (sur base du numéro de tel)
-            var query_client = "SELECT * FROM Client WHERE Tel='"+params.client.Tel+"';";
-            connection.query(query_client , function(err, rows, fields) {
-                if (err) throw err;
-                if (rows.length > 0){
-
-                    //2) si il existe, on garde son idClient (et on l'update)
-                    console.log("WHAT IS THIS STRUCTURE ? HOW TO GET THE CLIENT ID ? ??? ")
-                    console.log(rows);
-                    Client_idClient = 1;
-                    var query_update_client = "UPDATE Client SET Tel='"+params.client.Tel +"', Mail = '"+params.client.Mail +"', Nom = '"+params.client.Tel +"', TVA = '"+params.client.TVA +"' WHERE idClient = '"+Client_idClient +"';"
-                    connection.query(query_update_client , function(err, rows, fields) {if (err) throw err;});
-                }
-                else{
-                    //3) sinon, on le crée
-                    var query_insert_client = "INSERT INTO Client(Inscription, Mail, Tel, Nom, TVA) VALUES ('"+new Date()+"','"+params.client.Mail+"','"+params.client.Tel+"','"+params.client.Nom+"','"+params.client.TVA+"');";
-                    connection.query(query_insert_client , function(err, rows, fields) {if (err) throw err;});
-                    // todo Comment on recupere l'id ????
-                    Client_idClient = 1;
-
-                }
-            });
-            //endregion
-//todo recup id du client
-            //region MOT_CUSTOM
-            //any description has new words ? motcuston(idMotCustom, Mot)
-            //get all words in a dico {mot:mot}
-            var oldMots = {};
-            var newMots = {};
-            var query_oldMots = "SELECT * FROM motcustom;"
-            connection.query(query_oldMots , function(err, rows, fields) {
-                if (err) throw err;
-                for( m in rows){
-                    oldMots += {m:m};
-                }
-            });
-            for(var indice = 0; indice < params.produits.length; indice ++){
-                //new word?
-                p.commentaire.split(' ').some(function(mot){
-                    //si le mot n'est pas déjà dans le dico, le rajouter
-                    if(!(oldMots.mot)){
-                        newMots += {mot:mot};
-                    }
-                })
-            }
-            //pour la remarque générale aussi :
-            params.Remarque.split(' ').some(function(mot){
-                //si le mot n'est pas déjà dans le dico, le rajouter
-                if(!(oldMots.mot)){
-                    newMots += {mot:mot};
-                }
-            })
-            //rajouter les mots custom
-            var query_insert_mots = "INSERT INTO motcustom(Mot) VALUES ";
-            var firstMot = true;
-            for (m in newMots){
-                query_insert_mots += firstMot?   ""   :",";firstMot = false;
-                query_insert_mots += " '"+m+"'";
-            }
-            query_insert_mots += ";"
-            connection.query(query_update_client , function(err, rows, fields) {if (err) throw err;});
-            //endregion
-
-            //region COMMANDE
-            // Commande ( idCommande, Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal, display)
-            var Livraison = params.date + params.heure;
-console.log("DATE DE LA LIVRAISON (check pour voir si c'est la bonne formulation) : "+livraison);
-            var Terminal_idTerminal = req.session.data.terminal.idTerminal;
-
-            //IF modify Command
-            if(params.idCommande){
-                var query_delete_produitsCommandes = "DELETE FROM ProduitCommande WHERE Commande_idCommande = "+params.idCommande+";";
-                var query_update_commande = "UPDATE Commande SET " +
-                    "Livraison = '"+Livraison+"',"+
-                    "Montant = "+params.Montant+","+
-                    "PNP = '"+params.PNP+"',"+
-                    "Remarque = '"+params.Remarque+"',"+
-                    "Client_idClient = '"+Client_idClient+"',"+
-                    "Vendeuse.idVendeuse = '"+params.vendeuse.idVendeuse+"',"+
-                    "Terminal.idTerminal = '"+Terminal_idTerminal+"';"
-                //les deux d'un coup, oui oui
-                connection.query(query_delete_produitsCommandes+query_update_commande , function(err, rows, fields) {if (err) throw err;});
-            }
-            //ELSE new Command
-            else{
-                var Creation = new Date();
-                var query_insert_commande = "INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES "+
-                    "'"+Creation+"',"+"'"+Livraison+"',"+"'"+params.Montant+"',"+"'"+params.PNP+"',"+"'"+params.Remarque+"',"+
-                    "'"+Client_idClient+"',"+"'"+params.vendeuse.idVendeuse+"',"+"'"+Terminal_idTerminal+"';"
-                params.idCommande = 0; //todo recuperer l'id de la commande
-            }
-            //endregion
-//todo recup id de la commande
-            //region PRODUIT COMMANDE
-            var firstProduitCommande = true;
-            //new Produit commandes
-            //produitcommande(idProduitCommande, Quantite, Details, Commande_idCommande, Produit_idProduit, Custom, ProduitCustom_idProduitCustom)
-            var query_insert_produitCommande = "INSERT INTO produitcommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom, ProduitCustom_idProduitCustom) VALUES ";
-            for(var indice = 0; indice < params.produits.length; indice ++){
-                var p = params.produits[indice];
-                //si il est custom, on le rajoute et on indique son id
-                if(p.prod.custom){
-                    // check if il existe deja (dans le cas d'une modification de commande)
-                    if(!p.prod.idProduitCustom) {
-                        var query_insert_produitCustom = "INSERT INTO ProduitCustom(Nom, Prix, Categorie_idCategorie) VALUES(" + p.prod.Nom + "," + 1 + "," + p.prod.Categorie_idCategorie + ");";
-                        console.log(query_insert_produitCustom);
-                        connection.query(query_insert_produitCustom, function (err, rows, fields) {
-                            if (err) throw err;
-                        });
-                        p.prod.idProduitCustom = 1; //todo ???
-                    }
-                }
-                query_insert_produitCommande += firstProduitCommande?   ""    :",";firstProduitCommande = false;
-                query_insert_produitCommande += " ("+p.qty+","+p.commentaire+","+Commande_/*todo*/idCommande+","+p.prod.custom?0:p.prod.idProduit/*todo*/+","+0+","+p.prod.custom?p.prod.idProduitCustom:0/*todo*/")"
-            }
-            console.log(query_insert_produitCommande);
-            connection.query(query_insert_produitCommande , function(err, rows, fields) {if (err) throw err;});
-            //endregion
-//todo : comment recup l'id du produit custom, et comment gere les produit custom ou pas dans les produitcommande
-
+            /*BON, c'est moche mais ça va le faire. A cause de l'asynchronisme, on est obligés de faire des appels imbriqués. Voilà la structure du code :
+             * INSERT Mots{}
+             * INSERT Client{
+             *       INSERT Commande{
+             *               INSERT de produitcommandes
+             *               INSERT produitCustom{
+             *                       INSERT produitcommandesCustom
+             *               }
+             *       }
+             * }
+             * */
+            newMots(params);
+            var term = 1;//req.session.data.terminal.idTerminal;
+            com_client(params, term);
             break;
         default:
             console.log("Requete complexe d'un type inconnu : "+req.params.type);

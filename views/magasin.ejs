@@ -81,11 +81,12 @@
                 <li ng-class="{disabled:commande.heure==''}">         <a role="tab" ng-click="setActiveMenu('heure');">       Heure</a></li>
                 <li ng-class="{disabled:commande.client.Nom==''}">        <a role="tab" ng-click="setActiveMenu('client');">      Client</a></li>
                 <li ng-class="{disabled:commande.montant==''}">       <a role="tab" ng-click="setActiveMenu('produit');">     Produits</a></li>
-                <li ng-class="{disabled:commande.remarque==''}">   <a role="tab" ng-click="setActiveMenu('commentaire');"> Commentaire</a></li>
+                <li ng-class="{disabled:commande.Remarque==''}">   <a role="tab" ng-click="setActiveMenu('commentaire');"> Commentaire</a></li>
                 <li ng-class="{disabled:commande.PNP==''}">      <a role="tab" ng-click="setActiveMenu('payement');">    Payement</a></li>
                 <li ng-class="{disabled:commande.PNP==''}">         <a role="tab" ng-click="setActiveMenu('recap');">       Recapitulatif</a></li>
                 <li ng-if="activeMenu != 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Suivant</a></li>
-                <li ng-if="activeMenu == 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Envoyer la commande</a></li>
+                <li><a role="tab" class="btn btn-warning" ng-click="commandeDeTest()">COMMANDE DE TEST</a></li>
+                <li ng-if="activeMenu == 'recap'"><a role="tab" class="btn btn-success" ng-click="sendCommande()">Envoyer la commande</a></li>
         </ul>
         </div>
 
@@ -266,7 +267,7 @@
                     <div class="form-group">
                         <label for="commentaireCommande" class="col-md-2 control-label">Commentaire</label>
                         <div class="input-group col-md-6">
-                            <textarea class="typeahead form-control" ng-model="commande.remarque" id="comcom" rows="10" placeholder="Commentaire général"></textarea>
+                            <textarea class="typeahead form-control" ng-model="commande.Remarque" id="comcom" rows="10" placeholder="Commentaire général"></textarea>
                         </div>
                     </div>
                 </form>
@@ -285,16 +286,16 @@
                     <div class="fill form-group" style="height:100%;">
                         <div class="fill col-md-12" style="height:100%;">
                             <div class="fill col-md-6" style="height:70%;">
-                                <button type="" id="payeCommande" ng-click="selectPNP('P')" class="fill btn btn-block" ng-class="activePNP('P');" style="height:100%;">Pay&eacute</button>
+                                <button type="" id="payeCommande" ng-click="selectPNP(1)" class="fill btn btn-block" ng-class="activePNP(1);" style="height:100%;">Pay&eacute</button>
                             </div>
                             <div class="col-md-6" style="height:70%;">
-                                <button type="" id="payeReception" ng-click="selectPNP('NP')" class="fill btn btn-block" ng-class="activePNP('NP');" style="height:100%;">Non pay&eacute</button>
+                                <button type="" id="payeReception" ng-click="selectPNP(0)" class="fill btn btn-block" ng-class="activePNP(0);" style="height:100%;">Non pay&eacute</button>
                             </div>
                             <div class="col-md-6" style="height:20%; margin-top:10px;">
-                                <button type="" id="payeFacture" ng-click="selectPNP('AFP')" class="fill btn btn-block" ng-class="activePNP('AFP');" style="height:100%;">&Agrave facturer</button>
+                                <button type="" id="payeFacture" ng-click="selectPNP(2)" class="fill btn btn-block" ng-class="activePNP(2);" style="height:100%;">&Agrave facturer</button>
                             </div>
                             <div class="col-md-6" style="height:20%; margin-top:10px;">
-                                <button type="" id="nonPayeFacture" ng-click="selectPNP('AFNP')" class="fill btn btn-block" ng-class="activePNP('AFNP');" style="height:100%;">&Agrave facturer, non pay&eacute</button>
+                                <button type="" id="nonPayeFacture" ng-click="selectPNP(3)" class="fill btn btn-block" ng-class="activePNP(3);" style="height:100%;">&Agrave facturer, non pay&eacute</button>
                             </div>
                         </div>
                     </div>
@@ -390,7 +391,7 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Commentaire</label>
                             <div class="col-md-6">
-                                <p class="form-control-static">{{commande.remarque}}</p>
+                                <p class="form-control-static">{{commande.Remarque}}</p>
                             </div>
                         </div>
                     </form>

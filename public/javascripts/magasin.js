@@ -95,10 +95,45 @@ app.controller('commandeController', function($scope, $rootScope, $http){
         heure:'',
         client:{Nom:'',Tel:'',Mail:'',TVA:''},
         produits:[],
-        remarque:'',
+        Remarque:'',
         PNP:'',
         montant:''
-    }
+    };
+
+
+    $scope.commandeDeTest = function(){
+        $scope.commande = {
+            date:new Date(2015,7,10,12,0,0,0),
+            heure:"12h",
+            PNP:0,
+            montant:"1",
+            Remarque:"RAS",
+            vendeuse:{idVendeuse:7,Nom:"VENDEUSENOM"},
+            produits:[],
+            client:{Nom:"Commande de Test",Tel:"",Mail:"",TVA:""},
+        };
+        $scope.commande.produits.push({
+            prod: {
+                idProduit:1,
+                Nom:'Pistolet blanc',
+                Categorie_idCategorie:1,
+                Prix:1
+            },
+            qty: 3,
+            commentaire:'chaud'
+        });
+        $scope.commande.produits.push({
+            prod: {
+                idProduit:1,
+                Nom:'USA nature',
+                Categorie_idCategorie:4,
+                custom:'true'
+            },
+            qty: 1,
+            commentaire:''
+        });
+        $scope.sendCommande();
+    };
 
     $scope.controlTab = function(tab){
         classes = "";
@@ -119,7 +154,7 @@ app.controller('commandeController', function($scope, $rootScope, $http){
                 classes += $scope.commande.montant!=''?"":"disabled";
                 break;
             case "payement":
-                classes += $scope.commande.remarque!=''?"":"disabled";
+                classes += $scope.commande.montant!=''?"":"disabled";
                 break;
             case "recap":
                 classes += $scope.commande.PNP!=''?"":"disabled";
@@ -350,6 +385,7 @@ app.controller('commandeController', function($scope, $rootScope, $http){
 
     //RECAP
     $scope.sendCommande = function() {
+        console.log($scope.commande);
         $scope.commande.vendeuse = $rootScope.vendeuse;
         $http.post("/complex/commande", {params:$scope.commande}).success(function(res){
 

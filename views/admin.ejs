@@ -102,7 +102,7 @@
                     <td>{{commande.Creation | date:'EEEE dd MMMM yyyy'}}</td>
                     <td>{{commande.Livraison | date:'EEEE dd MMMM yyyy'}}</td>
                     <td>{{commande.Montant}}</td>
-                    <td>{{(commande.PNP==2)?'AF':(commande.PNP==1)?'P':'NP'}}</td>
+                    <td>{{(commande.PNP==3)?'AFNP':(commande.PNP==2)?'AF':(commande.PNP==1)?'P':'NP'}}</td>
                     <td>{{commande.Remarque}}</td>
                     <td>{{commande.clientNom}}</td>
                     <td>{{commande.vendeuseNom}}</td>
