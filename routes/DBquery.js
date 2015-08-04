@@ -63,6 +63,7 @@ function newMots(params){
     var oldMots = {};
     var newMots = {};
     var query_oldMots = "SELECT * FROM motcustom;"
+    var thereAreNewWords = false;
     connection.query(query_oldMots , function(err, rows, fields) {
         if (err) throw err;
         for(var i = 0; i < rows.length; i++){
@@ -76,13 +77,14 @@ function newMots(params){
                 //si le mot n'est pas déjà dans le dico, le rajouter
                 if(!(oldMots[mot]) && mot!=''){
                     newMots[mot]=mot;
+                    thereAreNewWords = true;
                 }
             })
         }
         //pour la remarque générale aussi :
         params.Remarque.split(' ').some(function(mot){
             //si le mot n'est pas déjà dans le dico, le rajouter
-            if(!(oldMots[mot])){
+            if(!(oldMots[mot])&& mot!=''){
                 newMots[mot]=mot;
             }
         })
@@ -94,7 +96,8 @@ function newMots(params){
             query_insert_mots += " ('"+newMots[m]+"')";
         }
         query_insert_mots += ";"
-        if(Object.keys(newMots).length > 0) {
+        if(thereAreNewWords) {
+            debug("number of new words :"+Object.keys(newMots).length);
             debug(query_insert_mots);
             connection.query(query_insert_mots, function (err, rows, fields) {
                 if (err) throw err;
@@ -145,7 +148,7 @@ function com_commande(params, Terminal_idTerminal, Client_idClient){
     // Commande ( idCommande, Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal, display)
     console.log(params);
     //todo gerer la date
-    var Livraison = connection.escape(new Date());
+    var Livraison = params.Livraison;
     debug(Livraison);
     //IF modify Command
     if(params.idCommande){
@@ -169,7 +172,7 @@ function com_commande(params, Terminal_idTerminal, Client_idClient){
     else{
         var Creation = connection.escape(new Date());
         var query_insert_commande = "INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ("+
-            ""+Creation+","+""+Livraison+","+"'"+params.montant+"',"+"'"+params.PNP+"',"+"'"+params.Remarque+"',"+
+            ""+Creation+","+"'"+Livraison+"',"+"'"+params.montant+"',"+"'"+params.PNP+"',"+"'"+params.Remarque+"',"+
             "'"+Client_idClient+"',"+"'"+params.vendeuse.idVendeuse+"',"+"'"+Terminal_idTerminal+"');"
         debug(query_insert_commande);
         connection.query(query_insert_commande , function(err, rows, fields) {
@@ -215,10 +218,11 @@ function com_produitcommandes(params){
         else{
             //Query normale
             query_insert_produitCommande += firstProduitCommande?   ""    :",";firstProduitCommande = false;
-            query_insert_produitCommande += " ("+p.qty+",'"+p.commentaire+"',"+params.idCommande+","+p.prod.idProduit+",0);";
+            query_insert_produitCommande += " ("+p.qty+",'"+p.commentaire+"',"+params.idCommande+","+p.prod.idProduit+",0)";
             numberProd++;
         }
     }
+    query_insert_produitCommande += ";";
     debug(query_insert_produitCommande);
     if(numberProd>0){
         connection.query(query_insert_produitCommande , function(err, rows, fields) {if (err) throw err;});
@@ -473,6 +477,71 @@ exports.complex = function(req, res){
             newMots(params);
             var term = 1;//req.session.data.terminal.idTerminal;
             com_client(params, term);
+            res.send('ok');
+            break;
+
+        case "vendByMag" :
+            debug("VendByMag DEBUG ###################################")
+            var n_by_row = 5;
+            var vendByMag = {};
+            var activeMag  = 1;//req.session.magasin.idMagasin;
+            debug("activeMag : "+activeMag)
+            connection.query("SELECT * FROM Magasin;", function (err, magasins){
+                connection.query("SELECT * FROM Vendeuse;", function (err, vendeuses){
+                    for(var m = 0; m < magasins.length; m++){
+                        mag = magasins[m];
+                        if(mag.display == 1){
+                            vendByMag[mag.idMagasin] = {
+                                idMagasin:mag.idMagasin
+                            }
+
+                            var indice = 0;
+                            for(var v = 0; v < vendeuses.length; v++){
+                                vend = vendeuses[v];
+                                if(vend.display == 1){
+                                    i = indice/n_by_row |0;
+                                    j = indice % n_by_row;
+                                    if(j == 0) vendByMag[mag.idMagasin][i] = {};
+                                    vendByMag[mag.idMagasin][i][j] = vend;
+                                    indice++;
+                                }
+                            }
+                        }
+                    }
+                    res.send({
+                        activeMag:activeMag,
+                        vendByMag:vendByMag
+                    });
+                });
+            });
+            break;
+
+        case "produitTable" :
+            //TODO REGROUPEMENT
+            //TODO ORDERING
+            var n_by_row = 4;
+            var produitTable = {};
+            connection.query("SELECT * FROM Produit;", function (err, produits){
+                connection.query("SELECT * FROM Categorie;", function (err, categories){
+                    for(var i_categ = 0; i_categ<categories.length; i_categ++){
+                        var idCateg = categories[i_categ].idCategorie;
+                        produitTable[idCateg] = {indice:0,idCategorie:idCateg};
+                    }
+                    for(var i_prod = 0; i_prod<produits.length; i_prod++){
+                        var prod = produits[i_prod];
+                        var idCateg = prod.Categorie_idCategorie;
+                        if(prod.display == 1){
+                            var indice = produitTable[idCateg].indice;
+                            var i = indice/n_by_row | 0 ;
+                            var j = indice % n_by_row;
+                            if (j==0) produitTable[idCateg][i] = {};
+                            produitTable[idCateg][i][j]=prod;
+                            produitTable[idCateg].indice = indice+1;
+                        }
+                    }
+                    res.send(produitTable);
+                });
+            });
             break;
         default:
             console.log("Requete complexe d'un type inconnu : "+req.params.type);

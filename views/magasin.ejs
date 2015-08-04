@@ -22,8 +22,8 @@
     <title>Application de commande</title>
 </head>
 <body ng-app="magasin" class="h100">
-<div id="wrapper" class="h100">
-    <div id="header" ng-controller="rootScopeVisualController">
+<div id="wrapper" ng-controller="magasinController" class="h100">
+    <div id="header">
         <div class="alert alert-danger" role="alert" ng-class="{hidden:!displayErreur}">
             {{messageErreur}}
             <button type="button" class="btn btn-danger" ng-click="clearErreur()">Ok</button>
@@ -32,14 +32,14 @@
 
 
     <div id="content" class="h100">
+
         <!-- CHOIX VENDEUSE -->
-    <div ng-controller="choixVendeuse" class="h100" ng-class="isActiveMenu('vendeuse')">
-        <div ng-show="! ok">Loading</div>
-        <div ng-show="ok">
+    <div class="h100" ng-class="isActiveMenu('vendeuse')">
+        <div>
             <h4>Selection de la Vendeuse</h4>
             <ul class="nav nav-pills nav-justified" role="tablist">
-                <li ng-repeat="magasin in magasins" ng-if="magasin.display == 1" ng-class="activeClass(magasin.idMagasin)">
-                    <a href="#mag{{magasin.idMagasin}}" ng-click="activeTab = magasin.idMagasin" role="tab" data-toggle="tab">
+                <li ng-repeat="magasin in magasins" ng-if="magasin.display == 1" ng-class="isActiveMag(magasin.idMagasin)">
+                    <a href="#mag{{magasin.idMagasin}}" ng-click="activeMag = magasin.idMagasin" role="tab" data-toggle="tab">
                         {{magasin.Nom}}
                     </a>
                 </li>
@@ -48,10 +48,10 @@
             <!-- Tab panes -->
             <div class="tab-content"  style="max-width: 100% !important; max-height:70% !important;">
                 <table id="mag{{mag_v.idMagasin}}" ng-repeat="mag_v in vendByMag"
-                       class="table table-bordered tab-pane form-control" ng-class="activeClass(mag_v.idMagasin)">
+                       class="table table-bordered tab-pane form-control" ng-class="isActiveMag(mag_v.idMagasin)">
                     <tr ng-repeat="row_v in mag_v">
                         <td ng-repeat="v in row_v" class="form-group-lg vcenter" style="max-width: 100% !important; max-height:70% !important;">
-                            <a ng-click="selectVendeuse(v);next()">
+                            <a ng-click="selectVendeuse(v);next('vendeuse')">
                                 <h4>{{v.Nom}}</h4>
                                 <img src="/default.jpg" class="center-block" style="max-width: 100% !important; max-height:70% !important;">
                             </a>
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Menu Principal -->
-    <div ng-controller="mainMenu" ng-class="isActiveMenu('main')" class="h100">
+    <div ng-class="isActiveMenu('main')" class="h100">
         <div class="col-md-6 fill h100">
             <button type="button" class="fill btn btn-primary btn-lg btn-block h100" ng-click="toCommand()">Commander</button>
         </div>
@@ -72,7 +72,92 @@
         </div>
     </div>
 
-    <div id="APPLICATION COMMANDE" ng-class="isActiveMenu('commande')" class="h100" ng-controller="commandeController">
+    <div class="h100" ng-class="isActiveMenu('consult_date')">
+            <h4>Selection de la Date</h4>
+            <table class="table table-bordered table-condensed tab-pane form-control h90">
+                <tr ng-repeat="semaine in calendar">
+                    <td ng-repeat="jour in semaine" class="form-group vcenter">
+                        <a  ng-class="activeDate(jour.date)"  class="btn form-control h100" ng-disabled="!(jour.ok)" ng-click="consultDate(jour.date);">
+                            <h2>{{jour.date | date: 'dd EEEE'}}</h2>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    <div ng-class="isActiveMenu('selectCommande')" class="h100">
+        <div class="row">
+            <div id="selectorMagasin" class="col-md-12 form-inline">
+                <label ng-repeat="magasin in magasins"  ng-if="magasin.display == 1"class="btn btn-primary active" ng-click="refresh()">
+                    <input class="form-control" type="checkbox" ng-model="params.selectedMagasins[magasin.idMagasin]">{{magasin.Nom}}
+                </label>
+            </div>
+        </div>
+        </br>
+        <div class="row">
+            <div class="form-inline col-md-12">
+                <div class="form-group col-md-4">
+                    <label class="col-md-4">
+                        Cr&eacuteation
+                    </label>
+                    <div class="input-group col-md-8">
+                        <input ng-model="params.dateCreate" ng-change="refresh()" id="dpCreate" type="text" placeholder="Entrez une date" class="form-control">
+                        <span ng-click="params.dateCreate='';refresh()" class="input-group-addon glyphicon glyphicon-remove"></span>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="col-md-4">
+                        R&eacuteception
+                    </label>
+                    <div class="input-group col-md-8">
+                        <input ng-model="params.dateLivraison" ng-change="refresh()" id="dpLivraison" type="text" placeholder="Entrez une date" class="form-control">
+                        <span ng-click="params.dateLivraison=''" class="input-group-addon glyphicon glyphicon-remove"></span>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="col-md-4">
+                        # R&eacutesultats
+                    </label>
+                    <div class="input-group col-md-8">
+                        <input ng-model="params.nbrResult" ng-change="refresh()" type="number" placeholder="Entrez un nombre" class="form-control">
+                        <span ng-click="params.nbrResult=0" class="input-group-addon glyphicon glyphicon-remove"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>Creation</th>
+                <th>Livraison</th>
+                <th>Prix</th>
+                <th>P/NP</th>
+                <th>Remarque</th>
+                <th>Client</th>
+                <th>Vendeuse</th>
+                <th>Magasin</th>
+                <th>Supprimer</th>
+                </thead>
+                <tbody>
+                <tr ng-repeat="commande in commandes" <!--ng-if="commande.display == 1"-->>
+                <td>{{commande.idCommande}}</td>
+                <td>{{commande.Creation | date:'EEEE dd MMMM yyyy'}}</td>
+                <td>{{commande.Livraison | date:'EEEE dd MMMM yyyy'}}</td>
+                <td>{{commande.Montant}}</td>
+                <td>{{(commande.PNP==3)?'AFNP':(commande.PNP==2)?'AF':(commande.PNP==1)?'P':'NP'}}</td>
+                <td>{{commande.Remarque}}</td>
+                <td>{{commande.clientNom}}</td>
+                <td>{{commande.vendeuseNom}}</td>
+                <td>{{commande.magasinNom}}</td>
+                <td><button class="btn btn-danger" ng-click="delete(commande);refresh();">Supprimer</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div id="APPLICATION COMMANDE" ng-class="isActiveMenu('commande')" class="h100" >
         <!-- NAV -->
         <div class="h5">
             <ul class="nav nav-tabs nav-justified" role="tablist">
@@ -108,16 +193,16 @@
             <h4>Selection de l'Heure</h4>
             <table class="table table-bordered table-condensed tab-pane form-control h90">
                 <tr>
-                    <td ng-repeat="heure in {a:'6h',b:'7h',c:'8h',d:'9h',e:'10h',f:'11h',g:'12h'}" class="form-group vcenter">
+                    <td ng-repeat="heure in {a:6,b:7,c:8,d:9,e:10,f:11,g:12}" class="form-group vcenter">
                         <a class="h100 btn btn-lg form-control"  ng-class="activeHeure(heure);"  ng-click="selectHeure(heure);">
-                            <h3>{{heure}}</h3>
+                            <h3>{{heure}}h</h3>
                         </a>
                     </td>
                 </tr>
                 <tr>
-                    <td ng-repeat="heure in {h:'13h',i:'14h',j:'15h',k:'16h',l:'17h',m:'18h',n:'19h'}" class="form-group vcenter">
+                    <td ng-repeat="heure in {h:13,i:14,j:15,k:16,l:17,m:18,n:19}" class="form-group vcenter">
                         <a class="h100 btn btn-lg form-control"  ng-class="activeHeure(heure);"  ng-click="selectHeure(heure);">
-                            <h3>{{heure}}</h3>
+                            <h3>{{heure}}h</h3>
                         </a>
                     </td>
                 </tr>
@@ -214,7 +299,7 @@
                         <table class="table table-bordered col-md-12 table-condensed">
                             <tr ng-repeat="row_p in category">
                                 <td ng-repeat="produit in row_p" class="col-md-3" style="border:none; !important">
-                                    <button type="button" data-toggle="modal" data-target="#modalProduit" class="btn btn-default btn-lg btn-block" ng-click="openModalProduit(produit.thisProd,1,'add','');">{{produit.thisProd.Nom}}</button>
+                                    <button type="button" data-toggle="modal" data-target="#modalProduit" class="btn btn-default btn-lg btn-block" ng-click="openModalProduit(produit,1,'add','');">{{produit.Nom}}</button>
                                 </td>
                             </tr>
                         </table>
@@ -271,7 +356,7 @@
                         </div>
                     </div>
                 </form>
-            <button type="button" class="btn tbn-primary" ng-click="selectCommentaire();">Suivant (Payement)</button>
+            <button type="button" class="btn tbn-primary" ng-click="next('commentaire');">Suivant (Payement)</button>
         </div>
         <!-- CHOIX payement-->
         <div class="h80" ng-class="isActiveMenu('payement')">
