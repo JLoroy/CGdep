@@ -383,19 +383,12 @@ app.controller('magasinController', function($scope, $filter, $http){
     };
     $scope.delete = function(commande){};
     $scope.modify = function(x){
-        //todo get commande + client + produits commandes + produits customs
-        $scope.commande = {
-            idCommande: x.idCommande,
-            Livraison: x.Livraison,
-            date: '', //todo
-            heure: '', //todo
-            client: {Nom: '', Tel: '', Mail: '', TVA: ''}, //todo
-            produits: [], //todo
-            Remarque: x.Remarque,
-            PNP: x.PNP,
-            montant: x.Montant,
-            vendeuse: $scope.commande.vendeuse
-        };
+        $http.post("complex/fullCommande", {params:{idCommande: x.idCommande}}).success(function(res){
+            var vendeuse = $scope.commande.vendeuse;
+            $scope.commande = res;
+            $scope.commande.vendeuse = vendeuse;
+        });
+        //todo DATE et Heure
         $scope.activeMenu = 'date';
     };
     //endregion

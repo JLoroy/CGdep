@@ -58,6 +58,7 @@ var refactorProduitCommande = function(produits, customs){
 };
 
 function newMots(params){
+    //Todo new mot support
     //any description has new words ? motcuston(idMotCustom, Mot)
     //get all words in a dico {mot:mot}
     var oldMots = {};
@@ -86,6 +87,10 @@ function newMots(params){
             //si le mot n'est pas déjà dans le dico, le rajouter
             if(!(oldMots[mot])&& mot!=''){
                 newMots[mot]=mot;
+            }
+            else{
+                debug("mot deja dans le dico :"+mot+":");
+                debug(oldMots);
             }
         })
         //rajouter les mots custom
@@ -116,7 +121,7 @@ function com_client(params, idTerminal){
         if (rows.length > 0){
 
             //2) si il existe, on garde son idClient (et on l'update)
-            Client_idClient = rows[0].idClient;
+            var Client_idClient = rows[0].idClient;
             var query_update_client = "UPDATE Client SET Tel='"+params.client.Tel +"', Mail = '"+params.client.Mail +"', Nom = '"+params.client.Nom +"', TVA = '"+params.client.TVA +"' WHERE idClient = '"+Client_idClient +"';"
             debug(query_update_client);
             connection.query(query_update_client , function(err, rows, fields) {if (err) throw err;});
@@ -135,7 +140,7 @@ function com_client(params, idTerminal){
                 TVA:params.client.TVA
             }, function(err, result) {
                 if (err) throw err;
-                Client_idClient = rows.insertId;
+                var Client_idClient = result.insertId;
                 debug("clientID :"+result.insertId);
                 com_commande(params, idTerminal, Client_idClient);
             });
@@ -146,7 +151,7 @@ function com_client(params, idTerminal){
 }
 function com_commande(params, Terminal_idTerminal, Client_idClient){
     // Commande ( idCommande, Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal, display)
-    console.log(params);
+    console.log(params);console.log("client:"+Client_idClient);
     //todo gerer la date
     var Livraison = params.Livraison;
     debug(Livraison);
@@ -474,7 +479,10 @@ exports.complex = function(req, res){
              *       }
              * }
              * */
-            newMots(params);
+
+            //todo
+            //newMots(params);
+
             var term = 1;//req.session.data.terminal.idTerminal;
             com_client(params, term);
             res.send('ok');
@@ -540,6 +548,76 @@ exports.complex = function(req, res){
                         }
                     }
                     res.send(produitTable);
+                });
+            });
+            break;
+
+        case "fullCommande":
+            var commande = {}
+            //first on chope la commande normale a partir de l'ID
+            query = "SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque," +
+                " Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, " +
+                "Magasin.idMagasin, Magasin.Nom AS magasinNom "+
+                "FROM Commande "+
+                "JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal "+
+                "JOIN Client ON Commande.Client_idClient=Client.idClient "+
+                "JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin "+
+                "WHERE ?";
+            connection.query(query, {idCommande:params.idCommande}, function(err, rows){
+                commande = {
+                    idCommande: rows[0].idCommande,
+                    Livraison: rows[0].Livraison,
+                    date: '', //todo
+                    heure: '', //todo
+                    client: {
+                        idClient: rows[0].idClient,
+                        Nom: rows[0].clientNom,
+                        Tel: rows[0].Tel,
+                        Mail: rows[0].Mail,
+                        TVA: rows[0].TVA},
+                    produits: [], //todo
+                    Remarque: rows[0].Remarque,
+                    PNP: rows[0].PNP,
+                    montant: rows[0].Montant
+                };
+
+
+                //ensuite, on chope tous les produits commandés et tous les produits custom
+                connection.query("SELECT Produitcommande.Quantite, Produitcommande.Details, Produitcommande.Produit_idProduit, "+
+                    "Produit.Nom, Produit.idProduit, Produit.Categorie_idCategorie FROM Produitcommande "+
+                    "JOIN Produit ON produitCommande.Produit_idProduit = idProduit WHERE ?", {Commande_idCommande:params.idCommande}, function(err,produits){
+                    for(var i = 0; i<produits.length; i++){
+                        commande.produits.push({
+                            prod: {
+                                idProduit:produits[i].idProduit,
+                                Nom:produits[i].Nom,
+                                Categorie_idCategorie:produits[i].Categorie_idCategorie,
+                                custom:false
+                            },
+                            qty: produits[i].Quantite,
+                            commentaire:produits[i].Details
+                        });
+                    }
+                    //Et les produits customs
+                    connection.query("SELECT Produitcommande.Quantite, Produitcommande.Details, Produitcommande.ProduitCustom_idProduitCustom, "+
+                        "produitcustom.Nom, produitcustom.idProduitCustom, produitcustom.Categorie_idCategorie FROM Produitcommande "+
+                        "JOIN produitcustom ON produitCommande.ProduitCustom_idProduitCustom = idProduitCustom WHERE ?", {Commande_idCommande:params.idCommande}, function(err,customs){
+                        if(err) throw err;
+                        debug(customs);
+                        for(var i = 0; i<customs.length; i++){
+                            commande.produits.push({
+                                prod: {
+                                    idProduit:customs[i].idProduitCustom,
+                                    Nom:customs[i].Nom,
+                                    Categorie_idCategorie:customs[i].Categorie_idCategorie,
+                                    custom:true
+                                },
+                                qty: customs[i].Quantite,
+                                commentaire: customs[i].Details
+                            });
+                        }
+                        res.send(commande);
+                    });
                 });
             });
             break;
