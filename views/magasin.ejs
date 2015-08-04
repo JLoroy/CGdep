@@ -23,7 +23,10 @@
 </head>
 <body ng-app="magasin" class="h100">
 <div id="wrapper" ng-controller="magasinController" class="h100">
-    <div id="header">
+    <div id="header" class="col-md-12">
+        <div ng-class="{hidden:commande.date==''}" style="float:right">
+            <h2 class="nomargin">{{commande.date|date:'dd-MMMM-yy'}}</h2>
+        </div>
         <div class="alert alert-danger" role="alert" ng-class="{hidden:!displayErreur}">
             {{messageErreur}}
             <button type="button" class="btn btn-danger" ng-click="clearErreur()">Ok</button>
@@ -166,16 +169,16 @@
 
     <div id="APPLICATION COMMANDE" ng-class="isActiveMenu('commande')" class="h100" >
         <!-- NAV -->
-        <div class="h5">
+        <div class="h5 nomargin">
             <ul class="nav nav-tabs nav-justified" role="tablist">
                 <li><a role="tab" class="btn btn-warning" ng-click="previous(activeMenu)">Précédent</a></li>
-                <li ng-class="{disabled:commande.date==''}">  <a role="tab" ng-click="setActiveMenu('date');">        Date</a></li>
-                <li ng-class="{disabled:commande.heure==''}">         <a role="tab" ng-click="setActiveMenu('heure');">       Heure</a></li>
-                <li ng-class="{disabled:commande.client.Nom==''}">        <a role="tab" ng-click="setActiveMenu('client');">      Client</a></li>
-                <li ng-class="{disabled:commande.montant==''}">       <a role="tab" ng-click="setActiveMenu('produit');">     Produits</a></li>
-                <li ng-class="{disabled:commande.Remarque==''}">   <a role="tab" ng-click="setActiveMenu('commentaire');"> Commentaire</a></li>
-                <li ng-class="{disabled:commande.PNP==''}">      <a role="tab" ng-click="setActiveMenu('payement');">    Payement</a></li>
-                <li ng-class="{disabled:commande.PNP==''}">         <a role="tab" ng-click="setActiveMenu('recap');">       Recapitulatif</a></li>
+                <li ng-click="setActiveMenu('date');">  <a role="tab" >        Date</a></li>
+                <li ng-class="{disabled:commande.date==''}" ng-click="setActiveMenu('heure');">         <a role="tab" >       Heure</a></li>
+                <li ng-class="{disabled:commande.heure==''}" ng-click="setActiveMenu('client');">        <a role="tab" >      Client</a></li>
+                <li ng-class="{disabled:commande.client.Nom==''}" ng-click="setActiveMenu('produit');">       <a role="tab" >     Produits</a></li>
+                <li ng-class="{disabled:commande.montant==0}" ng-click="setActiveMenu('commentaire');">   <a role="tab"> Commentaire</a></li>
+                <li ng-class="{disabled:commande.montant==0}" ng-click="setActiveMenu('payement');">      <a role="tab">    Payement</a></li>
+                <li ng-class="{disabled:commande.PNP=='null'}" ng-click="setActiveMenu('recap');">         <a role="tab">       Recapitulatif</a></li>
                 <li ng-if="activeMenu != 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Suivant</a></li>
                 <li><a role="tab" class="btn btn-warning" ng-click="commandeDeTest()">COMMANDE DE TEST</a></li>
                 <li ng-if="activeMenu == 'recap'"><a role="tab" class="btn btn-success" ng-click="sendCommande()">Envoyer la commande</a></li>
@@ -346,9 +349,9 @@
                     </div>
                 </div>
                 <div class="col-md-offset-3 col-md-6">
-                    <!--todo-->
+
                     <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#modalProduit"
-                            ng-click="openModalProduit({Nom:'', Categorie_idCategorie:'', Prix:1,custom:'true'},1,'custom','');">Produit personnalis&eacute...</button>
+                            ng-click="openModalProduit({Nom:'', Categorie_idCategorie:'', Prix:1,custom:true},1,'custom','');">Produit personnalis&eacute...</button>
                 </div>
             </div>
         </div>

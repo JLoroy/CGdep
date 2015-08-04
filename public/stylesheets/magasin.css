@@ -50,3 +50,8 @@ body {
 .h5{
     height:5%;
 }
+
+.nomargin{
+    margin-top: 0;
+    margin-bottom: 0;
+}

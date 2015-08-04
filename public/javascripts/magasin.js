@@ -19,8 +19,8 @@ app.controller('magasinController', function($scope, $filter, $http){
         client:{Nom:'',Tel:'',Mail:'',TVA:''},
         produits:[],
         Remarque:'',
-        PNP:'',
-        montant:'',
+        PNP:'null',
+        montant:0,
         vendeuse:{Nom:'', idVendeuse:''}
     };
 
@@ -41,7 +41,6 @@ app.controller('magasinController', function($scope, $filter, $http){
             $scope.vendByMag = res.vendByMag;
             $scope.activeMenu='vendeuse';
             $scope.activeMag = res.activeMag;
-            console.log($scope.vendByMag);
         });
         $http.post("complex/produitTable",{}).success(function(res){
             $scope.produitTable = res;
@@ -78,8 +77,8 @@ app.controller('magasinController', function($scope, $filter, $http){
            client: {Nom: '', Tel: '', Mail: '', TVA: ''},
            produits: [],
            Remarque: '',
-           PNP: '',
-           montant: '',
+           PNP: 'null',
+           montant: 0,
            vendeuse: {Nom: '', idVendeuse: ''}
        };
        $scope.loadData();
@@ -128,14 +127,14 @@ app.controller('magasinController', function($scope, $filter, $http){
                 else $scope.erreur("Veuillez rentrer un nom et un numero de telephone");
                 break;
             case 'produit':
-                if($scope.commande.montant!='')tab='commentaire';
+                if($scope.commande.montant>0)tab='commentaire';
                 else $scope.erreur("Veuillez entrer des produits");
                 break;
             case 'commentaire':
                 tab='payement';
                 break;
             case 'payement':
-                if($scope.commande.pnp!='')tab='recap';
+                if($scope.commande.pnp!='null')tab='recap';
                 else $scope.erreur("Payement non valide");
                 break;
             case 'recap':
@@ -214,10 +213,11 @@ app.controller('magasinController', function($scope, $filter, $http){
                 classes += $scope.commande.client.Nom!=''?"":"disabled";
                 break;
             case "commentaire":
-                classes += $scope.commande.montant!=''?"":"disabled";
+                classes += $scope.commande.montant>0?"":"disabled";
+                console.log($scope.commande.montant);
                 break;
             case "payement":
-                classes += $scope.commande.montant!=''?"":"disabled";
+                classes += $scope.commande.montant>0?"":"disabled";
                 break;
             case "recap":
                 classes += $scope.commande.PNP!=''?"":"disabled";
@@ -271,7 +271,6 @@ app.controller('magasinController', function($scope, $filter, $http){
             d.setMinutes(0);
             d.setSeconds(0);
             d = $filter('date')(d, 'yyyy-MM-dd HH-mm-ss');
-            console.log("new filter : "+ d);
             $scope.commande.Livraison = d;
         }
     };
@@ -399,7 +398,7 @@ app.controller('magasinController', function($scope, $filter, $http){
             date:new Date(2015,7,10,12,0,0,0),
             heure:"12",
             PNP:0,
-            montant:"1",
+            montant:1,
             Remarque:"RAS",
             vendeuse:{idVendeuse:7,Nom:"VENDEUSENOM"},
             produits:[],
@@ -420,7 +419,8 @@ app.controller('magasinController', function($scope, $filter, $http){
                 idProduit:1,
                 Nom:'USAa nature',
                 Categorie_idCategorie:4,
-                custom:'true'
+                custom:true,
+                Prix:1
             },
             qty: 1,
             commentaire:''
