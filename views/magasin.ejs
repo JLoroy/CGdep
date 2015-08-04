@@ -72,6 +72,8 @@
         </div>
     </div>
 
+
+        <!-- Date Consult -->
     <div class="h100" ng-class="isActiveMenu('consult_date')">
             <h4>Selection de la Date</h4>
             <table class="table table-bordered table-condensed tab-pane form-control h90">
@@ -84,13 +86,16 @@
                 </tr>
             </table>
         </div>
+        <!-- Select Commande -->
     <div ng-class="isActiveMenu('selectCommande')" class="h100">
-        <div class="row">
-            <div id="selectorMagasin" class="col-md-12 form-inline">
-                <label ng-repeat="magasin in magasins"  ng-if="magasin.display == 1"class="btn btn-primary active" ng-click="refresh()">
-                    <input class="form-control" type="checkbox" ng-model="params.selectedMagasins[magasin.idMagasin]">{{magasin.Nom}}
-                </label>
-            </div>
+        <div class="h5">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li><a role="tab" class="btn btn-warning" ng-click="previous(activeMenu)">Précédent</a></li>
+                <li ng-repeat="magasin in magasins" ng-if="magasin.display == 1"
+                    ng-click="selectedMagasins[magasin.idMagasin]=(!selectedMagasins[magasin.idMagasin]);refreshCommandes()">
+                    <a role="tab" class="btn" ng-class="consultMagSelected(magasin.idMagasin)" >{{magasin.Nom}}</a>
+                </li>
+            </ul>
         </div>
         </br>
         <div class="row">
@@ -136,6 +141,7 @@
                 <th>Client</th>
                 <th>Vendeuse</th>
                 <th>Magasin</th>
+                <th>Modifier</th>
                 <th>Supprimer</th>
                 </thead>
                 <tbody>
@@ -149,7 +155,8 @@
                 <td>{{commande.clientNom}}</td>
                 <td>{{commande.vendeuseNom}}</td>
                 <td>{{commande.magasinNom}}</td>
-                <td><button class="btn btn-danger" ng-click="delete(commande);refresh();">Supprimer</button></td>
+                <td><button class="btn btn-primary" ng-click="modify(commande);">Modifier</button></td>
+                <td><button class="btn btn-danger" ng-click="delete(commande);refreshCommandes();">Supprimer</button></td>
                 </tr>
                 </tbody>
             </table>
@@ -161,7 +168,7 @@
         <!-- NAV -->
         <div class="h5">
             <ul class="nav nav-tabs nav-justified" role="tablist">
-                <li><a role="tab" class="btn btn-primary" ng-click="previous(activeMenu)">Précédent</a></li>
+                <li><a role="tab" class="btn btn-warning" ng-click="previous(activeMenu)">Précédent</a></li>
                 <li ng-class="{disabled:commande.date==''}">  <a role="tab" ng-click="setActiveMenu('date');">        Date</a></li>
                 <li ng-class="{disabled:commande.heure==''}">         <a role="tab" ng-click="setActiveMenu('heure');">       Heure</a></li>
                 <li ng-class="{disabled:commande.client.Nom==''}">        <a role="tab" ng-click="setActiveMenu('client');">      Client</a></li>
@@ -172,7 +179,7 @@
                 <li ng-if="activeMenu != 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Suivant</a></li>
                 <li><a role="tab" class="btn btn-warning" ng-click="commandeDeTest()">COMMANDE DE TEST</a></li>
                 <li ng-if="activeMenu == 'recap'"><a role="tab" class="btn btn-success" ng-click="sendCommande()">Envoyer la commande</a></li>
-        </ul>
+            </ul>
         </div>
 
         <!-- CHOIX DATE -->

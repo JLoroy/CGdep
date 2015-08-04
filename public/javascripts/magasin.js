@@ -10,6 +10,7 @@ app.controller('magasinController', function($scope, $filter, $http){
     $scope.commandes = {};$scope.params_commandes = {date:''};
     $scope.produitTable = {};
     $scope.motscustoms = {};$scope.params_motscustoms = {};
+    $scope.selectedMagasins = {};
 
     $scope.commande = {
         Livraison:'',
@@ -29,6 +30,9 @@ app.controller('magasinController', function($scope, $filter, $http){
         });
         $http.post("get/magasin",{}).success(function(res){
             $scope.magasins = res;
+            for(m in $scope.magasins){
+                $scope.selectedMagasins[m.idMagasin] = false;
+            }
         });
         $http.post("get/category",{}).success(function(res){
             $scope.categories = res;
@@ -147,9 +151,16 @@ app.controller('magasinController', function($scope, $filter, $http){
         var tab = from;
         switch(from){
             case 'date':
+                $scope.init();
+                tab='vendeuse';
                 break;
             case 'selectCommande':
-                tab='consult_date';
+                $scope.init();
+                tab='vendeuse';
+                break;
+            case 'consult_date':
+                $scope.init();
+                tab='vendeuse';
                 break;
             case 'heure':
                 tab='date';
@@ -236,6 +247,9 @@ app.controller('magasinController', function($scope, $filter, $http){
     $scope.buttonCategorie = function(idCategorie){
         return idCategorie == $scope.activeCategorie?"active btn-primary":"btn-default";
     };
+    $scope.consultMagSelected = function(id){
+        return $scope.selectedMagasins[id]?"btn-success":"btn-primary";
+    }
     //endregion
 
     //region Vendeuse
@@ -362,9 +376,27 @@ app.controller('magasinController', function($scope, $filter, $http){
         $scope.next('consult_date');
     }
     $scope.refreshCommandes = function(){
+        $scope.params_commandes.selectedMagasins = $scope.selectedMagasins;
         $http.post("get/commande", {params:$scope.params_commandes}).success(function(res){
             $scope.commandes = res;
         });
+    };
+    $scope.delete = function(commande){};
+    $scope.modify = function(x){
+        //todo get commande + client + produits commandes + produits customs
+        $scope.commande = {
+            idCommande: x.idCommande,
+            Livraison: x.Livraison,
+            date: '', //todo
+            heure: '', //todo
+            client: {Nom: '', Tel: '', Mail: '', TVA: ''}, //todo
+            produits: [], //todo
+            Remarque: x.Remarque,
+            PNP: x.PNP,
+            montant: x.Montant,
+            vendeuse: $scope.commande.vendeuse
+        };
+        $scope.activeMenu = 'date';
     };
     //endregion
 
