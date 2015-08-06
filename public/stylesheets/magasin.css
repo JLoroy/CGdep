@@ -60,13 +60,13 @@ body {
 }
 
 .dimanche{
-    background-color: rgba(255, 171, 9, 0.45);
+    background-color: rgba(236, 108, 130, 1);
 }
 
 .samedi{
-    background-color: rgba(124, 255, 0, 0.46);
+    background-color: rgb(135, 211, 124);
 }
 
 .activedate{
-    background-color: rgba(66, 255, 27, 0.85) !important;
+    background-color: rgba(96, 203, 236, 1) !important;
 }

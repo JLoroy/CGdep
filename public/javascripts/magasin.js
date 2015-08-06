@@ -1,6 +1,6 @@
 var app = angular.module('magasin',[]);
 
-app.controller('magasinController', function($scope, $filter, $http){
+app.controller('magasinController', ['$scope', '$filter', '$http', function($scope, $filter, $http){
 
     //region Donnée
     $scope.magasins = {};
@@ -66,25 +66,25 @@ app.controller('magasinController', function($scope, $filter, $http){
             $scope.day.setDate(($scope.day).getDate()+1);
         }
     }
-   $scope.init = function() {
-       $scope.params_clients = {};
-       $scope.params_commandes = {date: ''};
-       $scope.params_motscustoms = {};
+    $scope.init = function() {
+        $scope.params_clients = {};
+        $scope.params_commandes = {date: ''};
+        $scope.params_motscustoms = {};
 
-       $scope.commande = {
-           Creation: '',
-           Livraison: '',
-           date: '',
-           heure: '',
-           client: {Nom: '', Tel: '', Mail: '', TVA: ''},
-           produits: [],
-           Remarque: '',
-           PNP: 'null',
-           montant: 0,
-           vendeuse: {Nom: '', idVendeuse: ''}
-       };
-       $scope.loadData();
-   };
+        $scope.commande = {
+            Creation: '',
+            Livraison: '',
+            date: '',
+            heure: '',
+            client: {Nom: '', Tel: '', Mail: '', TVA: ''},
+            produits: [],
+            Remarque: '',
+            PNP: 'null',
+            montant: 0,
+            vendeuse: {Nom: '', idVendeuse: ''}
+        };
+        $scope.loadData();
+    };
 
     //DS = DateString
     $scope.DS = function(d){
@@ -252,12 +252,12 @@ app.controller('magasinController', function($scope, $filter, $http){
         classes = "";
         if(date.getDay() == 0) classes += "dimanche";
         if(date.getDay() == 6) classes += "samedi";
-        if($scope.commande.date == $scope.DS(date)) classes += "active btn-primary"
+        if($scope.commande.date == $scope.DS(date)) classes += "active activedate"
         return classes;
     };
     //permet de verifier si le bouton de l'heure a été celui cliqué. Si oui, on rajotue la classe active
     $scope.activeHeure = function(heure){
-        return $scope.commande.heure == heure?"active btn-primary":"";
+        return $scope.commande.heure == heure?"active activedate":"";
     };
     //produit
     $scope.tabCategorie = function(idCategorie){
@@ -353,9 +353,15 @@ app.controller('magasinController', function($scope, $filter, $http){
         }
         $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
         $scope.calculTotal();
-
-
-    }
+    };
+    $scope.confirmModalProduit = function(){
+        if( $scope.modal.prod.Nom && $scope.modal.prod.idCategorie){
+            addProduit(modal.prod, modal.qty, modal.commentaire);
+        }
+        else{
+            modal.erreur = true
+        }
+    };
     //endregion
 
     //region Payement
@@ -445,4 +451,4 @@ app.controller('magasinController', function($scope, $filter, $http){
         $scope.sendCommande();
     };
     //endregion
-});
+}]);

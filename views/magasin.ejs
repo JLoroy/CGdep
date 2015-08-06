@@ -257,6 +257,8 @@
                         <input id="clientTVA" ng-model="commande.client.TVA" type="number" max="9999999999" class="form-control">
                     </div>
                 </div>
+
+                <button type="button" class="form-group btn btn-lg btn-primary" ng-click="next('client');">Continuer</button>
             </form>
             <button type="button" class="btn tbn-primary fr" ng-click="commande.client.Nom='Commande de Test';next('client');">Commande de Test</button>
         </div>
@@ -324,8 +326,10 @@
                                     <h3 class="col-md-12">Produit Personnalisé</h3>
                                     <h4 class="col-md-3">Nom :</h4>
                                     <input type="text" ng-model="modal.prod.Nom" class="form-control">
+                                    <p ng-if="modal.erreur && modal.prod.Nom == ''">Veuillez entrer un Nom</p>
                                     <h4  class="col-md-3">Categorie :</h4>
                                     <select ng-options="category.idCategorie as category.Nom for category in categories" ng-model="modal.prod.Categorie_idCategorie" class="form-control"></select>
+                                    <p ng-if="modal.erreur && modal.prod.Nom == ''">Veuillez entrer une Categorie</p>
                                 </div>
                                     <h4 class="col-md-3">Quantité</h4>
                                     <div class="input-group form-control">
@@ -343,7 +347,7 @@
                             </div>
                             <div class="modal-footer">
                                 <a type="button" data-dismiss="modal" class="btn btn-danger" ng-click="cancelModalProduit();" >Annuler</a>
-                                <a type="button" data-dismiss="modal" class="btn btn-success" ng-click="addProduit(modal.prod, modal.qty, modal.commentaire)" >Confirmer</a>
+                                <a type="button" data-dismiss="modal" class="btn btn-success" ng-click="confirmModalProduit();" >Confirmer</a>
                             </div>
                         </div>
                     </div>

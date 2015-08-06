@@ -1,216 +1,180 @@
 var app = angular.module('magasin',[]);
 
+app.controller('magasinController', ['$scope', '$filter', '$http', function($scope, $filter, $http){
 
-app.run(function ($rootScope, $http){
-    $rootScope.vendeuse = {Nom:'', idVendeuse:''};
-    $rootScope.activeMenu = "vendeuse";
+    //region Donn√©e
+    $scope.magasins = {};
+    $scope.categories = {};
+    $scope.clients = {};$scope.params_clients = {};
+    $scope.vendByMag = {};
+    $scope.commandes = {};$scope.params_commandes = {date:''};
+    $scope.produitTable = {};
+    $scope.motscustoms = {};$scope.params_motscustoms = {};
+    $scope.selectedMagasins = {};
 
-    //Erreur
-    $rootScope.messageErreur = "";
-    $rootScope.displayErreur = false;
-    $rootScope.erreur = function(message){
-        $rootScope.messageErreur = message;
-        $rootScope.displayErreur = true;
-    }
-
-    $rootScope.setActiveMenu = function(menu){
-        $rootScope.activeMenu = menu;
-    };
-    $rootScope.isActiveMenu = function(menu){
-        if(menu=='commande'){
-            return $rootScope.activeMenu in {
-                date:1, heure:2, client:3, produit:4,
-                commentaire:5, payement:6, recap:7}?"":"hidden";
-        }
-        return menu==$rootScope.activeMenu?"active":"hidden";
-    }
-    $rootScope.calculLivraison = function(){
-        $rootScope.commande.Livraison=$rootScope.commande.dateLivraison+$rootScope.commande.heureLivraison
-    };
-});
-
-app.controller('rootScopeVisualController', function($scope, $rootScope, $http){
-    $scope.clearErreur = function(){
-        $rootScope.messageErreur = "";
-        $rootScope.displayErreur = false;
-    };
-});
-
-app.controller('choixVendeuse', function($scope, $rootScope, $http){
-    //
-    $scope.ok = false;
-    $scope.activeTab = 1;
-    $scope.n_by_row = 6;
-
-    //todo:REFACTOR this into complex/vendByMag
-    $http.post("get/magasin", {}).success(function(res){
-        $rootScope.magasins = res;
-        $http.post("/getsession", {}).success(function(res){
-            $rootScope.sess = res;
-            $scope.activeTab = $rootScope.sess.magasin.idMagasin;
-            $scope.ok = true;
-        });
-        $http.post("get/vendeuse",{params:{}}).success(function(res){
-            $rootScope.vendeuses = res;
-            $scope.vendByMag = {};
-            for(mag in $rootScope.magasins){
-                if($rootScope.magasins[mag].display == 1) {
-                    $scope.vendByMag[$rootScope.magasins[mag].idMagasin] = {idMagasin:$rootScope.magasins[mag].idMagasin};
-                    var indice = 0
-                    for (vend in $rootScope.vendeuses) {
-                        if ($rootScope.vendeuses[vend].Magasin_idMagasin == $rootScope.magasins[mag].idMagasin) {
-                            if (indice % $scope.n_by_row == 0) $scope.vendByMag[$rootScope.magasins[mag].idMagasin][indice / $scope.n_by_row|0] = {};
-                            $scope.vendByMag[$rootScope.magasins[mag].idMagasin][indice / $scope.n_by_row |0][indice % $scope.n_by_row] = $rootScope.vendeuses[vend];
-                            indice++;
-                        }
-                    }
-                }
-            }
-        });
-    });
-    $scope.selectVendeuse = function(v){
-        $rootScope.vendeuse = v;
-    };
-    $scope.next = function(){
-        $rootScope.activeMenu = "main";
-    };
-    $scope.activeClass = function(id) {
-        //determine si le tab magasin selectionÈ est "id"
-        return id == $scope.activeTab ? 'active' : '';
-    };
-});
-
-app.controller('mainMenu', function($scope, $rootScope, $http){
-    $scope.toCommand = function(){$rootScope.activeMenu = "date";};
-    $scope.toConsult = function(){$rootScope.activeMenu = 'selectCommande'};
-
-});
-app.controller('selectCommande', function($scope, $rootScope, $http){
-    $scope.params = {};
-    $scope.refresh = function(){
-        $http.post("get/commande", {params:$scope.params}).success(function(res){
-            $scope.commandes = res;
-        });
-    };
-    $scope.refresh();
-});
-
-
-app.controller('commandeController', function($scope, $rootScope, $http){
-    //object commande global (pour sortir du rootScope, sauf vendeuse)
-    $scope.montant = "";
     $scope.commande = {
+        Creation:'',
+        Livraison:'',
         date:'',
         heure:'',
         client:{Nom:'',Tel:'',Mail:'',TVA:''},
         produits:[],
         Remarque:'',
-        PNP:'',
-        montant:''
+        PNP:'null',
+        montant:0,
+        vendeuse:{Nom:'', idVendeuse:''}
     };
 
+    $scope.loadData = function(){
+        $http.post("get/commande",{params:{}}).success(function(res){
+            $scope.commandes = res;
+        });
+        $http.post("get/magasin",{}).success(function(res){
+            $scope.magasins = res;
+            for(m in $scope.magasins){
+                $scope.selectedMagasins[m.idMagasin] = false;
+            }
+        });
+        $http.post("get/category",{}).success(function(res){
+            $scope.categories = res;
+        });
+        $http.post("complex/vendByMag",{}).success(function(res){
+            $scope.vendByMag = res.vendByMag;
+            $scope.activeMenu='vendeuse';
+            $scope.activeMag = res.activeMag;
+        });
+        $http.post("complex/produitTable",{}).success(function(res){
+            $scope.produitTable = res;
+            $scope.activeCategorie = "1";
+        });
 
-    $scope.commandeDeTest = function(){
-        $scope.commande = {
-            date:new Date(2015,7,10,12,0,0,0),
-            heure:"12h",
-            PNP:0,
-            montant:"1",
-            Remarque:"RAS",
-            vendeuse:{idVendeuse:7,Nom:"VENDEUSENOM"},
-            produits:[],
-            client:{Nom:"Commande de Test",Tel:"",Mail:"",TVA:""},
-        };
-        $scope.commande.produits.push({
-            prod: {
-                idProduit:1,
-                Nom:'Pistolet blanc',
-                Categorie_idCategorie:1,
-                Prix:1
-            },
-            qty: 3,
-            commentaire:'chaud'
-        });
-        $scope.commande.produits.push({
-            prod: {
-                idProduit:1,
-                Nom:'USAa nature',
-                Categorie_idCategorie:4,
-                custom:'true'
-            },
-            qty: 1,
-            commentaire:''
-        });
-        $scope.sendCommande();
     };
-
-    $scope.controlTab = function(tab){
-        classes = "";
-        if($rootScope.activeMenu == tab) classes += "active ";
-        switch(tab){
-            case "date":
-                break;
-            case "heure":
-                classes += $scope.commande.date!=''?"":"disabled";
-                break;
-            case "client":
-                classes += $scope.commande.heure!=''?"":"disabled";
-                break;
-            case "produit":
-                classes += $scope.commande.client.Nom!=''?"":"disabled";
-                break;
-            case "commentaire":
-                classes += $scope.commande.montant!=''?"":"disabled";
-                break;
-            case "payement":
-                classes += $scope.commande.montant!=''?"":"disabled";
-                break;
-            case "recap":
-                classes += $scope.commande.PNP!=''?"":"disabled";
-                break;
-            default:
-                console.log("Who are you?"+tab);
+    $scope.loadData();
+    $scope.calendar = {1:{},2:{},3:{},4:{}};
+    $scope.today = new Date();
+    $scope.day = new Date();
+    var past = (($scope.today).getDay());
+    $scope.day.setDate(($scope.today).getDate()+1-past);
+    for(i=1; i<=4; i++) {
+        for(j=1; j<=7; j++){
+            $scope.calendar[i][j] = {};
+            $scope.calendar[i][j].date = new Date($scope.day);
+            if(past){//on disable les past premiers jours
+                $scope.calendar[i][j].ok = false;
+                past--;}
+            else{$scope.calendar[i][j].ok = true;}
+            $scope.day.setDate(($scope.day).getDate()+1);
         }
-        return classes;
+    }
+    $scope.init = function() {
+        $scope.params_clients = {};
+        $scope.params_commandes = {date: ''};
+        $scope.params_motscustoms = {};
+
+        $scope.commande = {
+            Creation: '',
+            Livraison: '',
+            date: '',
+            heure: '',
+            client: {Nom: '', Tel: '', Mail: '', TVA: ''},
+            produits: [],
+            Remarque: '',
+            PNP: 'null',
+            montant: 0,
+            vendeuse: {Nom: '', idVendeuse: ''}
+        };
+        $scope.loadData();
     };
 
+    //DS = DateString
+    $scope.DS = function(d){
+        return $filter('date')(d, 'EEEE dd/MM/yyyy');
+    };
+    $scope.unDS = function(d){
+        console.log("unDS");
+        console.log(d);
+        var arr = d.split(' ')[1].split('/');
+        var x = new Date(arr[2],arr[1]-1,arr[0]);
+        console.log(x.toString());
+        return x;
+    };
+    //endregion
+
+    //region Erreur
+    $scope.messageErreur = "";
+    $scope.displayErreur = false;
+    $scope.erreur = function(message){
+        $scope.messageErreur = message;
+        $scope.displayErreur = true;
+    }
+    $scope.clearErreur = function(){
+        $scope.messageErreur = "";
+        $scope.displayErreur = false;
+    }
+    // endregion
+
+    //region Navigation
+    $scope.activeMenu = 'loading';
+    $scope.setActiveMenu = function(menu){
+        $scope.activeMenu = menu;
+    };
     $scope.next = function (from) {
         var tab = from;
         switch(from){
+            case 'vendeuse':
+                if($scope.commande.vendeuse.idVendeuse!='') tab='main';
+                else $scope.erreur("Vendeuse non valide");
+                break;
+            case 'consult_date':
+                if($scope.params_commandes.dateCreate!='') tab='selectCommande';
+                else $scope.erreur("Date non valide");
+                break;
             case 'date':
-                if($scope.commande.date!='')tab='heure';
-                else $rootScope.erreur("Date non valide");
+                if($scope.commande.date!='') tab='heure';
+                else $scope.erreur("Date non valide");
                 break;
             case 'heure':
                 if($scope.commande.heure!='')tab='client';
-                else $rootScope.erreur("Heure non valide");
+                else $scope.erreur("Heure non valide");
                 break;
             case 'client':
                 if($scope.commande.client.Nom!='')tab='produit';
-                else $rootScope.erreur("Veuillez rentrer un nom et un numero de telephone");
+                else $scope.erreur("Veuillez rentrer un nom et un numero de telephone");
                 break;
             case 'produit':
-                if($scope.commande.montant!='')tab='commentaire';
-                else $rootScope.erreur("Veuillez entrer des produits");
+                if($scope.commande.montant>0)tab='commentaire';
+                else $scope.erreur("Veuillez entrer des produits");
                 break;
             case 'commentaire':
                 tab='payement';
                 break;
             case 'payement':
-                if($scope.commande.pnp!='')tab='recap';
-                else $rootScope.erreur("Payement non valide");
+                if($scope.commande.pnp!='null')tab='recap';
+                else $scope.erreur("Payement non valide");
+                break;
+            case 'recap':
+                tab='vendeuse';
                 break;
             default:
-                tab='date';
+                tab='vendeuse';
         }
-        $rootScope.activeMenu = tab;
+        $scope.activeMenu = tab;
 
     };
-
     $scope.previous = function (from) {
         var tab = from;
         switch(from){
             case 'date':
+                $scope.init();
+                tab='vendeuse';
+                break;
+            case 'selectCommande':
+                $scope.init();
+                tab='vendeuse';
+                break;
+            case 'consult_date':
+                $scope.init();
+                tab='vendeuse';
                 break;
             case 'heure':
                 tab='date';
@@ -233,133 +197,121 @@ app.controller('commandeController', function($scope, $rootScope, $http){
             default:
                 tab='date';
         }
-        $rootScope.activeMenu = tab;
+        $scope.activeMenu = tab;
 
     };
 
-    //region DATE
-    //<!-- ONLY FOR DATE-->
-    //rajoute la classe active si c'est la date active
-    $scope.activeDate = function(date){
-        return $scope.commande.date == date?"active btn-primary":"";
-    };
-    //fonction qui va set la date de la commande a la date choisie
-    $scope.selectDate = function(date){
-        $scope.commande.date = date;
-        $scope.next('date');
-    };
-    //creation du calendar
-    $scope.calendar = {1:{},2:{},3:{},4:{}};
-    $scope.today = new Date();
-    $scope.day = new Date();
-    var past = (($scope.today).getDay());
-    $scope.day.setDate(($scope.today).getDate()+1-past);
-    for(i=1; i<=4; i++) {
-        for(j=1; j<=7; j++){
-            $scope.calendar[i][j] = {};
-            $scope.calendar[i][j].date = new Date($scope.day);
-            if(past){//on disable les past premiers jours
-                $scope.calendar[i][j].ok = false;
-                past--;}
-            else{$scope.calendar[i][j].ok = true;}
-            $scope.day.setDate(($scope.day).getDate()+1);
-        }
-    }
     //endregion
-    //region HEURE
-    //<!-- ONLY FOR HER-->
-    //permet de verifier si le bouton de l'heure a ÈtÈ celui cliquÈ. Si oui, on rajotue la classe active
+
+    //region ng-class
+    $scope.isActiveMenu = function(menu){
+        if(menu=='commande'){
+            return $scope.activeMenu in {
+                date:1, heure:2, client:3, produit:4,
+                commentaire:5, payement:6, recap:7}?"":"hidden";
+        }
+        return menu==$scope.activeMenu?"active":"hidden";
+    }
+    $scope.controlTab = function(tab){
+        classes = "";
+        if($scope.activeMenu == tab) classes += "active ";
+        switch(tab){
+            case "date":
+                break;
+            case "heure":
+                classes += $scope.commande.date!=''?"":"disabled";
+                break;
+            case "client":
+                classes += $scope.commande.heure!=''?"":"disabled";
+                break;
+            case "produit":
+                classes += $scope.commande.client.Nom!=''?"":"disabled";
+                break;
+            case "commentaire":
+                classes += $scope.commande.montant>0?"":"disabled";
+                console.log($scope.commande.montant);
+                break;
+            case "payement":
+                classes += $scope.commande.montant>0?"":"disabled";
+                break;
+            case "recap":
+                classes += $scope.commande.PNP!=''?"":"disabled";
+                break;
+            default:
+                console.log("Who are you?"+tab);
+        }
+        return classes;
+    };
+    //vendeuse
+    $scope.isActiveMag = function(id) {
+        //determine si le tab magasin selection√© est "id"
+        return id == $scope.activeMag ? 'active' : '';
+    };
+    //date et heure
+    $scope.activeDate = function(date){
+        classes = "";
+        if(date.getDay() == 0) classes += "dimanche";
+        if(date.getDay() == 6) classes += "samedi";
+        if($scope.commande.date == $scope.DS(date)) classes += "active btn-primary"
+        return classes;
+    };
+    //permet de verifier si le bouton de l'heure a √©t√© celui cliqu√©. Si oui, on rajotue la classe active
     $scope.activeHeure = function(heure){
         return $scope.commande.heure == heure?"active btn-primary":"";
     };
-    //fonction qui set l'heure de la commande ‡ l'heure cliquÈe
+    //produit
+    $scope.tabCategorie = function(idCategorie){
+        return idCategorie == $scope.activeCategorie?"active":"hidden";
+    };
+    $scope.buttonCategorie = function(idCategorie){
+        return idCategorie == $scope.activeCategorie?"active btn-primary":"btn-default";
+    };
+    $scope.consultMagSelected = function(id){
+        return $scope.selectedMagasins[id]?"btn-success":"btn-primary";
+    }
+    //endregion
+
+    //region Vendeuse
+    $scope.selectVendeuse = function(v){
+        $scope.commande.vendeuse = v;
+    };
+    //endregion
+
+    //region Menu
+    $scope.toCommand = function(){$scope.activeMenu = "date";$scope.mode='Creation'};
+    $scope.toConsult = function(){$scope.activeMenu = 'consult_date';$scope.mode='Consultation'};
+    //endregion
+
+    //region Date
+    $scope.selectDate = function(date){
+        $scope.commande.date = $scope.DS(date);
+        console.log("set date :"+$scope.DS(date));
+        $scope.next('date');
+    };
+    //endregion
+
+    //region Heure
+    //fonction qui set l'heure de la commande √† l'heure cliqu√©e
     $scope.selectHeure = function(heure){
         $scope.commande.heure = heure;
         $scope.next('heure');
     };
-    //endregion
+    // endregion
+
     //region CLIENT
-    //<!-- ONLY FOR ClIENT-->
     $scope.getClients = function(){
         $http.post("get/client", {
             params: {Nom:$scope.commande.client.Nom}
         }).success(function(res){
             $scope.clients = res;
         });
-    };
+    }
     //endregion
-    //region PRODUITS
-    //<!-- ONLY FOR PRODUIT
-    // produit = [
-    //      { prod : {
-    //          Nom: '',
-    //          (idProduit: ''),
-    //          (Prix: ''),
-    //          Categorie_idCategorie: '',
-    //          (custom: '')},
-    //      qty: '',
-    //      commentaire: ''}
-    // ,...]
-    // -->
-    $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
-    $scope.n_by_row = 4;
-    $scope.produitTable = {};
-    $scope.activeCategorie = "1";//todo issue if categorie 1 is deleted
-    $scope.total = 0;
-    //todo:REFACTOR this into complex/produitTable
-    //todo: changer l'ordre alphabetique
-    $http.post("/get/produit", {params:{}}).success(function(res){
-        $rootScope.produits = res;
-        $http.post("/get/category", {params:{}}).success(function(res){
-            $rootScope.categories = res;
-            for(categ in res) {
-                if(res[categ].display == 1){
-                    $scope.produitTable[res[categ].idCategorie] = {i:0,idCategorie:(res[categ].idCategorie)};
-                }
-            }
-            for(prod in $rootScope.produits){
-                thisProd = $rootScope.produits[prod];
-                if($rootScope.produits[prod].display == 1){
-                    i = $scope.produitTable[thisProd.Categorie_idCategorie].i;
-                    if(i%$scope.n_by_row == 0) $scope.produitTable[thisProd.Categorie_idCategorie][i/$scope.n_by_row |0] = {};
-                    $scope.produitTable[thisProd.Categorie_idCategorie][i/$scope.n_by_row |0][i%$scope.n_by_row] = {thisProd:thisProd};
-                    $scope.produitTable[thisProd.Categorie_idCategorie].i= i+1;
-                }
-            }
-        });
-    });
+
+    //region Produits
     $scope.selectCategorie = function(idCategorie){
         $scope.activeCategorie = idCategorie;
     };
-    $scope.tabCategorie = function(idCategorie){
-        return idCategorie == $scope.activeCategorie?"active":"hidden";
-    };
-    $scope.buttonCategorie = function(idCategorie){
-        return idCategorie == $scope.activeCategorie?"active btn-primary":"btn-default";
-    };/*
-     $scope.getParams('categ'){
-     var params = {};
-     switch(categ){
-
-     }
-     }*/
-    $scope.openModalProduit = function(toAdd,qty,mode,commentaire){
-        $scope.modal.mode = mode;
-        $scope.modal.prod = toAdd;
-        $scope.modal.qty = qty;
-        $scope.modal.commentaire = commentaire;
-        $scope.modal.original.prod = toAdd;
-        $scope.modal.original.qty = qty;
-        $scope.modal.original.commentaire = commentaire;
-
-        console.log($scope.modal);
-    };
-    $scope.cancelModalProduit = function(){
-        if($scope.modal.mode == 'modify'){
-            $scope.addProduit($scope.modal.original.prod, $scope.modal.original.qty, $scope.modal.original.commentaire);
-        }
-        $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
-    }
     $scope.addProduit = function(toAdd, quantity, commentaire){
         if(toAdd.Nom != '' && toAdd.Categorie_idCategorie != '' && quantity >= 1) {
             $scope.modal = {prod: {}, qty: '', mode: '', commentaire: '',original:{prod:{},qty:1,commentaire:''}};
@@ -376,19 +328,38 @@ app.controller('commandeController', function($scope, $rootScope, $http){
         var tot = 0;
         for(i = 0; i<$scope.commande.produits.length; i++){
             var p = $scope.commande.produits[i];
+            if(!p.prod.Prix) p.prod.Prix = 1;
             tot += (p.qty * p.prod.Prix);
         }
         $scope.commande.montant = tot.toFixed(2);
+        console.log($scope.commande.montant);
     };
     //endregion
-    //region COMMENTAIRE
-    //COMMENTAIRE
-    $scope.selectCommentaire = function(){
-        $scope.next('commentaire');
+
+    //region Modal Produit
+    $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
+    $scope.openModalProduit = function(toAdd,qty,mode,commentaire){
+        $scope.modal.mode = mode;
+        $scope.modal.prod = toAdd;
+        $scope.modal.qty = qty;
+        $scope.modal.commentaire = commentaire;
+        $scope.modal.original.prod = toAdd;
+        $scope.modal.original.qty = qty;
+        $scope.modal.original.commentaire = commentaire;
     };
+    $scope.cancelModalProduit = function(){
+        if($scope.modal.mode == 'modify'){
+            $scope.addProduit($scope.modal.original.prod, $scope.modal.original.qty, $scope.modal.original.commentaire);
+        }
+        $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
+        $scope.calculTotal();
+
+
+    }
     //endregion
-    //region PNP
-    //PNP
+
+    //region Payement
+    $scope.pnpTab = ['NP','P','AF','AFNP'];
     $scope.selectPNP = function(PNP){
         $scope.commande.PNP = PNP;
         $scope.next('payement');
@@ -397,13 +368,81 @@ app.controller('commandeController', function($scope, $rootScope, $http){
         return $scope.commande.PNP == PNP?"active btn-success":"btn-primary";
     };
     //endregion
-    //region RECAP
-    $scope.sendCommande = function() {
-        console.log($scope.commande);
-        $scope.commande.vendeuse = $rootScope.vendeuse;
-        $http.post("/complex/commande", {params:$scope.commande}).success(function(res){
 
+    //region Envoi Commande
+    $scope.sendCommande = function() {
+        $scope.commande.Livraison = new Date(($scope.unDS($scope.commande.date)).setHours($scope.commande.heure));
+        $scope.commande.Creation = new Date();
+        console.log($scope.commande);
+        $http.post("/complex/commande", {params:$scope.commande}).success(function(res){
+            console.log("COMMANDE SUCCESSFUL")
+            $scope.init();
+            $scope.next('recap');
         });
     };
     //endregion
-});
+
+    //region Consultation
+    $scope.consultDate = function(date){
+        var d = new Date(date);
+        d = $filter('date')(d, 'yyyy-MM-dd');
+        $scope.params_commandes.dateLivraison = d;
+        $scope.refreshCommandes();
+        $scope.next('consult_date');
+    }
+    $scope.refreshCommandes = function(){
+        $scope.params_commandes.selectedMagasins = $scope.selectedMagasins;
+        $http.post("get/commande", {params:$scope.params_commandes}).success(function(res){
+            $scope.commandes = res;
+        });
+    };
+    $scope.delete = function(commande){};
+    $scope.modify = function(x){
+        $http.post("complex/fullCommande", {params:{idCommande: x.idCommande}}).success(function(res){
+            var vendeuse = $scope.commande.vendeuse;
+            $scope.commande = res;
+            $scope.commande.vendeuse = vendeuse;
+            $scope.commande.heure = (new Date($scope.commande.Livraison)).getHours();
+            $scope.commande.date =  $scope.DS(new Date($scope.commande.Livraison));
+        });
+        $scope.activeMenu = 'date';
+    };
+    //endregion
+
+    //region DEBUGGING
+    $scope.commandeDeTest = function(){
+        $scope.commande = {
+            date:new Date(2015,7,10,12,0,0,0),
+            heure:"12",
+            PNP:0,
+            montant:1,
+            Remarque:"RAS",
+            vendeuse:{idVendeuse:7,Nom:"VENDEUSENOM"},
+            produits:[],
+            client:{Nom:"Commande de Test",Tel:"",Mail:"",TVA:""},
+        };
+        $scope.commande.produits.push({
+            prod: {
+                idProduit:1,
+                Nom:'Pistolet blanc',
+                Categorie_idCategorie:1,
+                Prix:1
+            },
+            qty: 3,
+            commentaire:'chaud'
+        });
+        $scope.commande.produits.push({
+            prod: {
+                idProduit:1,
+                Nom:'USAa nature',
+                Categorie_idCategorie:4,
+                custom:true,
+                Prix:1
+            },
+            qty: 1,
+            commentaire:''
+        });
+        $scope.sendCommande();
+    };
+    //endregion
+}]);
