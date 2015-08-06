@@ -57,6 +57,10 @@ var refactorProduitCommande = function(produits, customs){
     return result;
 };
 
+function DS(date){
+    return  date.slice(0,10) + " " + date.slice(11,19);
+}
+
 function newMots(params){
     //Todo new mot support
     //any description has new words ? motcuston(idMotCustom, Mot)
@@ -153,14 +157,13 @@ function com_commande(params, Terminal_idTerminal, Client_idClient){
     // Commande ( idCommande, Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal, display)
     console.log(params);console.log("client:"+Client_idClient);
     //todo gerer la date
-    var Livraison = params.Livraison;
-    debug(Livraison);
+    var Livraison = DS(params.Livraison);
     //IF modify Command
     if(params.idCommande){
         var query_delete_produitsCommandes = "DELETE FROM ProduitCommande WHERE Commande_idCommande = "+params.idCommande+";";
         var query_update_commande = "UPDATE Commande SET " +
             "Livraison = '"+Livraison+"',"+
-            "Montant = "+params.Montant+","+
+            "Montant = "+params.montant+","+
             "PNP = '"+params.PNP+"',"+
             "Remarque = '"+params.Remarque+"',"+
             "Client_idClient = '"+Client_idClient+"',"+
@@ -175,9 +178,9 @@ function com_commande(params, Terminal_idTerminal, Client_idClient){
     }
     //ELSE new Command
     else{
-        var Creation = connection.escape(new Date());
+        var Creation = DS(params.Creation);
         var query_insert_commande = "INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ("+
-            ""+Creation+","+"'"+Livraison+"',"+"'"+params.montant+"',"+"'"+params.PNP+"',"+"'"+params.Remarque+"',"+
+            "'"+Creation+"','"+Livraison+"',"+"'"+params.montant+"',"+"'"+params.PNP+"',"+"'"+params.Remarque+"',"+
             "'"+Client_idClient+"',"+"'"+params.vendeuse.idVendeuse+"',"+"'"+Terminal_idTerminal+"');"
         debug(query_insert_commande);
         connection.query(query_insert_commande , function(err, rows, fields) {
@@ -567,8 +570,6 @@ exports.complex = function(req, res){
                 commande = {
                     idCommande: rows[0].idCommande,
                     Livraison: rows[0].Livraison,
-                    date: '', //todo
-                    heure: '', //todo
                     client: {
                         idClient: rows[0].idClient,
                         Nom: rows[0].clientNom,

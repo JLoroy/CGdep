@@ -13,6 +13,7 @@ app.controller('magasinController', function($scope, $filter, $http){
     $scope.selectedMagasins = {};
 
     $scope.commande = {
+        Creation:'',
         Livraison:'',
         date:'',
         heure:'',
@@ -71,6 +72,7 @@ app.controller('magasinController', function($scope, $filter, $http){
        $scope.params_motscustoms = {};
 
        $scope.commande = {
+           Creation: '',
            Livraison: '',
            date: '',
            heure: '',
@@ -83,6 +85,19 @@ app.controller('magasinController', function($scope, $filter, $http){
        };
        $scope.loadData();
    };
+
+    //DS = DateString
+    $scope.DS = function(d){
+        return $filter('date')(d, 'EEEE dd/MM/yyyy');
+    };
+    $scope.unDS = function(d){
+        console.log("unDS");
+        console.log(d);
+        var arr = d.split(' ')[1].split('/');
+        var x = new Date(arr[2],arr[1]-1,arr[0]);
+        console.log(x.toString());
+        return x;
+    };
     //endregion
 
     //region Erreur
@@ -234,7 +249,11 @@ app.controller('magasinController', function($scope, $filter, $http){
     };
     //date et heure
     $scope.activeDate = function(date){
-        return $scope.commande.date == date?"active btn-primary":"";
+        classes = "";
+        if(date.getDay() == 0) classes += "dimanche";
+        if(date.getDay() == 6) classes += "samedi";
+        if($scope.commande.date == $scope.DS(date)) classes += "active btn-primary"
+        return classes;
     };
     //permet de verifier si le bouton de l'heure a été celui cliqué. Si oui, on rajotue la classe active
     $scope.activeHeure = function(heure){
@@ -264,18 +283,9 @@ app.controller('magasinController', function($scope, $filter, $http){
     //endregion
 
     //region Date
-    $scope.calculLivraison = function(){
-        if($scope.commande.date !='' && $scope.commande.heure != ''){
-            var d = new Date($scope.commande.date);
-            d.setHours($scope.commande.heure);
-            d.setMinutes(0);
-            d.setSeconds(0);
-            d = $filter('date')(d, 'yyyy-MM-dd HH-mm-ss');
-            $scope.commande.Livraison = d;
-        }
-    };
     $scope.selectDate = function(date){
-        $scope.commande.date = date;
+        $scope.commande.date = $scope.DS(date);
+        console.log("set date :"+$scope.DS(date));
         $scope.next('date');
     };
     //endregion
@@ -318,6 +328,7 @@ app.controller('magasinController', function($scope, $filter, $http){
         var tot = 0;
         for(i = 0; i<$scope.commande.produits.length; i++){
             var p = $scope.commande.produits[i];
+            if(!p.prod.Prix) p.prod.Prix = 1;
             tot += (p.qty * p.prod.Prix);
         }
         $scope.commande.montant = tot.toFixed(2);
@@ -341,10 +352,14 @@ app.controller('magasinController', function($scope, $filter, $http){
             $scope.addProduit($scope.modal.original.prod, $scope.modal.original.qty, $scope.modal.original.commentaire);
         }
         $scope.modal = {prod:{},qty:'',mode:'',commentaire:'',original:{prod:{},qty:1,commentaire:''}};
+        $scope.calculTotal();
+
+
     }
     //endregion
 
     //region Payement
+    $scope.pnpTab = ['NP','P','AF','AFNP'];
     $scope.selectPNP = function(PNP){
         $scope.commande.PNP = PNP;
         $scope.next('payement');
@@ -354,9 +369,10 @@ app.controller('magasinController', function($scope, $filter, $http){
     };
     //endregion
 
-    //region Recap
+    //region Envoi Commande
     $scope.sendCommande = function() {
-        $scope.calculLivraison();
+        $scope.commande.Livraison = new Date(($scope.unDS($scope.commande.date)).setHours($scope.commande.heure));
+        $scope.commande.Creation = new Date();
         console.log($scope.commande);
         $http.post("/complex/commande", {params:$scope.commande}).success(function(res){
             console.log("COMMANDE SUCCESSFUL")
@@ -386,8 +402,9 @@ app.controller('magasinController', function($scope, $filter, $http){
             var vendeuse = $scope.commande.vendeuse;
             $scope.commande = res;
             $scope.commande.vendeuse = vendeuse;
+            $scope.commande.heure = (new Date($scope.commande.Livraison)).getHours();
+            $scope.commande.date =  $scope.DS(new Date($scope.commande.Livraison));
         });
-        //todo DATE et Heure
         $scope.activeMenu = 'date';
     };
     //endregion

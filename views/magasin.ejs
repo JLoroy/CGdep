@@ -25,7 +25,7 @@
 <div id="wrapper" ng-controller="magasinController" class="h100">
     <div id="header" class="col-md-12">
         <div ng-class="{hidden:commande.date==''}" style="float:right">
-            <h2 class="nomargin">{{commande.date|date:'dd-MMMM-yy'}}</h2>
+            <h2 class="nomargin">{{commande.date|date:'EEEE dd-MMMM-yy'}}</h2>
         </div>
         <div class="alert alert-danger" role="alert" ng-class="{hidden:!displayErreur}">
             {{messageErreur}}
@@ -81,8 +81,8 @@
             <h4>Selection de la Date</h4>
             <table class="table table-bordered table-condensed tab-pane form-control h90">
                 <tr ng-repeat="semaine in calendar">
-                    <td ng-repeat="jour in semaine" class="form-group vcenter">
-                        <a  ng-class="activeDate(jour.date)"  class="btn form-control h100" ng-disabled="!(jour.ok)" ng-click="consultDate(jour.date);">
+                    <td ng-repeat="jour in semaine" class="form-group vcenter nopadding">
+                        <a  ng-class="activeDate(jour.date)"  class="btn form-control h100 nopadding" ng-disabled="!(jour.ok)" ng-click="consultDate(jour.date);">
                             <h2>{{jour.date | date: 'dd EEEE'}}</h2>
                         </a>
                     </td>
@@ -172,13 +172,13 @@
         <div class="h5 nomargin">
             <ul class="nav nav-tabs nav-justified" role="tablist">
                 <li><a role="tab" class="btn btn-warning" ng-click="previous(activeMenu)">Précédent</a></li>
-                <li ng-click="setActiveMenu('date');">  <a role="tab" >        Date</a></li>
-                <li ng-class="{disabled:commande.date==''}" ng-click="setActiveMenu('heure');">         <a role="tab" >       Heure</a></li>
-                <li ng-class="{disabled:commande.heure==''}" ng-click="setActiveMenu('client');">        <a role="tab" >      Client</a></li>
-                <li ng-class="{disabled:commande.client.Nom==''}" ng-click="setActiveMenu('produit');">       <a role="tab" >     Produits</a></li>
-                <li ng-class="{disabled:commande.montant==0}" ng-click="setActiveMenu('commentaire');">   <a role="tab"> Commentaire</a></li>
-                <li ng-class="{disabled:commande.montant==0}" ng-click="setActiveMenu('payement');">      <a role="tab">    Payement</a></li>
-                <li ng-class="{disabled:commande.PNP=='null'}" ng-click="setActiveMenu('recap');">         <a role="tab">       Recapitulatif</a></li>
+                <li ng-click="setActiveMenu('date');">                                                          <a role="tab">      Date</a></li>
+                <li ng-class="{disabled:commande.date==''}"         ng-click="setActiveMenu('heure');">         <a role="tab">      Heure</a></li>
+                <li ng-class="{disabled:commande.heure==''}"        ng-click="setActiveMenu('client');">        <a role="tab">      Client</a></li>
+                <li ng-class="{disabled:commande.client.Nom==''}"   ng-click="setActiveMenu('produit');">       <a role="tab">      Produits</a></li>
+                <li ng-class="{disabled:commande.montant==0}"       ng-click="setActiveMenu('commentaire');">   <a role="tab">      Commentaire</a></li>
+                <li ng-class="{disabled:commande.montant==0}"       ng-click="setActiveMenu('payement');">      <a role="tab">      Payement</a></li>
+                <li ng-class="{disabled:commande.PNP=='null'}"      ng-click="setActiveMenu('recap');">         <a role="tab">      Recapitulatif</a></li>
                 <li ng-if="activeMenu != 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Suivant</a></li>
                 <li><a role="tab" class="btn btn-warning" ng-click="commandeDeTest()">COMMANDE DE TEST</a></li>
                 <li ng-if="activeMenu == 'recap'"><a role="tab" class="btn btn-success" ng-click="sendCommande()">Envoyer la commande</a></li>
@@ -188,29 +188,29 @@
         <!-- CHOIX DATE -->
         <div class="h80" ng-class="isActiveMenu('date')">
             <h4>Selection de la Date</h4>
-                <table class="table table-bordered table-condensed tab-pane form-control h90">
-                    <tr ng-repeat="semaine in calendar">
-                        <td ng-repeat="jour in semaine" class="form-group vcenter">
-                            <a  ng-class="activeDate(jour.date)"  class="btn form-control h100" ng-disabled="!(jour.ok)" ng-click="selectDate(jour.date);">
-                                <h2>{{jour.date | date: 'dd EEEE'}}</h2>
-                            </a>
-                        </td>
-                    </tr>
-                </table>
+            <table class="table table-bordered table-condensed tab-pane form-control h90">
+                <tr ng-repeat="semaine in calendar">
+                    <td ng-repeat="jour in semaine" class="form-group vcenter nopadding">
+                        <a  ng-class="activeDate(jour.date)"  class="btn form-control h100 nopadding" ng-disabled="!(jour.ok)" ng-click="selectDate(jour.date);">
+                            <h2>{{jour.date | date: 'dd EEEE'}}</h2>
+                        </a>
+                    </td>
+                </tr>
+            </table>
         </div>
         <!-- CHOIX HEURE -->
         <div class="h80" ng-class="isActiveMenu('heure')">
             <h4>Selection de l'Heure</h4>
             <table class="table table-bordered table-condensed tab-pane form-control h90">
                 <tr>
-                    <td ng-repeat="heure in {a:6,b:7,c:8,d:9,e:10,f:11,g:12}" class="form-group vcenter">
+                    <td ng-repeat="heure in {a:'06',b:'07',c:'08',d:'09',e:'10',f:'11',g:'12'}" class="form-group vcenter">
                         <a class="h100 btn btn-lg form-control"  ng-class="activeHeure(heure);"  ng-click="selectHeure(heure);">
                             <h3>{{heure}}h</h3>
                         </a>
                     </td>
                 </tr>
                 <tr>
-                    <td ng-repeat="heure in {h:13,i:14,j:15,k:16,l:17,m:18,n:19}" class="form-group vcenter">
+                    <td ng-repeat="heure in {h:'13',i:'14',j:'15',k:'16',l:'17',m:'18',n:'19'}" class="form-group vcenter">
                         <a class="h100 btn btn-lg form-control"  ng-class="activeHeure(heure);"  ng-click="selectHeure(heure);">
                             <h3>{{heure}}h</h3>
                         </a>
@@ -428,26 +428,26 @@
                         <div class="form-group">
                             <label class="col-md-3 control-label">Date</label>
                             <div class="col-md-6">
-                                <p id="recapDate" class="form-control-static">{{commande.date | date :'EEEE dd MM'}}</p>
+                                <p id="recapDate" class="form-control-static">{{commande.date | date :'EEEE dd MMMM'}}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label">Heure</label>
                             <div class="col-md-6">
-                                <p id="recapHeure" class="form-control-static">{{commande.heure}}</p>
+                                <p id="recapHeure" class="form-control-static">{{commande.heure}}h</p>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">Payement</label>
                             <div class="col-md-6">
-                                <p class="form-control-static">{{commande.PNP}}</p>
+                                <p class="form-control-static">{{pnpTab[commande.PNP]}}</p>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label">Vendeuse</label>
                             <div class="col-md-6">
-                                <p class="form-control-static">{{vendeuse.Nom}}</p>
+                                <p class="form-control-static">{{commande.vendeuse.Nom}}</p>
                             </div>
                         </div>
                     </form>

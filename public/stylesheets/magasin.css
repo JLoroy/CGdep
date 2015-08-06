@@ -55,3 +55,18 @@ body {
     margin-top: 0;
     margin-bottom: 0;
 }
+.nopadding{
+    padding:0 !important;
+}
+
+.dimanche{
+    background-color: rgba(255, 171, 9, 0.45);
+}
+
+.samedi{
+    background-color: rgba(124, 255, 0, 0.46);
+}
+
+.activedate{
+    background-color: rgba(66, 255, 27, 0.85) !important;
+}
