@@ -415,6 +415,23 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
     };
     //endregion
 
+    //region PRINT
+    $scope.printDiv = function(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var popupWin = window.open('', '_blank', 'width=300,height=300');
+        popupWin.document.open();
+        popupWin.document.write('<html><body onload="window.print()">' + printContents + '</body></html>');
+        popupWin.document.close();
+    };
+
+    $scope.getPrint = function(){
+        $http.post('/complex/consultMagCommande',{Livraison:$scope.commande.Livraison}).success(function(res){
+            $scope.fullcommandes = res;
+
+        });
+    }
+    //endregion
+
     //region DEBUGGING
     $scope.commandeDeTest = function(){
         $scope.commande = {

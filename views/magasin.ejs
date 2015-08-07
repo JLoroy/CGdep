@@ -163,7 +163,28 @@
                 </tr>
                 </tbody>
             </table>
+            <a class="btn btn-lg btn-danger" ng-click="getPrint();activeMenu = 'consult_print';">PRINT</a>
         </div>
+    </div>
+    <div id="toPrint" ng-class="isActiveMenu('consult_print')">
+        <table>
+            <tr ng-repeat="commande in fullcommandes">
+                <td class="col-md-6">
+                    <!--infoclient-->
+                    {{commande.clientNom}}
+                    {{commande.heure}}
+                </td>
+                <td class="col-md-6">
+                    <table>
+                        <!-- produits -->
+                        <tr ng-repeat="p in commande.produit">
+                            <td>{{p.produitNom}}</td>
+                            <td>({{p.Quantite}})</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </div>
 
 
@@ -309,7 +330,7 @@
                 <div class="tab-content col-md-10" id="produitBtnDiv" ng-repeat="category in produitTable" >
                     <div class="tab-pane" ng-class="tabCategorie(category.idCategorie)">
                         <table class="table table-bordered col-md-12 table-condensed">
-                            <tr ng-repeat="row_p in category">
+                            <tr ng-repeat="row_p in category.row">
                                 <td ng-repeat="produit in row_p" class="col-md-3" style="border:none; !important">
                                     <button type="button" data-toggle="modal" data-target="#modalProduit" class="btn btn-default btn-lg btn-block" ng-click="openModalProduit(produit,1,'add','');">{{produit.Nom}}</button>
                                 </td>

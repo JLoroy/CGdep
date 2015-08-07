@@ -56,7 +56,39 @@ var refactorProduitCommande = function(produits, customs){
     }
     return result;
 };
-
+var refactorConsultationPrint = function(produits, customs){
+    var result = {};
+    for(var i = 0; i< produits.length; i++){
+        var p =  produits[i]
+        if(!p.idCommande in result){
+            result[p.idCommande] = {
+                //info commande
+                heure: p.Livraison,
+                clientNom: p.clientNom
+            };
+        }
+        result[p.idCommande].produits.push({
+            //info produit
+            Quantite : p.Quantite,
+            produitNom : p.produitNom
+        })
+    }
+    for(var i = 0; i< customs.length; i++){
+        var p =  customs[i]
+        if(!p.idCommande in result){
+            result[p.idCommande] = {
+                //info commande
+                heure: p.Livraison,
+                clientNom: p.clientNom
+            };
+        }
+        result[p.idCommande].produits.push({
+            //info produit
+            Quantite : p.Quantite,
+            produitNom : p.produitNom
+        })
+    }
+};
 function DS(date){
     return  date.slice(0,10) + " " + date.slice(11,19);
 }
@@ -295,7 +327,7 @@ exports.get = function(req, res){
         default:
             console.log("Requete d'un type inconnu : "+req.params.type);
     }
-    console.log("get : "+query);
+    debug("get/"+req.params.type+' : '+query);
     connection.query(query , function(err, rows, fields) {
         if (err) throw err;
         res.send(rows);
@@ -414,9 +446,9 @@ exports.complex = function(req, res){
     var params = req.body.params;
     switch(req.params.type){
         case "produitCommande":
-
+            //region ProduitCommande
             var query = "";
-            console.log(params.selectedCategories);
+            debug(params.selectedCategories);
             query = "SELECT Produitcommande.Quantite, Produitcommande.Details, Produitcommande.Produit_idProduit, "+
                 "Produit.Nom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin, " +
                 "Magasin.Nom AS MagasinNom FROM Produitcommande "+
@@ -446,11 +478,11 @@ exports.complex = function(req, res){
                     res.send(result);
                 });
             });
+            //endregion
             break;
 
 
         case "commande" :
-            debug("DEBUG COMMANDE ##########################");
             /*params : {
                 date:'',
                 heure:'',
@@ -492,10 +524,10 @@ exports.complex = function(req, res){
             break;
 
         case "vendByMag" :
-            debug("VendByMag DEBUG ###################################")
+            //region vendByMag
             var n_by_row = 5;
             var vendByMag = {};
-            var activeMag  = 1;//req.session.magasin.idMagasin;
+            var activeMag  = 1//req.session.magasin.idMagasin;
             debug("activeMag : "+activeMag)
             connection.query("SELECT * FROM Magasin;", function (err, magasins){
                 connection.query("SELECT * FROM Vendeuse;", function (err, vendeuses){
@@ -526,27 +558,31 @@ exports.complex = function(req, res){
                 });
             });
             break;
+        //endregion
 
         case "produitTable" :
             //TODO REGROUPEMENT
             //TODO ORDERING
+            //region produitTable
             var n_by_row = 4;
             var produitTable = {};
             connection.query("SELECT * FROM Produit;", function (err, produits){
                 connection.query("SELECT * FROM Categorie;", function (err, categories){
+                    //creation des objets categorie
                     for(var i_categ = 0; i_categ<categories.length; i_categ++){
                         var idCateg = categories[i_categ].idCategorie;
-                        produitTable[idCateg] = {indice:0,idCategorie:idCateg};
+                        produitTable[idCateg] = {indice:0,idCategorie:idCateg, row:[]};
                     }
+                    //remplissage des categories
                     for(var i_prod = 0; i_prod<produits.length; i_prod++){
                         var prod = produits[i_prod];
                         var idCateg = prod.Categorie_idCategorie;
                         if(prod.display == 1){
                             var indice = produitTable[idCateg].indice;
-                            var i = indice/n_by_row | 0 ;
+                            var i = parseInt(indice/n_by_row | 0) ;
                             var j = indice % n_by_row;
-                            if (j==0) produitTable[idCateg][i] = {};
-                            produitTable[idCateg][i][j]=prod;
+                            if (j==0) produitTable[idCateg].row.push({});
+                            produitTable[idCateg].row[i][j]=prod;
                             produitTable[idCateg].indice = indice+1;
                         }
                     }
@@ -554,9 +590,11 @@ exports.complex = function(req, res){
                 });
             });
             break;
+        //endregion
 
         case "fullCommande":
-            var commande = {}
+            //region FullCommande
+            var commande = {};
             //first on chope la commande normale a partir de l'ID
             query = "SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque," +
                 " Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, " +
@@ -619,6 +657,48 @@ exports.complex = function(req, res){
                         }
                         res.send(commande);
                     });
+                });
+            });
+            //endregion
+            break;
+
+        case "consultMagCommande":
+            /*We need an array of fullcommandes */
+            /*params : {Livraison: '', idMagasin:''} */
+            var Livraison = DS(params.Livraison).split(' ')[0];
+            var query = "";
+            debug(Livraison);
+            query = "SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque," +
+                " Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom," +
+                "Magasin.idMagasin, Magasin.Nom AS magasinNom, Produitcommande.Quantite, Produitcommande.Details, Produitcommande.Produit_idProduit, "+
+                "Produit.Nom AS produitNom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin " +
+                " FROM Produitcommande "+
+                "JOIN Produit ON produitCommande.Produit_idProduit = idProduit "+
+                "JOIN Commande ON produitCommande.Commande_idCommande = idCommande " +
+                "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal "+
+                "JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin "+
+                "JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse "+
+                "WHERE Commande.Livraison LIKE '" + Livraison + "%' AND Magasin.idMagasin = "+params.idMagasin+";";
+            debug("complex PRINT 1 : "+query);
+            connection.query(query , function(errP, rowsP, fields) {
+                if (errP) throw errP;
+                query = "SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque," +
+                    " Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom," +
+                    "Magasin.idMagasin, Magasin.Nom AS magasinNom, Produitcommande.Quantite, Produitcommande.Details, Produitcommande.ProduitCustom_idProduitCustom, "+
+                    "ProduitCustom.Nom AS produitCustomNom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, " +
+                    "Terminal.Magasin_idMagasin FROM Produitcommande "+
+                    "JOIN ProduitCustom ON produitCommande.ProduitCustom_idProduitCustom = idProduitCustom "+
+                    "JOIN Commande ON produitCommande.Commande_idCommande = idCommande " +
+                    "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal " +
+                    "JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin "+
+                    "JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse "+
+                    "WHERE Commande.Livraison LIKE '" + Livraison + "%' AND Magasin.idMagasin = "+params.idMagasin+";";
+                debug("complex PRINT 2 : "+query);
+                connection.query(query , function(errC, rowsC, fields) {
+                    if (errC) throw errC;
+                    var result = refactorConsultationPrint(rowsP, rowsC);
+                    debug(result);
+                    res.send(result);
                 });
             });
             break;
