@@ -359,7 +359,7 @@
                         <table class="table table-bordered col-md-12 table-condensed">
                             <tr ng-repeat="row_p in category.row">
                                 <td ng-repeat="produit in row_p" class="col-md-3" style="border:none; !important">
-                                    <button type="button" data-toggle="modal" data-target="#modalProduit" class="btn btn-default btn-lg btn-block" ng-click="openModalProduit(produit,1,'add','');">{{produit.Nom}}</button>
+                                    <button type="button" data-toggle="modal" data-target="#modalProduit" class="btn btn-default btn-lg btn-block" ng-click="openModalProduit(produit,1,produit.modType,'');">{{produit.Nom}}</button>
                                 </td>
                             </tr>
                         </table>
@@ -368,7 +368,15 @@
                 <!-- MODAL produit Quantite-->
                 <div class="modal fade"  data-backdrop="static" keyboard="false" role="dialog" and aria-labelledby="modalProduit" id="modalProduit" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
-                        <div class="modal-content">
+                        <div class="modal-content" ng-if="modal.mode == 'grp'">
+                            <div class="modal-body form-group">
+                                <div class="input-group form">
+                                    <h3 class="col-md-12">Produits</h3>
+                                    <a type="button" class="btn btn-default btn-lg col-md-6" ng-repeat="prod in modal.prod.produits" ng-click="openModalProduit(prod, 1, prod.modType, '')">{{prod.Nom}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-content" ng-if="modal.mode != 'grp'">
                             <div class="modal-body form-group">
                                 <div ng-if="modal.prod.custom" class="input-group form" role="form">
                                     <h3 class="col-md-12">Produit Personnalisé</h3>

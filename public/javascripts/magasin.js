@@ -358,11 +358,11 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
         $scope.calculTotal();
     };
     $scope.confirmModalProduit = function(){
-        if( $scope.modal.prod.Nom && $scope.modal.prod.idCategorie){
-            addProduit(modal.prod, modal.qty, modal.commentaire);
+        if( $scope.modal.prod.Nom != '' && $scope.modal.prod.idCategorie != ''){
+            $scope.addProduit($scope.modal.prod, $scope.modal.qty, $scope.modal.commentaire);
         }
         else{
-            modal.erreur = true
+            $scope.modal.erreur = true
         }
     };
     //endregion
