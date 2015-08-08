@@ -28,11 +28,13 @@ router.post("/complex/:type/", db.complex);//Switch to request anything complex 
 router.post('/newsession', function(req, res){
     sess = req.session;
     sess.data = req.body.data;
+    console.log(sess);
     res.render('magasin', {session: sess});
 });
 
 router.post('/getsession', function(req, res){
     sess = req.session;
+    console.log(sess)
     if(sess.data) res.send(sess.data);
 });
 

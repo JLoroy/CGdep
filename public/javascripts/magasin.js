@@ -172,6 +172,9 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
                 $scope.init();
                 tab='vendeuse';
                 break;
+            case 'consult_print':
+                tab='selectCommande';
+                break;
             case 'consult_date':
                 $scope.init();
                 tab='vendeuse';
@@ -420,12 +423,17 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
         var printContents = document.getElementById(divName).innerHTML;
         var popupWin = window.open('', '_blank', 'width=300,height=300');
         popupWin.document.open();
-        popupWin.document.write('<html><body onload="window.print()">' + printContents + '</body></html>');
+        popupWin.document.write('' +
+            '<html>' +
+            '<head><script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js">' +
+            '</script><script src="https://code.angularjs.org/1.3.15/i18n/angular-locale_fr-be.js">' +
+            '</script><script src="/bootstrap/js/bootstrap.js"></script><link href="/bootstrap/css/bootstrap.css" rel="stylesheet" /><link href="/stylesheets/magasin.css" rel="stylesheet" />' +
+            '</head><body onload="window.print()">' + printContents + '</body></html>');
         popupWin.document.close();
     };
 
     $scope.getPrint = function(){
-        $http.post('/complex/consultMagCommande',{Livraison:$scope.commande.Livraison}).success(function(res){
+        $http.post('/complex/consultMagCommande',{params:{Livraison:$scope.params_commandes.dateLivraison}}).success(function(res){
             $scope.fullcommandes = res;
 
         });

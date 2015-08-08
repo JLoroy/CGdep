@@ -166,25 +166,52 @@
             <a class="btn btn-lg btn-danger" ng-click="getPrint();activeMenu = 'consult_print';">PRINT</a>
         </div>
     </div>
-    <div id="toPrint" ng-class="isActiveMenu('consult_print')">
-        <table>
-            <tr ng-repeat="commande in fullcommandes">
-                <td class="col-md-6">
-                    <!--infoclient-->
-                    {{commande.clientNom}}
-                    {{commande.heure}}
-                </td>
-                <td class="col-md-6">
-                    <table>
-                        <!-- produits -->
-                        <tr ng-repeat="p in commande.produit">
-                            <td>{{p.produitNom}}</td>
-                            <td>({{p.Quantite}})</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
+    <div ng-class="isActiveMenu('consult_print')">
+        <a class="btn btn-lg btn-warning col-md-2" ng-click="previous('consult_print')">Precedent</a>
+        <div id="consult_print" class="col-md-offset-1 col-md-6">
+            <table class="table" style="table-layout: fixed">
+                <caption><h2>{{params_commandes.dateLivraison}}</h2></caption>
+                <thead>
+                    <th style="width: 15%"></th>
+                    <th style="width: 40%">Commande</th>
+                    <th style="width: 45%">Produits</th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="commande in fullcommandes | orderBy:'idCommande'">
+                        <th scope="row" style="overflow: hidden">{{commande.idCommande}}</th>
+                        <td>
+                            <table class="table borderless">
+                                <tbody>
+                                    <tr>
+                                        <!--infoclient-->
+                                        <td style="width: 25%;overflow: hidden">{{commande.heure}}h</td>
+                                        <td style="width: 75%;overflow: hidden">{{commande.clientNom}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td style="overflow: hidden">{{commande.Remarque}}</td>
+                                    </tr>
+                                    </tbody>
+                            </table>
+                        </td>
+                        <td style="overflow: hidden">
+                            <table class="table borderless">
+                                <!-- produits -->
+                                <tr ng-repeat="p in commande.produits">
+                                    <th scope="row" style="width: 20%;overflow: hidden">{{p.Quantite}}</th>
+                                    <td style="width: 80%;overflow: hidden">{{p.produitNom}}</td>
+                                </tr>
+                                <tr><td></td></td><td>{{P.Detail}}</td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <a class="btn btn-lg btn-danger col-md-offset-1 col-md-2" ng-click="printDiv('consult_print');">PRINT</a>
     </div>
 
 

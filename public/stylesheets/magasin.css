@@ -70,3 +70,7 @@ body {
 .activedate{
     background-color: rgba(96, 203, 236, 1) !important;
 }
+
+.borderless tbody tr td, .borderless tbody tr th, .borderless thead tr th {
+    border: none;
+}
