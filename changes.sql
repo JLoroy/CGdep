@@ -26,7 +26,7 @@ ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Categorie_idCatego
 ALTER TABLE `cgdb`.`Vendeuse` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Magasin_idMagasin`;
 
-UPDATE commande SET Livraison='2015-08-18 12:00:00' WHERE idCommande < 90;
+UPDATE Commande SET Livraison='2015-08-18 12:00:00' WHERE idCommande < 90;
 
 
 CREATE TABLE `cgdb`.`regroupement` (
