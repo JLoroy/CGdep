@@ -330,6 +330,9 @@ exports.get = function(req, res){
         case "ferie":
             query = "SELECT * FROM Ferie;";
             break;
+        case "regroupement":
+            query = "SELECT * FROM regroupement;";
+            break;
         default:
             console.log("Requete d'un type inconnu : "+req.params.type);
     }
@@ -364,6 +367,9 @@ exports.add = function(req, res){
             break;
         case "ferie":
             query =  "INSERT INTO Ferie(date) VALUES('"+x.date+"');";
+            break;
+        case "regroupement":
+            query = "INSERT INTO Regroupement(Nom, Categorie_idCategorie) VALUES('"+x.Nom+"'+'"+ x.Categorie_idCategorie+"');";
             break;
         default:
             console.log("Rajout d'un type inconnu : "+req.params.type);
@@ -487,9 +493,8 @@ exports.complex = function(req, res){
             });
             //endregion
             break;
-
-
         case "commande" :
+            //region Commande
             /*params : {
                 date:'',
                 heure:'',
@@ -528,8 +533,8 @@ exports.complex = function(req, res){
             var term = 1;//req.session.data.terminal.idTerminal;
             com_client(params, term);
             res.send('ok');
+            //endregion
             break;
-
         case "vendByMag" :
             //region vendByMag
             var n_by_row = 5;
@@ -670,7 +675,7 @@ exports.complex = function(req, res){
             break;
 
         case "consultMagCommande":
-            debug('cfc');
+            //region consultMagCommande(PRINT)
             /*We need an array of fullcommandes */
             /*params : {Livraison: ''} */
             debug(params);
@@ -712,6 +717,46 @@ exports.complex = function(req, res){
                     res.send(result);
                 });
             });
+            //endregion
+            break;
+
+        case "getRegroupement":
+            var regroupements = []
+            connection.query("SELECT * FROM Regroupement", function(err, groupes){
+                for(var i = 0; i<groupes.length;i++){
+                    var group = {idRegroupement:groupes[i].idRegroupement, produits:[]}
+                    connection.query('SELECT * FROM Produit WHERE idRegroupement'+R.idRegroupement, function(err,produits){
+                        for(var j = 0;j<produits.length;j++){
+                            group.produits.push(produits[j]);
+                        }
+                    });
+                    regroupements.push(group);
+                }
+                res.send(regroupements);
+            });
+
+            break;
+        case "addRegroupement":
+            //params = {Nom:Nom, Categorie_idCategorie:id, produits:[]}
+            connection.query("INSERT INTO Regroupement SET ?", {Nom:params.Nom,Categorie_idCategorie:params.Categorie_idCategorie}, function(err, rows){
+                if (err) throw err;
+                for(var i = 0; i<params.produits.length; i++){
+                    connection.query('UPDATE Produit SET Regroupement_idRegroupement ='+res.insertId+' WHERE idProduit='+params.produits[i].idProduit,function(err,rows){
+                        if (err) throw err;
+                    });
+                }
+            });
+            break;
+        case "removeRegroupement":
+            //params = {idRegroupement:idRegroupement}
+            connection.query("UPDATE Regroupement SET display=0 WHERE idRegroupement="+params.idRegroupement, function(err, rows){
+                if(err) throw err;
+            });
+            connection.query("UPDATE Produit SET Regroupement_idRegroupement='NULL' WHERE Regroupement_idRegroupement="+params.idRegroupement, function(err, rows){
+                if(err) throw err;
+            });
+            break;
+        case "modifyRegroupement":
             break;
         default:
             console.log("Requete complexe d'un type inconnu : "+req.params.type);

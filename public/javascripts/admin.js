@@ -63,18 +63,38 @@ app.controller('ProduitController', function($scope, $http){
     $http.post("get/category").success(function(res){
         $scope.categories = res;
     });
+    $http.post("get/regroupement").success(function(res){
+        $scope.regroupements = res;
+    });
+    $scope.checkCateg = function(prod){
+        console.log('CHECK CATEG help me');
+        console.log(prod);
+        if(prod.regroupement_idRegroupement != ''){
+            console.log('It has a regroupement');
+            for(R in regroupements){
+                if(prod.regroupement_idRegroupement == R.idRegroupement){
+                    return prod.Categorie_idCategorie == R.Categorie_idCategorie;
+                }
+            }
+        }
+        else return true;
+    };
     $scope.add = function(){
         console.log($scope.new);
-        $http.post("add/produit", {
-            new: $scope.new
-        });
-        $scope.new={};
+        if($scope.checkCateg($scope.new)){
+            $http.post("add/produit", {
+                new: $scope.new
+            });
+            $scope.new={};
+        }
     };
     $scope.modify = function(toMod){
         console.log(toMod);
-        $http.post("modify/produit", {
-            toModify: toMod
-        })
+        if($scope.checkCateg(toMod)){
+            $http.post("modify/produit", {
+                toModify: toMod
+            })
+        }
     };
     $scope.delete = function(toRem){
         $http.post("remove/produit",{
@@ -276,4 +296,35 @@ app.controller('CustomController', function($scope, $http){
         });
     };
     $scope.getCustoms();
+});
+
+
+app.controller('RegroupementController', function($scope, $http){
+    $scope.new = {};
+    $scope.getRegroupement = function(){
+        $http.post("complexe/getRegroupement",{
+        }).success(function(res){
+            $scope.regroupements = res;
+        });
+    };
+    $scope.add = function(){
+        //params = {Nom:Nom, Categorie_idCategorie:id, produits:[]}
+        $http.post("add/regroupement", {
+            new: $scope.new
+        });
+        $scope.new={};
+    };
+    $scope.modify = function(toMod){
+        console.log(toMod);
+       /*TODO $http.post("modifyRegroupement", {
+            toModify: toMod
+        })*/
+    };
+    $scope.delete = function(toRem){
+        //params = {idRegroupement:idRegroupement}
+        $http.post("remove/category",{
+            toRemove: toRem
+        });
+    };
+    $scope.getCategories();
 });

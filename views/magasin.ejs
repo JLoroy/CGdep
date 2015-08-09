@@ -170,7 +170,7 @@
         <a class="btn btn-lg btn-warning col-md-2" ng-click="previous('consult_print')">Precedent</a>
         <div id="consult_print" class="col-md-offset-1 col-md-6">
             <table class="table" style="table-layout: fixed">
-                <caption><h2>{{params_commandes.dateLivraison}}</h2></caption>
+                <caption><h2>{{params_commandes.dateLivraison| date:'EEEE dd MMMM yyyy'}}</h2></caption>
                 <thead>
                     <th style="width: 15%"></th>
                     <th style="width: 40%">Commande</th>

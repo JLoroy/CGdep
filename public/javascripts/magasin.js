@@ -358,11 +358,13 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
         $scope.calculTotal();
     };
     $scope.confirmModalProduit = function(){
-        if( $scope.modal.prod.Nom && $scope.modal.prod.idCategorie){
-            addProduit(modal.prod, modal.qty, modal.commentaire);
+        console.log($scope.modal);
+        if( $scope.modal.prod.Nom !='' && $scope.modal.prod.idCategorie !=''){
+            console.log("add "+$scope.modal.prod.Nom);
+            $scope.addProduit($scope.modal.prod, $scope.modal.qty, $scope.modal.commentaire);
         }
         else{
-            modal.erreur = true
+            $scope.modal.erreur = true
         }
     };
     //endregion
@@ -427,7 +429,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
             '<html>' +
             '<head><script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js">' +
             '</script><script src="https://code.angularjs.org/1.3.15/i18n/angular-locale_fr-be.js">' +
-            '</script><script src="/bootstrap/js/bootstrap.js"></script><link href="/bootstrap/css/bootstrap.css" rel="stylesheet" /><link href="/stylesheets/magasin.css" rel="stylesheet" />' +
+            '</script><link href="/bootstrap/css/bootstrap.css" rel="stylesheet" /><link href="/stylesheets/magasin.css" rel="stylesheet" />' +
             '</head><body onload="window.print()">' + printContents + '</body></html>');
         popupWin.document.close();
     };
@@ -443,8 +445,8 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
     //region DEBUGGING
     $scope.commandeDeTest = function(){
         $scope.commande = {
-            date:new Date(2015,7,10,12,0,0,0),
-            heure:"12",
+            date:$scope.DS(new Date(2015,7,10,12,0,0,0)),
+            heure:12,
             PNP:0,
             montant:1,
             Remarque:"RAS",
