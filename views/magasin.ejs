@@ -39,7 +39,6 @@
         <!-- CHOIX VENDEUSE -->
     <div class="h100" ng-class="isActiveMenu('vendeuse')">
         <div>
-            <h4>Selection de la Vendeuse</h4>
             <ul class="nav nav-pills nav-justified" role="tablist">
                 <li ng-repeat="magasin in magasins" ng-if="magasin.display == 1" ng-class="isActiveMag(magasin.idMagasin)">
                     <a href="#mag{{magasin.idMagasin}}" ng-click="activeMag = magasin.idMagasin" role="tab" data-toggle="tab">
@@ -78,7 +77,6 @@
 
         <!-- Date Consult -->
     <div class="h100" ng-class="isActiveMenu('consult_date')">
-            <h4>Selection de la Date</h4>
             <table class="table table-bordered table-condensed tab-pane form-control h90">
                 <tr ng-repeat="semaine in calendar">
                     <td ng-repeat="jour in semaine" class="form-group vcenter nopadding">
@@ -235,7 +233,6 @@
 
         <!-- CHOIX DATE -->
         <div class="h80" ng-class="isActiveMenu('date')">
-            <h4>Selection de la Date</h4>
             <table class="table table-bordered table-condensed tab-pane form-control h90">
                 <tr ng-repeat="semaine in calendar">
                     <td ng-repeat="jour in semaine" class="form-group vcenter nopadding">
@@ -248,7 +245,6 @@
         </div>
         <!-- CHOIX HEURE -->
         <div class="h80" ng-class="isActiveMenu('heure')">
-            <h4>Selection de l'Heure</h4>
             <table class="table table-bordered table-condensed tab-pane form-control h90">
                 <tr>
                     <td ng-repeat="heure in {a:'06',b:'07',c:'08',d:'09',e:'10',f:'11',g:'12'}" class="form-group vcenter">
@@ -274,7 +270,6 @@
 
         <!-- CHOIX CLIENT -->
         <div class="h80" ng-class="isActiveMenu('client')">
-            <h4>Encodage du Client</h4>
             <form id="clientForm" role="form" class="form-horizontal">
                 <div class="patch-zoom-bug form-group">
                     <label for="clientNom" class="col-md-2 control-label">Nom</label>
@@ -312,7 +307,6 @@
         </div>
         <!-- CHOIX Produits -->
         <div class="h80" ng-class="isActiveMenu('produit')">
-            <h4>Selection des Produits</h4>
             <div class="col-md-4" style="border-right: 1px solid gray;">
                 <form role="form">
                     <div class="form-group">
@@ -417,7 +411,6 @@
         </div>
         <!-- CHOIX Commentaire -->
         <div class="h80" ng-class="isActiveMenu('commentaire')">
-            <h4>Commentaire</h4>
                 <form id="clientForm" role="form" class="form-horizontal">
                     <div class="form-group">
                         <label for="commentaireCommande" class="col-md-2 control-label">Commentaire</label>
@@ -430,7 +423,6 @@
         </div>
         <!-- CHOIX payement-->
         <div class="h80" ng-class="isActiveMenu('payement')">
-            <h4>Selection du Payement</h4>
                 <form id="clientForm" role="form" class="fill form-horizontal" style="height:100%;">
                     <!--<div class="form-group">
                         <label class="col-md-2 control-label">Prix total</label>
@@ -458,7 +450,6 @@
         </div>
         <!-- CHOIX Recap -->
         <div class="h80" ng-class="isActiveMenu('recap')">
-            <h4>Recapitulatif</h4>
                 <div id="toPrint" class="col-md-offset-1" style="width:100%;height:70%;">
                     <form class="form-horizontal col-md-3" role="form">
                         <div class="form-group">

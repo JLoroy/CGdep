@@ -331,7 +331,7 @@ exports.get = function(req, res){
             query = "SELECT * FROM Ferie;";
             break;
         case "regroupement":
-            query = "SELECT * FROM regroupement;";
+            query = "SELECT * FROM Regroupement;";
             break;
         default:
             console.log("Requete d'un type inconnu : "+req.params.type);
@@ -369,7 +369,7 @@ exports.add = function(req, res){
             query =  "INSERT INTO Ferie(date) VALUES('"+x.date+"');";
             break;
         case "regroupement":
-            query = "INSERT INTO Regroupement(Nom, Categorie_idCategorie) VALUES('"+x.Nom+"'+'"+ x.Categorie_idCategorie+"');";
+            query = "INSERT INTO Regroupement(Nom, Categorie_idCategorie) VALUES('"+x.Nom+"','"+ x.Categorie_idCategorie+"');";
             break;
         default:
             console.log("Rajout d'un type inconnu : "+req.params.type);
@@ -424,7 +424,7 @@ exports.modify = function(req, res){
     var mod = req.body.toModify;
     switch(req.params.type) {
         case "produit":
-            query = "UPDATE Produit SET Nom = '"+mod.Nom+"', Prix = "+mod.Prix+", Categorie_idCategorie = "+mod.Categorie_idCategorie+" WHERE idProduit = '"+mod.idProduit+"';";
+            query = "UPDATE Produit SET Nom = '"+mod.Nom+"', Prix = "+mod.Prix+", Categorie_idCategorie = "+mod.Categorie_idCategorie+", regroupement_idRegroupement ="+(mod.regroupement_idRegroupement?mod.regroupement_idRegroupement:"'NULL'")+" WHERE idProduit = '"+mod.idProduit+"';";
             break;
         case "client":
             query = "UPDATE Client SET Nom = '"+mod.Nom+"', Tel = "+mod.Tel+", Mail = "+mod.Mail+", TVA = "+mod.TVA+" WHERE idClient = '"+mod.idClient+"';";
@@ -747,18 +747,10 @@ exports.complex = function(req, res){
             break;
 
         case "getRegroupement":
-            var regroupements = []
+            var regroupements = {};
             connection.query("SELECT * FROM Regroupement", function(err, groupes){
-                for(var i = 0; i<groupes.length;i++){
-                    var group = {idRegroupement:groupes[i].idRegroupement, produits:[]}
-                    connection.query('SELECT * FROM Produit WHERE idRegroupement'+R.idRegroupement, function(err,produits){
-                        for(var j = 0;j<produits.length;j++){
-                            group.produits.push(produits[j]);
-                        }
-                    });
-                    regroupements.push(group);
-                }
-                res.send(regroupements);
+                if(err) throw err;
+                res.send(groupes);
             });
 
             break;

@@ -340,7 +340,7 @@ CREATE TABLE `Vendeuse` (
 
 LOCK TABLES `Vendeuse` WRITE;
 /*!40000 ALTER TABLE `Vendeuse` DISABLE KEYS */;
-INSERT INTO `Vendeuse` VALUES (1,'Perrine Vandeuren',NULL,1),(2,'Sarah Roumache',NULL,1),(3,'Emilie Belot',NULL,1),(4,'Emilie Van Hecke',NULL,1),(5,'Audrey Vandenbosch',NULL,1),(6,'AlizÃ©e De Bolle',NULL,1),(7,'Marion Balsaux',NULL,1),(8,'Charlotte Geno',NULL,1),(9,'Florianne Delobbe',NULL,1),(10,'Charline Foulon',NULL,1),(11,'Carol Palmaerts',NULL,1),(12,'Romane Rolin',NULL,1),(13,'Coline Vermoelen',NULL,1),(14,'Vendeuse anonyme',NULL,1),(15,'Laura Degembe',NULL,1),(16,'Charlotte Newman',NULL,1),(17,'Ã‰lodie Noel',NULL,1);
+INSERT INTO `Vendeuse` VALUES (1,'Perrine Vandeuren',NULL,1),(2,'Sarah Roumache',NULL,1),(3,'Emilie Belot',NULL,1),(4,'Emilie Van Hecke',NULL,1),(5,'Audrey Vandenbosch',NULL,1),(6,'Alizée De Bolle',NULL,1),(7,'Marion Balsaux',NULL,1),(8,'Charlotte Geno',NULL,1),(9,'Florianne Delobbe',NULL,1),(10,'Charline Foulon',NULL,1),(11,'Carol Palmaerts',NULL,1),(12,'Romane Rolin',NULL,1),(13,'Coline Vermoelen',NULL,1),(14,'Vendeuse anonyme',NULL,1),(15,'Laura Degembe',NULL,1),(16,'Charlotte Newman',NULL,1),(17,'Elodie Noel',NULL,1);
 /*!40000 ALTER TABLE `Vendeuse` ENABLE KEYS */;
 UNLOCK TABLES;
 

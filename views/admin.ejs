@@ -38,6 +38,7 @@
     <li><a href="#terminal" role="tab" data-toggle="tab">Terminaux</a></li>
     <li><a href="#ferie" role="tab" data-toggle="tab">Ferie</a></li>
     <li><a href="#custom" role="tab" data-toggle="tab">Produits Custom</a></li>
+    <li><a href="#regroupement" role="tab" data-toggle="tab">Regroupements</a></li>
 </ul>
 
 <!-- Tab panes -->
@@ -187,7 +188,7 @@
                     <td>Nouveau</td>
                     <td><input type="text" ng-model="new.Nom"></td>
                     <td><input type="text" ng-model="new.Prix"></td>
-                    <td><select ng-model="new.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories | filter: category.display=1" ng-if="category.display = 1"></select></td>
+                    <td><select ng-model="new.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories | filter: category.display==1" ng-if="category.display == 1"></select></td>
                     <td><select ng-model="new.regroupement_idRegroupement" ng-options="regroupement.idRegroupement as regroupement.Nom for regroupement in regroupements | filter: regroupement.Display==1" ng-if="regroupement.Display == 1"></select></td>
                     <td><button class="btn btn-primary" ng-click="add();getProduits();">Ajouter</button></td>
                 </tr>
@@ -196,6 +197,7 @@
                     <td><input type="text" ng-model="produit.Nom"></td>
                     <td><input type="text" ng-model="produit.Prix"></td>
                     <td><select ng-model="produit.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories | filter: category.display=1" ng-if="category.display = 1"></select></td>
+                    <td><select ng-model="produit.regroupement_idRegroupement" ng-options="regroupement.idRegroupement as regroupement.Nom for regroupement in regroupements"></select></td>
                     <td><button class="btn btn-primary" ng-click="modify(produit);getProduits();">Modifier</button></td>
                     <td><button class="btn btn-danger" ng-click="delete(produit);getProduits();">Supprimer</button></td>
                 </tr>
@@ -461,16 +463,14 @@
                 <th>#</th>
                 <th>Nom</th>
                 <th>Categorie</th>
-                <th>Produits</th>
                 <th>Modifier</th>
                 <th>Supprimer</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="regroupement in regroupements" ng-if="regroupement.display == 1">
+                <tr ng-repeat="regroupement in regroupements">
                     <td>{{regroupement.idRegroupement}}</td>
                     <td><input type="text" ng-model="regroupement.Nom"></td>
                     <td><select ng-model="regroupement.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories | filter: category.display=1" ng-if="category.display = 1"></select></td>
-                    <td><table><tr ng-repeat="produit in regroupement.produits"><td>produit.Nom</td></tr></table></td>
                     <td><button class="btn btn-primary" ng-click="modify(regroupement);getRegroupements();">Modifier</button></td>
                     <td><button class="btn btn-danger" ng-click="delete(regroupement);getRegroupements();">Supprimer</button></td>
                 </tr>

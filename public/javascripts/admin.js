@@ -67,11 +67,9 @@ app.controller('ProduitController', function($scope, $http){
         $scope.regroupements = res;
     });
     $scope.checkCateg = function(prod){
-        console.log('CHECK CATEG help me');
-        console.log(prod);
         if(prod.regroupement_idRegroupement != ''){
-            console.log('It has a regroupement');
-            for(R in regroupements){
+            for(var i = 0;i<$scope.regroupements.length;i++){
+                var R = $scope.regroupements[i];
                 if(prod.regroupement_idRegroupement == R.idRegroupement){
                     return prod.Categorie_idCategorie == R.Categorie_idCategorie;
                 }
@@ -302,13 +300,18 @@ app.controller('CustomController', function($scope, $http){
 app.controller('RegroupementController', function($scope, $http){
     $scope.new = {};
     $scope.getRegroupement = function(){
-        $http.post("complexe/getRegroupement",{
+        $http.post("complex/getRegroupement",{
         }).success(function(res){
             $scope.regroupements = res;
+            console.log($scope.regroupements);
         });
+        $http.post("get/category",{
+        }).success(function(res){
+                $scope.categories = res;
+            }
+        );
     };
     $scope.add = function(){
-        //params = {Nom:Nom, Categorie_idCategorie:id, produits:[]}
         $http.post("add/regroupement", {
             new: $scope.new
         });
@@ -326,5 +329,5 @@ app.controller('RegroupementController', function($scope, $http){
             toRemove: toRem
         });
     };
-    $scope.getCategories();
+    $scope.getRegroupement();
 });
