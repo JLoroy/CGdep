@@ -358,9 +358,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
         $scope.calculTotal();
     };
     $scope.confirmModalProduit = function(){
-        console.log($scope.modal);
         if( $scope.modal.prod.Nom !='' && $scope.modal.prod.idCategorie !=''){
-            console.log("add "+$scope.modal.prod.Nom);
             $scope.addProduit($scope.modal.prod, $scope.modal.qty, $scope.modal.commentaire);
         }
         else{

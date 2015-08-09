@@ -578,27 +578,53 @@ exports.complex = function(req, res){
             //region produitTable
             var n_by_row = 4;
             var produitTable = {};
+            var orderGrp = {};
             connection.query("SELECT * FROM Produit;", function (err, produits){
                 connection.query("SELECT * FROM Categorie;", function (err, categories){
-                    //creation des objets categorie
-                    for(var i_categ = 0; i_categ<categories.length; i_categ++){
-                        var idCateg = categories[i_categ].idCategorie;
-                        produitTable[idCateg] = {indice:0,idCategorie:idCateg, row:[]};
-                    }
-                    //remplissage des categories
-                    for(var i_prod = 0; i_prod<produits.length; i_prod++){
-                        var prod = produits[i_prod];
-                        var idCateg = prod.Categorie_idCategorie;
-                        if(prod.display == 1){
-                            var indice = produitTable[idCateg].indice;
-                            var i = parseInt(indice/n_by_row | 0) ;
-                            var j = indice % n_by_row;
-                            if (j==0) produitTable[idCateg].row.push({});
-                            produitTable[idCateg].row[i][j]=prod;
-                            produitTable[idCateg].indice = indice+1;
+                    connection.query("SELECT * FROM Regroupement;", function(err, regroupements){
+                        //creation des objets categorie
+                        for(var i_categ = 0; i_categ<categories.length; i_categ++){
+                            var idCateg = categories[i_categ].idCategorie;
+                            produitTable[idCateg] = {indice:0,idCategorie:idCateg, row:[]};
                         }
-                    }
-                    res.send(produitTable);
+                        //remplissage des categories
+                        for(var i_grp = 0; i_grp < regroupements.length; i_grp++){
+                            var grp = regroupements[i_grp];
+                            grp.produits = [];
+                            grp.modType = 'grp';
+                            var idCateg = grp.Categorie_idCategorie;
+                            if(grp.Display == 1){
+                                var indice = produitTable[idCateg].indice;
+                                var i = parseInt(indice/n_by_row | 0) ;
+                                var j = indice % n_by_row;
+                                if (j==0) produitTable[idCateg].row.push({});
+                                produitTable[idCateg].row[i][j]=grp;
+                                produitTable[idCateg].indice = indice+1;
+                                orderGrp[grp.idRegroupement] = {i: i, j: j};
+                            }
+                        }
+                        for(var i_prod = 0; i_prod<produits.length; i_prod++){
+                            var prod = produits[i_prod];
+                            prod.modType = 'add';
+                            var idCateg = prod.Categorie_idCategorie;
+                            if(prod.display == 1){
+                                if(prod.regroupement_idRegroupement){
+                                    var idGrp = prod.regroupement_idRegroupement;
+                                    debug(orderGrp);
+                                    debug(idGrp);
+                                    produitTable[idCateg].row[orderGrp[idGrp].i][orderGrp[idGrp].j].produits.push(prod);
+                                } else {
+                                    var indice = produitTable[idCateg].indice;
+                                    var i = parseInt(indice/n_by_row | 0) ;
+                                    var j = indice % n_by_row;
+                                    if (j==0) produitTable[idCateg].row.push({});
+                                    produitTable[idCateg].row[i][j]=prod;
+                                    produitTable[idCateg].indice = indice+1;
+                                }
+                            }
+                        }
+                        res.send(produitTable);
+                    });
                 });
             });
             break;
