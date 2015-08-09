@@ -331,7 +331,7 @@ exports.get = function(req, res){
             query = "SELECT * FROM Ferie;";
             break;
         case "regroupement":
-            query = "SELECT * FROM Regroupement;";
+            query = "SELECT * FROM regroupement;";
             break;
         default:
             console.log("Requete d'un type inconnu : "+req.params.type);
@@ -369,7 +369,7 @@ exports.add = function(req, res){
             query =  "INSERT INTO Ferie(date) VALUES('"+x.date+"');";
             break;
         case "regroupement":
-            query = "INSERT INTO Regroupement(Nom, Categorie_idCategorie) VALUES('"+x.Nom+"','"+ x.Categorie_idCategorie+"');";
+            query = "INSERT INTO regroupement(Nom, Categorie_idCategorie) VALUES('"+x.Nom+"','"+ x.Categorie_idCategorie+"');";
             break;
         default:
             console.log("Rajout d'un type inconnu : "+req.params.type);
@@ -581,7 +581,7 @@ exports.complex = function(req, res){
             var orderGrp = {};
             connection.query("SELECT * FROM Produit;", function (err, produits){
                 connection.query("SELECT * FROM Categorie;", function (err, categories){
-                    connection.query("SELECT * FROM Regroupement;", function(err, regroupements){
+                    connection.query("SELECT * FROM regroupement;", function(err, regroupements){
                         //creation des objets categorie
                         for(var i_categ = 0; i_categ<categories.length; i_categ++){
                             var idCateg = categories[i_categ].idCategorie;
@@ -748,7 +748,7 @@ exports.complex = function(req, res){
 
         case "getRegroupement":
             var regroupements = {};
-            connection.query("SELECT * FROM Regroupement", function(err, groupes){
+            connection.query("SELECT * FROM regroupement", function(err, groupes){
                 if(err) throw err;
                 res.send(groupes);
             });
@@ -756,10 +756,10 @@ exports.complex = function(req, res){
             break;
         case "addRegroupement":
             //params = {Nom:Nom, Categorie_idCategorie:id, produits:[]}
-            connection.query("INSERT INTO Regroupement SET ?", {Nom:params.Nom,Categorie_idCategorie:params.Categorie_idCategorie}, function(err, rows){
+            connection.query("INSERT INTO regroupement SET ?", {Nom:params.Nom,Categorie_idCategorie:params.Categorie_idCategorie}, function(err, rows){
                 if (err) throw err;
                 for(var i = 0; i<params.produits.length; i++){
-                    connection.query('UPDATE Produit SET Regroupement_idRegroupement ='+res.insertId+' WHERE idProduit='+params.produits[i].idProduit,function(err,rows){
+                    connection.query('UPDATE Produit SET regroupement_idRegroupement ='+res.insertId+' WHERE idProduit='+params.produits[i].idProduit,function(err,rows){
                         if (err) throw err;
                     });
                 }
@@ -767,10 +767,10 @@ exports.complex = function(req, res){
             break;
         case "removeRegroupement":
             //params = {idRegroupement:idRegroupement}
-            connection.query("UPDATE Regroupement SET display=0 WHERE idRegroupement="+params.idRegroupement, function(err, rows){
+            connection.query("UPDATE regroupement SET display=0 WHERE idRegroupement="+params.idRegroupement, function(err, rows){
                 if(err) throw err;
             });
-            connection.query("UPDATE Produit SET Regroupement_idRegroupement='NULL' WHERE Regroupement_idRegroupement="+params.idRegroupement, function(err, rows){
+            connection.query("UPDATE Produit SET regroupement_idRegroupement='NULL' WHERE regroupement_idRegroupement="+params.idRegroupement, function(err, rows){
                 if(err) throw err;
             });
             break;
