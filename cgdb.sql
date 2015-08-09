@@ -344,31 +344,31 @@ INSERT INTO `Vendeuse` VALUES (1,'Perrine Vandeuren',NULL,1),(2,'Sarah Roumache'
 /*!40000 ALTER TABLE `Vendeuse` ENABLE KEYS */;
 UNLOCK TABLES;
 
-ALTER TABLE `cgdb`.`terminal` 
+ALTER TABLE `cgdb`.`Terminal` 
 CHANGE COLUMN `Actif` `Actif` INT NOT NULL DEFAULT 1 COMMENT '' ;
 
 
-ALTER TABLE `cgdb`.`categorie` 
+ALTER TABLE `cgdb`.`Categorie` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Nom`;
 
-ALTER TABLE `cgdb`.`client` 
+ALTER TABLE `cgdb`.`Client` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `TVA`;
 
-ALTER TABLE `cgdb`.`commande` 
+ALTER TABLE `cgdb`.`Commande` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Terminal_idTerminal`;
 
 
-ALTER TABLE `cgdb`.`magasin` 
+ALTER TABLE `cgdb`.`Magasin` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Adresse`;
 
-ALTER TABLE `cgdb`.`produit` 
+ALTER TABLE `cgdb`.`Produit` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Categorie_idCategorie`;
 
 
-ALTER TABLE `cgdb`.`produitcustom` 
+ALTER TABLE `cgdb`.`ProduitCustom` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Categorie_idCategorie`;
 
-ALTER TABLE `cgdb`.`vendeuse` 
+ALTER TABLE `cgdb`.`Vendeuse` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Magasin_idMagasin`;
 
 UPDATE commande SET Livraison='2015-08-18 12:00:00' WHERE idCommande < 90;
@@ -393,5 +393,5 @@ ADD CONSTRAINT `categorie`
 ALTER TABLE `cgdb`.`regroupement`
 ADD COLUMN `Display` INT UNSIGNED NOT NULL DEFAULT 1 COMMENT '' AFTER `Categorie_idCategorie`;
 
-ALTER TABLE `cgdb`.`produit`
+ALTER TABLE `cgdb`.`Produit`
 ADD COLUMN `regroupement_idR

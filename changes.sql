@@ -1,28 +1,33 @@
-ALTER TABLE `cgdb`.`terminal`
+
+ALTER TABLE `cgdb`.`Terminal` 
 CHANGE COLUMN `Actif` `Actif` INT NOT NULL DEFAULT 1 COMMENT '' ;
 
-ALTER TABLE `cgdb`.`categorie`
+
+ALTER TABLE `cgdb`.`Categorie` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Nom`;
 
-ALTER TABLE `cgdb`.`client`
+ALTER TABLE `cgdb`.`Client` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `TVA`;
 
-ALTER TABLE `cgdb`.`commande`
+ALTER TABLE `cgdb`.`Commande` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Terminal_idTerminal`;
 
 
-ALTER TABLE `cgdb`.`magasin`
+ALTER TABLE `cgdb`.`Magasin` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Adresse`;
 
-ALTER TABLE `cgdb`.`produit`
+ALTER TABLE `cgdb`.`Produit` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Categorie_idCategorie`;
 
 
-ALTER TABLE `cgdb`.`produitcustom`
+ALTER TABLE `cgdb`.`ProduitCustom` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Categorie_idCategorie`;
 
-ALTER TABLE `cgdb`.`vendeuse`
+ALTER TABLE `cgdb`.`Vendeuse` 
 ADD COLUMN `display` INT NOT NULL DEFAULT 1 COMMENT '' AFTER `Magasin_idMagasin`;
+
+UPDATE commande SET Livraison='2015-08-18 12:00:00' WHERE idCommande < 90;
+
 
 CREATE TABLE `cgdb`.`regroupement` (
   `idRegroupement` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '',
@@ -31,16 +36,16 @@ CREATE TABLE `cgdb`.`regroupement` (
   PRIMARY KEY (`idRegroupement`)  COMMENT '',
   UNIQUE INDEX `idRegroupement_UNIQUE` (`idRegroupement` ASC)  COMMENT '');
 
-ALTER TABLE `cgdb`.`regroupement` 
+ALTER TABLE `cgdb`.`regroupement`
 ADD INDEX `categorie_idx` (`Categorie_idCategorie` ASC)  COMMENT '';
-ALTER TABLE `cgdb`.`regroupement` 
+ALTER TABLE `cgdb`.`regroupement`
 ADD CONSTRAINT `categorie`
   FOREIGN KEY (`Categorie_idCategorie`)
   REFERENCES `cgdb`.`categorie` (`idCategorie`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
-ALTER TABLE `cgdb`.`regroupement` 
+ALTER TABLE `cgdb`.`regroupement`
 ADD COLUMN `Display` INT UNSIGNED NOT NULL DEFAULT 1 COMMENT '' AFTER `Categorie_idCategorie`;
 
 ALTER TABLE `cgdb`.`produit` 
