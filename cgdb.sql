@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.1.73, for redhat-linux-gnu (x86_64)
 --
--- Host: localhost    Database: CGdb
+-- Host: localhost    Database: cgdb
 -- ------------------------------------------------------
 -- Server version	5.1.73
 
@@ -16,12 +16,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `CGdb`
+-- Current Database: `cgdb`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `CGdb` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `cgdb` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
-USE `CGdb`;
+USE `cgdb`;
 
 --
 -- Table structure for table `Categorie`
