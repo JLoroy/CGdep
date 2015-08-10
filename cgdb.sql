@@ -394,4 +394,4 @@ ALTER TABLE `cgdb`.`regroupement`
 ADD COLUMN `Display` INT UNSIGNED NOT NULL DEFAULT 1 COMMENT '' AFTER `Categorie_idCategorie`;
 
 ALTER TABLE `cgdb`.`Produit`
-ADD COLUMN `regroupement_idR
+ADD COLUMN `regroupement_idRegroupement` INT UNSIGNED NULL DEFAULT NULL COMMENT '' AFTER `display`;
