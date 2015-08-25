@@ -25,7 +25,7 @@
 <div id="wrapper" ng-controller="magasinController" class="h100">
     <div id="header" class="col-md-12">
         <div ng-class="{hidden:commande.date==''}" style="float:right">
-            <h2 class="nomargin">{{commande.date|date:'EEEE dd-MMMM-yy'}}</h2>
+            <h2 class="nomargin">{{commande.date|date:'EEEE dd MMMM yyyy'}}</h2>
         </div>
         <div class="alert alert-danger" role="alert" ng-class="{hidden:!displayErreur}">
             {{messageErreur}}
@@ -97,38 +97,6 @@
                     <a role="tab" class="btn" ng-class="consultMagSelected(magasin.idMagasin)" >{{magasin.Nom}}</a>
                 </li>
             </ul>
-        </div>
-        </br>
-        <div class="row">
-            <div class="form-inline col-md-12">
-                <div class="form-group col-md-4">
-                    <label class="col-md-4">
-                        Cr&eacuteation
-                    </label>
-                    <div class="input-group col-md-8">
-                        <input ng-model="params.dateCreate" ng-change="refresh()" id="dpCreate" type="text" placeholder="Entrez une date" class="form-control">
-                        <span ng-click="params.dateCreate='';refresh()" class="input-group-addon glyphicon glyphicon-remove"></span>
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="col-md-4">
-                        R&eacuteception
-                    </label>
-                    <div class="input-group col-md-8">
-                        <input ng-model="params.dateLivraison" ng-change="refresh()" id="dpLivraison" type="text" placeholder="Entrez une date" class="form-control">
-                        <span ng-click="params.dateLivraison=''" class="input-group-addon glyphicon glyphicon-remove"></span>
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="col-md-4">
-                        # R&eacutesultats
-                    </label>
-                    <div class="input-group col-md-8">
-                        <input ng-model="params.nbrResult" ng-change="refresh()" type="number" placeholder="Entrez un nombre" class="form-control">
-                        <span ng-click="params.nbrResult=0" class="input-group-addon glyphicon glyphicon-remove"></span>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="col-md-12">
             <table class="table">
