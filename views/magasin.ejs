@@ -25,7 +25,10 @@
 <div id="wrapper" ng-controller="magasinController" class="h100">
     <div id="header" class="col-md-12">
         <div ng-class="{hidden:commande.date==''}" style="float:right">
-            <h2 class="nomargin">{{commande.date|date:'EEEE dd-MMMM-yy'}}</h2>
+            <h2 class="nomargin">{{commande.date|date:'EEEE dd MMMM yyyy'}}{{params_commandes.dateLivraison}}</h2>
+        </div>
+        <div ng-class="{hidden:params_commandes.dateLivraison==''}" style="float:right">
+            <h2 class="nomargin">{{params_commandes.dateLivraison| date:'EEEE dd MMMM yyyy'}}</h2>
         </div>
         <div class="alert alert-danger" role="alert" ng-class="{hidden:!displayErreur}">
             {{messageErreur}}
@@ -89,46 +92,15 @@
         </div>
         <!-- Select Commande -->
     <div ng-class="isActiveMenu('selectCommande')" class="h100">
-        <div class="h5">
+        <div class="h10">
             <ul class="nav nav-tabs nav-justified" role="tablist">
-                <li><a role="tab" class="btn btn-warning" ng-click="previous(activeMenu)">Précédent</a></li>
+                <li><a role="tab" class="btn btn-danger" ng-click="previous(activeMenu)">Retour</a></li>
+                <li><a role="tab" class="btn btn-warning" ng-click="params_commandes.date='';activeMenu = 'consult_date'">Choisir Date</a></li>
                 <li ng-repeat="magasin in magasins" ng-if="magasin.display == 1"
                     ng-click="selectedMagasins[magasin.idMagasin]=(!selectedMagasins[magasin.idMagasin]);refreshCommandes()">
                     <a role="tab" class="btn" ng-class="consultMagSelected(magasin.idMagasin)" >{{magasin.Nom}}</a>
                 </li>
             </ul>
-        </div>
-        </br>
-        <div class="row">
-            <div class="form-inline col-md-12">
-                <div class="form-group col-md-4">
-                    <label class="col-md-4">
-                        Cr&eacuteation
-                    </label>
-                    <div class="input-group col-md-8">
-                        <input ng-model="params.dateCreate" ng-change="refresh()" id="dpCreate" type="text" placeholder="Entrez une date" class="form-control">
-                        <span ng-click="params.dateCreate='';refresh()" class="input-group-addon glyphicon glyphicon-remove"></span>
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="col-md-4">
-                        R&eacuteception
-                    </label>
-                    <div class="input-group col-md-8">
-                        <input ng-model="params.dateLivraison" ng-change="refresh()" id="dpLivraison" type="text" placeholder="Entrez une date" class="form-control">
-                        <span ng-click="params.dateLivraison=''" class="input-group-addon glyphicon glyphicon-remove"></span>
-                    </div>
-                </div>
-                <div class="form-group col-md-4">
-                    <label class="col-md-4">
-                        # R&eacutesultats
-                    </label>
-                    <div class="input-group col-md-8">
-                        <input ng-model="params.nbrResult" ng-change="refresh()" type="number" placeholder="Entrez un nombre" class="form-control">
-                        <span ng-click="params.nbrResult=0" class="input-group-addon glyphicon glyphicon-remove"></span>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="col-md-12">
             <table class="table">
@@ -146,7 +118,7 @@
                 <th>Supprimer</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="commande in commandes" <!--ng-if="commande.display == 1"-->>
+                <tr ng-repeat="commande in commandes"><!-- ng-if="commande.display == 1">-->
                 <td>{{commande.idCommande}}</td>
                 <td>{{commande.Creation | date:'EEEE dd MMMM yyyy'}}</td>
                 <td>{{commande.Livraison | date:'EEEE dd MMMM yyyy'}}</td>
@@ -177,29 +149,29 @@
                 <tbody>
                     <tr ng-repeat="commande in fullcommandes | orderBy:'idCommande'">
                         <th scope="row" style="overflow: hidden">{{commande.idCommande}}</th>
-                        <td>
-                            <table class="table borderless">
+                        <td class="nopadding">
+                            <table class="table borderless nomargin">
                                 <tbody>
                                     <tr>
                                         <!--infoclient-->
                                         <td style="width: 25%;overflow: hidden">{{commande.heure}}h</td>
                                         <td style="width: 75%;overflow: hidden">{{commande.clientNom}}</td>
                                     </tr>
-                                    <tr>
+                                    <tr ng-if="commande.Remarque!=''">
                                         <td></td>
                                         <td style="overflow: hidden">{{commande.Remarque}}</td>
                                     </tr>
-                                    </tbody>
+                                </tbody>
                             </table>
                         </td>
-                        <td style="overflow: hidden">
-                            <table class="table borderless">
+                        <td class="nopadding" style="overflow: hidden">
+                            <table class="table borderless nomargin">
                                 <!-- produits -->
                                 <tr ng-repeat="p in commande.produits">
-                                    <th scope="row" style="width: 20%;overflow: hidden">{{p.Quantite}}</th>
+                                    <th scope="row" style="width: 15%;float:right;overflow: hidden">{{p.Quantite}}</th>
                                     <td style="width: 80%;overflow: hidden">{{p.produitNom}}</td>
                                 </tr>
-                                <tr><td></td></td><td>{{P.Detail}}</td></tr>
+                                <tr ng-if="p.Detail!=''"><td></td><td>{{p.Detail}}</td></tr>
                             </table>
                         </td>
                     </tr>

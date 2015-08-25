@@ -403,6 +403,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
         $scope.params_commandes.selectedMagasins = $scope.selectedMagasins;
         $http.post("get/commande", {params:$scope.params_commandes}).success(function(res){
             $scope.commandes = res;
+            console.log(res);
         });
     };
     $scope.delete = function(commande){};
