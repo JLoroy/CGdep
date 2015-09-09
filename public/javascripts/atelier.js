@@ -1,6 +1,6 @@
 var app = angular.module('atelier',[]);
 
-app.controller('MainController', function($scope, $rootScope, $http){
+app.controller('MainController', ['$scope', '$rootScope', '$http', '$window', function($scope, $rootScope, $http, $window){
     $scope.params = {
         dateLivraison: '',
         selectedCategories: {}
@@ -14,7 +14,15 @@ app.controller('MainController', function($scope, $rootScope, $http){
         var printContents = document.getElementById(divName).innerHTML;
         var popupWin = window.open('', '_blank', 'width=300,height=300');
         popupWin.document.open()
-        popupWin.document.write('<html><head><link rel="stylesheet" type="text/css" href="style.css" /></head><body onload="window.print()">' + printContents + '</html>');
+        popupWin.document.write('' +
+            '<html>' +
+            '<head><script src="/jquery.js"></script>' +
+            '<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js">' +
+            '</script><script src="https://code.angularjs.org/1.3.15/i18n/angular-locale_fr-be.js">' +
+            '<script src="/bootstrap/js/bootstrap.js"></script>' +
+            '<script src="javascripts/atelier.js"></script>' +
+            '</script><link href="/bootstrap/css/bootstrap.css" rel="stylesheet" /><link href="/stylesheets/style.css" rel="stylesheet" />' +
+            '</head><body onload="window.print()">' + printContents + '</html>');
         popupWin.document.close();
     };
 
@@ -63,4 +71,8 @@ app.controller('MainController', function($scope, $rootScope, $http){
             console.log(res);
         });
     };
-});
+
+    $scope.goToMagasin = function(){
+        $window.location.href = 'magasin';
+    }
+}]);

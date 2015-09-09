@@ -45,6 +45,11 @@
                         {{magasin.Nom}}
                     </a>
                 </li>
+                <li>
+                    <a ng-click="goToAtelier()" role="tab" class="btn-warning">
+                        Atelier
+                    </a>
+                </li>
             </ul>
 
             <!-- Tab panes -->
@@ -89,7 +94,7 @@
         </div>
         <!-- Select Commande -->
     <div ng-class="isActiveMenu('selectCommande')" class="h100">
-        <div class="h5">
+        <div class="h5 nomargintop">
             <ul class="nav nav-tabs nav-justified" role="tablist">
                 <li><a role="tab" class="btn btn-warning" ng-click="previous(activeMenu)">Précédent</a></li>
                 <li ng-repeat="magasin in magasins" ng-if="magasin.display == 1"
@@ -104,7 +109,6 @@
                 <th>#</th>
                 <th>Creation</th>
                 <th>Livraison</th>
-                <th>Prix</th>
                 <th>P/NP</th>
                 <th>Remarque</th>
                 <th>Client</th>
@@ -114,11 +118,10 @@
                 <th>Supprimer</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="commande in commandes" <!--ng-if="commande.display == 1"-->>
+                <tr ng-repeat="commande in commandes" ng-if="commande.display == 1">
                 <td>{{commande.idCommande}}</td>
                 <td>{{commande.Creation | date:'EEEE dd MMMM yyyy'}}</td>
                 <td>{{commande.Livraison | date:'EEEE dd MMMM yyyy'}}</td>
-                <td>{{commande.Montant}}</td>
                 <td>{{(commande.PNP==3)?'AFNP':(commande.PNP==2)?'AF':(commande.PNP==1)?'P':'NP'}}</td>
                 <td>{{commande.Remarque}}</td>
                 <td>{{commande.clientNom}}</td>
@@ -129,7 +132,7 @@
                 </tr>
                 </tbody>
             </table>
-            <a class="btn btn-lg btn-danger" ng-click="getPrint();activeMenu = 'consult_print';">PRINT</a>
+            <a class="btn btn-lg btn-danger" ng-click="getPrint();activeMenu = 'consult_print';">Plus de Details</a>
         </div>
     </div>
     <div ng-class="isActiveMenu('consult_print')">
@@ -183,7 +186,7 @@
 
     <div id="APPLICATION COMMANDE" ng-class="isActiveMenu('commande')" class="h100" >
         <!-- NAV -->
-        <div class="h5 nomargin">
+        <div class="h5">
             <ul class="nav nav-tabs nav-justified" role="tablist">
                 <li><a role="tab" class="btn btn-warning" ng-click="previous(activeMenu)">Précédent</a></li>
                 <li ng-click="setActiveMenu('date');">                                                          <a role="tab">      Date</a></li>
@@ -194,7 +197,7 @@
                 <li ng-class="{disabled:commande.montant==0}"       ng-click="setActiveMenu('payement');">      <a role="tab">      Payement</a></li>
                 <li ng-class="{disabled:commande.PNP=='null'}"      ng-click="setActiveMenu('recap');">         <a role="tab">      Recapitulatif</a></li>
                 <li ng-if="activeMenu != 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Suivant</a></li>
-                <li><a role="tab" class="btn btn-warning" ng-click="commandeDeTest()">COMMANDE DE TEST</a></li>
+                <li ng-if="false"><a role="tab" class="btn btn-warning" ng-click="commandeDeTest()">COMMANDE DE TEST</a></li>
                 <li ng-if="activeMenu == 'recap'"><a role="tab" class="btn btn-success" ng-click="sendCommande()">Envoyer la commande</a></li>
             </ul>
         </div>
@@ -269,9 +272,9 @@
                     </div>
                 </div>
 
-                <button type="button" class="form-group btn btn-lg btn-primary" ng-click="next('client');">Continuer</button>
+                <button type="button" class="form-group btn btn-lg btn-primary" ng-click="next('client');" style="float:right">Continuer</button>
             </form>
-            <button type="button" class="btn tbn-primary fr" ng-click="commande.client.Nom='Commande de Test';next('client');">Commande de Test</button>
+            <button ng-if="false" type="button" class="btn tbn-primary fr" ng-click="commande.client.Nom='Commande de Test';next('client');">Commande de Test</button>
         </div>
         <!-- CHOIX Produits -->
         <div class="h80" ng-class="isActiveMenu('produit')">
@@ -511,12 +514,17 @@
                     </form>
                     <button id="doPrint" class="btn btn-lg btn-primary col-md-1">Imprimer</button>
                 </div>
-            <div style="width:100%;"><a class="btn btn-lg btn-success">Envoyer la commande</a></div>
         </div>
     </div>
 
 
-
+    <div id="COMMANDE SENDING" ng-class="isActiveMenu('sendingCommande')" class ="h100">
+        <div class="sendingCommande col-md-offset-3 col-md-6">
+            <h2>{{sendingMessage}}</h2>
+            <a type="button" class="col-md-2 col-md-offset-1" ng-click="next('recap')" ng-if="sendingMessage=='La commande a bien &eacute;t&eacute; envoy&eacute;e'">Menu Principal</a>
+            <a type="button" class="col-md-2 col-md-offset-1"  ng-click="sendCommande()" ng-if="sendingMessage!='La commande a bien &eacute;t&eacute; envoy&eacute;e' && sendingMessage != 'Envoi en cours'">Réessayer</a>
+        </div>
+    </div>
 
 </div>
 </body>

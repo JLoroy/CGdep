@@ -46,25 +46,22 @@
                 <input class="form-control" type="checkbox" ng-model="params.selectedCategories[categorie.idCategorie]" ng-change="refresh()">{{categorie.Nom}}
             </label>
         </div>
-        <button type="button" class="btn btn-lg btn-primary col-md-1 col-md-offset-1" ng-click="printDiv('printable');">Imprimer</button>
+        <a type="button" class="btn btn-lg btn-warning col-md-1" ng-click="goToMagasin()">Magasin</a>
+        <button type="button" class="btn btn-lg btn-primary col-md-1" ng-click="printDiv('printable');">Imprimer</button>
         <div id="printable" hidden>
-            </br>
-            </br>
-            </br>
-            </br>
-            </br>
-            <table class="table" style="table-layout: fixed;">
-                <thead style="float:left; text-align:left">
-                <th style="width:350px">
+            <table class="table table-bordered" style="table-layout: fixed;">
+                <caption><h2>{{params.dateLivraison| date:'EEEE dd MMMM yyyy'}}</h2></caption>
+                <thead style="text-align:left;">
+                <th style="height:120px;width:30%">
                     Nom du produit
                 </th>
-                <th ng-repeat="magasin in magasins" style="width:50px !important;transform: rotate(-90deg);transform-origin: left top;">
-                    {{magasin.Nom}}
+                <th ng-repeat="magasin in magasins">
+                    <p  style="transform: rotate(-90deg);transform-origin: center;">{{magasin.Nom}}</p>
                 </th>
-                <th style="width:50px !important;transform: rotate(-90deg);transform-origin: left top;">
-                    Total
+                <th>
+                    <p style="transform: rotate(-90deg);transform-origin: center;">Total</p>
                 </th>
-                <th style="width:500px">
+                <th style="width:30%">
                     Details
                 </th>
                 </thead>
