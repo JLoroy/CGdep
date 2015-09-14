@@ -1,6 +1,6 @@
 var app = angular.module('magasin',[]);
 
-app.controller('magasinController', ['$scope', '$filter', '$http', function($scope, $filter, $http){
+app.controller('magasinController', ['$scope', '$filter', '$http', '$window', function($scope, $filter, $http, $window){
 
     //region Donnée
     $scope.magasins = {};
@@ -158,6 +158,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
             default:
                 tab='vendeuse';
         }
+        console.log(tab);
         $scope.activeMenu = tab;
 
     };
@@ -203,6 +204,9 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
         $scope.activeMenu = tab;
 
     };
+    $scope.goToAtelier = function(){
+        $window.location.href = 'atelier';
+    }
 
     //endregion
 
@@ -380,14 +384,21 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
 
     //region Envoi Commande
     $scope.sendCommande = function() {
+        $scope.sendingMessage = "Envoi en cours";
+        $scope.activeMenu = "sendingCommande";
         $scope.commande.Livraison = new Date(($scope.unDS($scope.commande.date)).setHours($scope.commande.heure));
         $scope.commande.Creation = new Date();
         console.log($scope.commande);
-        $http.post("/complex/commande", {params:$scope.commande}).success(function(res){
-            console.log("COMMANDE SUCCESSFUL")
-            $scope.init();
-            $scope.next('recap');
-        });
+        $http.post("/complex/commande", {params:$scope.commande}).then(
+            function(res){
+                console.log("COMMANDE SUCCESSFUL");
+                $scope.init();
+                $scope.sendingMessage = "La commande a bien &eacute;t&eacute; envoyée";
+            },
+            function(res){
+                console.log("COMMANDE FAILED");
+                $scope.sendingMessage = res;
+            });
     };
     //endregion
 
@@ -403,9 +414,14 @@ app.controller('magasinController', ['$scope', '$filter', '$http', function($sco
         $scope.params_commandes.selectedMagasins = $scope.selectedMagasins;
         $http.post("get/commande", {params:$scope.params_commandes}).success(function(res){
             $scope.commandes = res;
+            console.log($scope.commandes);
         });
     };
-    $scope.delete = function(commande){};
+    $scope.delete = function(toRem){
+        $http.post("remove/commande",{
+            toRemove: toRem
+        });
+    };
     $scope.modify = function(x){
         $http.post("complex/fullCommande", {params:{idCommande: x.idCommande}}).success(function(res){
             var vendeuse = $scope.commande.vendeuse;

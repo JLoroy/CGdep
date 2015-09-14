@@ -1,0 +1,94 @@
+Categorie
+-----------------------------
+idCategorie int
+Nom varchar45
+display int
+
+Client :
+-----------------------------
+idClient int
+Inscription datetime
+Mail text
+Tel varchar45
+Nom varchar45
+TVA varchar45
+
+Commande
+----------------------------
+idCommande int
+Creation datetime
+Livraison datetime
+Montant float
+PNP tinyint
+Remarque test
+Client_idClient --> int
+Vendeuse_idVendeuse --> int
+Terminal_idTerminal --> int
+display int
+
+Ferie
+---------------------------
+idFerie int
+date date
+
+Magasin
+--------------------------
+idMagasin int
+Nom varchar45
+Adresse text
+display int
+
+MotCustom
+-------------------------
+idMotCustom int
+Mot varchar45
+
+Produit
+-------------------------
+idProduit int
+Nom text
+Prix float
+Categorie_idCategorie --> int
+display int
+regroupement_idRegroupement --> int
+
+
+ProduitCommande
+-------------------------
+idProduitCommande int
+Quantite int
+Details text
+Commande_idCommande --> int
+Produit_idProduit --> int
+Custom tinyint
+ProduitCustom_idProduitCustom --> int
+
+
+ProduitCustom
+-------------------------
+idProduitCustom int
+Nom text
+Prix float
+Categorie_idCategorie --> int
+display int
+
+Terminal
+------------------------
+idTerminal int
+Magasin_idMagasin --> int
+Actif int
+
+Vendeuse
+-----------------------
+idVendeuse int
+Nom text
+Photo blob
+Magasin_idMagasin --> int
+display int
+
+regroupement
+-----------------------
+idRegroupement int
+Nom longtext
+Categorie_idCategorie --> int
+Display int

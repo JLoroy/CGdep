@@ -201,17 +201,21 @@ function com_commande(params, Terminal_idTerminal, Client_idClient){
         var query_delete_produitsCommandes = "DELETE FROM ProduitCommande WHERE Commande_idCommande = "+params.idCommande+";";
         var query_update_commande = "UPDATE Commande SET " +
             "Livraison = '"+Livraison+"',"+
-            "Montant = "+params.montant+","+
+            "Montant = '"+params.montant+"',"+
             "PNP = '"+params.PNP+"',"+
             "Remarque = '"+params.Remarque+"',"+
             "Client_idClient = '"+Client_idClient+"',"+
-            "Vendeuse.idVendeuse = '"+params.vendeuse.idVendeuse+"',"+
-            "Terminal.idTerminal = '"+Terminal_idTerminal+"';"
+            "Vendeuse_idVendeuse = '"+params.vendeuse.idVendeuse+"',"+
+            "Terminal_idTerminal = '"+Terminal_idTerminal+"'" +
+            " WHERE idCommande="+params.idCommande+";"
         //les deux d'un coup, oui oui
         debug(query_delete_produitsCommandes+query_update_commande);
-        connection.query(query_delete_produitsCommandes+query_update_commande , function(err, rows, fields) {
+        connection.query(query_delete_produitsCommandes, function(err, rows, fields) {
             if (err) throw err;
-            com_produitcommandes(params);
+            connection.query(query_update_commande, function(err, rows, fields) {
+                if (err) throw err;
+                com_produitcommandes(params);
+            });
         });
     }
     //ELSE new Command
@@ -293,7 +297,7 @@ exports.get = function(req, res){
     switch(req.params.type){
         case "commande":
             query = "SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, "+
-            "Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom "+
+            "Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom "+
             "FROM Commande "+
             "JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal "+
             "JOIN Client ON Commande.Client_idClient=Client.idClient "+
@@ -315,7 +319,7 @@ exports.get = function(req, res){
             query = "SELECT * FROM Categorie;";
             break;
         case "magasin":
-            query = "SELECT * FROM Magasin;";
+            query = "SELECT * FROM Magasin WHERE display = 1;";
             break;
         case "vendeuse":
             query = "SELECT * FROM Vendeuse WHERE " + (params.Nom?"Vendeuse.Nom LIKE '%" + params.Nom + "%' ":"")+select_query(params.selectedMagasins,"Vendeuse.Magasin_idMagasin");
@@ -409,6 +413,9 @@ exports.remove = function(req, res){
         case "ferie":
             query = "DELETE FROM Ferie WHERE Ferie.idFerie = "+rem.idFerie+";";
             break;
+        case "commande":
+            query = "UPDATE Commande SET display = 0 WHERE idCommande = '"+rem.idCommande+"';";
+            break;
         default:
             console.log("Supression d'un type inconnu : "+req.params.type);
     }
@@ -470,8 +477,7 @@ exports.complex = function(req, res){
                 "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal "+
                 "JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin "+
                 "WHERE "+select_query(params.selectedCategories,"Produit.Categorie_idCategorie");
-            if(params.dateLivraison) query = query + " AND Commande.Livraison LIKE '" + params.dateLivraison + "%'";
-            console.log("complex 1 : "+query);
+            if(params.dateLivraison) query = query + "AND Commande.display = 1 AND Commande.Livraison LIKE '" + params.dateLivraison + "%'";
             connection.query(query , function(errP, rowsP, fields) {
                 if (errP) throw errP;
                 query = "SELECT ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.ProduitCustom_idProduitCustom, "+
@@ -482,12 +488,11 @@ exports.complex = function(req, res){
                     "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal " +
                     "JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin "+
                     "WHERE "+select_query(params.selectedCategories,"ProduitCustom.Categorie_idCategorie");
-                if(params.dateLivraison) query = query + " AND Commande.Livraison LIKE '" + params.dateLivraison + "%'";
+                if(params.dateLivraison) query = query + "AND Commande.display = 1 AND Commande.Livraison LIKE '" + params.dateLivraison + "%'";
                 console.log("complex 2 : "+query);
                 connection.query(query , function(errC, rowsC, fields) {
                     if (errC) throw errC;
                     var result = refactorProduitCommande(rowsP, rowsC);
-                    console.log(result);
                     res.send(result);
                 });
             });
@@ -515,7 +520,7 @@ exports.complex = function(req, res){
                 vendeuse: '',
                 (idCommande: '')
             }*/
-            /*BON, c'est moche mais ça va le faire. A cause de l'asynchronisme, on est obligés de faire des appels imbriqués. Voilà la structure du code :
+            /*BON, ça va le faire. A cause de l'asynchronisme, on est obligés de faire des appels imbriqués. Voilà la structure du code :
              * INSERT Mots{}
              * INSERT Client{
              *       INSERT Commande{
@@ -530,7 +535,7 @@ exports.complex = function(req, res){
             //todo
             //newMots(params);
 
-            var term = 1;//req.session.data.terminal.idTerminal;
+            var term = req.session.data.terminal.idTerminal;
             com_client(params, term);
             res.send('ok');
             //endregion
@@ -553,7 +558,7 @@ exports.complex = function(req, res){
                             var indice = 0;
                             for(var v = 0; v < vendeuses.length; v++){
                                 vend = vendeuses[v];
-                                if(vend.display == 1){
+                                if(vend.display == 1 && vend.Magasin_idMagasin == mag.idMagasin){
                                     i = indice/n_by_row |0;
                                     j = indice % n_by_row;
                                     if(j == 0) vendByMag[mag.idMagasin][i] = {};
@@ -561,6 +566,8 @@ exports.complex = function(req, res){
                                     indice++;
                                 }
                             }
+
+
                         }
                     }
                     res.send({
@@ -610,8 +617,6 @@ exports.complex = function(req, res){
                             if(prod.display == 1){
                                 if(prod.regroupement_idRegroupement){
                                     var idGrp = prod.regroupement_idRegroupement;
-                                    debug(orderGrp);
-                                    debug(idGrp);
                                     produitTable[idCateg].row[orderGrp[idGrp].i][orderGrp[idGrp].j].produits.push(prod);
                                 } else {
                                     var indice = produitTable[idCateg].indice;
@@ -680,7 +685,6 @@ exports.complex = function(req, res){
                         "ProduitCustom.Nom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie FROM ProduitCommande "+
                         "JOIN ProduitCustom ON ProduitCommande.ProduitCustom_idProduitCustom = idProduitCustom WHERE ?", {Commande_idCommande:params.idCommande}, function(err,customs){
                         if(err) throw err;
-                        debug(customs);
                         for(var i = 0; i<customs.length; i++){
                             commande.produits.push({
                                 prod: {

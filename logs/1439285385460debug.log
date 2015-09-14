@@ -1,0 +1,659 @@
+get/magasin : SELECT * FROM Magasin;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%';
+get/category : SELECT * FROM Categorie;
+get/regroupement : SELECT * FROM regroupement;
+get/category : SELECT * FROM Categorie;
+get/magasin : SELECT * FROM Magasin;
+get/magasin : SELECT * FROM Magasin;
+get/vendeuse : SELECT * FROM Vendeuse WHERE (FALSE OR TRUE)
+get/magasin : SELECT * FROM Magasin;
+get/terminal : SELECT * FROM Terminal;
+get/ferie : SELECT * FROM Ferie;
+get/custom : SELECT * FROM ProduitCustom WHERE(FALSE OR TRUE);
+get/category : SELECT * FROM Categorie;
+complex
+get/category : SELECT * FROM Categorie;
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-12%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+{ Livraison: '2015-08-12' }
+2015-08-12
+complex PRINT 1 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque,Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.Produit_idProduit, Produit.Nom AS produitNom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin  FROM ProduitCommande JOIN Produit ON ProduitCommande.Produit_idProduit = idProduit JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-08-12%' AND Magasin.idMagasin = 1;
+complex PRINT 2 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque,Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.ProduitCustom_idProduitCustom, ProduitCustom.Nom AS produitNom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, Terminal.Magasin_idMagasin FROM ProduitCommande JOIN ProduitCustom ON ProduitCommande.ProduitCustom_idProduitCustom = idProduitCustom JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-08-12%' AND Magasin.idMagasin = 1;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-22%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-19%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-14%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-08-14%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-08-14%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-08-20%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-13%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+{ Livraison: '2015-08-13' }
+2015-08-13
+complex PRINT 1 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque,Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.Produit_idProduit, Produit.Nom AS produitNom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin  FROM ProduitCommande JOIN Produit ON ProduitCommande.Produit_idProduit = idProduit JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-08-13%' AND Magasin.idMagasin = 1;
+complex PRINT 2 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque,Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.ProduitCustom_idProduitCustom, ProduitCustom.Nom AS produitNom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, Terminal.Magasin_idMagasin FROM ProduitCommande JOIN ProduitCustom ON ProduitCommande.ProduitCustom_idProduitCustom = idProduitCustom JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-08-13%' AND Magasin.idMagasin = 1;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-13%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+{ Livraison: '2015-08-13' }
+2015-08-13
+complex PRINT 1 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque,Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.Produit_idProduit, Produit.Nom AS produitNom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin  FROM ProduitCommande JOIN Produit ON ProduitCommande.Produit_idProduit = idProduit JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-08-13%' AND Magasin.idMagasin = 1;
+complex PRINT 2 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque,Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.ProduitCustom_idProduitCustom, ProduitCustom.Nom AS produitNom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, Terminal.Magasin_idMagasin FROM ProduitCommande JOIN ProduitCustom ON ProduitCommande.ProduitCustom_idProduitCustom = idProduitCustom JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-08-13%' AND Magasin.idMagasin = 1;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-13%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+{ Livraison: '2015-08-13' }
+2015-08-13
+complex PRINT 1 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque,Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.Produit_idProduit, Produit.Nom AS produitNom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin  FROM ProduitCommande JOIN Produit ON ProduitCommande.Produit_idProduit = idProduit JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-08-13%' AND Magasin.idMagasin = 1;
+complex PRINT 2 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque,Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.ProduitCustom_idProduitCustom, ProduitCustom.Nom AS produitNom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, Terminal.Magasin_idMagasin FROM ProduitCommande JOIN ProduitCustom ON ProduitCommande.ProduitCustom_idProduitCustom = idProduitCustom JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-08-13%' AND Magasin.idMagasin = 1;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-13%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+{ Livraison: '2015-08-13' }
+2015-08-13
+complex PRINT 1 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque,Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.Produit_idProduit, Produit.Nom AS produitNom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin  FROM ProduitCommande JOIN Produit ON ProduitCommande.Produit_idProduit = idProduit JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-08-13%' AND Magasin.idMagasin = 1;
+complex PRINT 2 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque,Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.ProduitCustom_idProduitCustom, ProduitCustom.Nom AS produitNom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, Terminal.Magasin_idMagasin FROM ProduitCommande JOIN ProduitCustom ON ProduitCommande.ProduitCustom_idProduitCustom = idProduitCustom JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-08-13%' AND Magasin.idMagasin = 1;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-13%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-09-04%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-09-04%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-13%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-14%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-13%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+1
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+2
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+3
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+{ '1': { i: 0, j: 0 },
+  '2': { i: 0, j: 1 },
+  '3': { i: 0, j: 2 },
+  '4': { i: 0, j: 3 } }
+4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-08-13%' ORDER BY Commande.Creation DESC LIMIT 0,20

@@ -3,7 +3,13 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('atelier', {});
+  sess = req.session;
+
+  if(sess.data){
+    res.render('atelier', {session: sess.data});
+  } else {
+    res.render('atelier', {});
+  }
 });
 
 module.exports = router;

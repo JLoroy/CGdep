@@ -168,11 +168,14 @@ app.controller('VendeuseController', function($scope, $http){
     };
     $scope.add = function(){
         //todo rajouter cette ligne dans les autres controllers
-        if($scope.new.Nom & $scope.new.Magasin_idMagasin) {
+        if($scope.new.Nom && $scope.new.Magasin_idMagasin) {
             $http.post("add/vendeuse", {
                 new: $scope.new
             });
             $scope.new = {};
+        }
+        else{
+            console.log('pas possible')
         }
         //todo : le else
     };
