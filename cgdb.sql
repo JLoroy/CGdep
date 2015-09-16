@@ -402,7 +402,7 @@ ADD INDEX `categorie_idx` (`Categorie_idCategorie` ASC)  COMMENT '';
 ALTER TABLE `cgdb`.`regroupement`
 ADD CONSTRAINT `categorie`
   FOREIGN KEY (`Categorie_idCategorie`)
-  REFERENCES `cgdb`.`categorie` (`idCategorie`)
+  REFERENCES `cgdb`.`Categorie` (`idCategorie`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
