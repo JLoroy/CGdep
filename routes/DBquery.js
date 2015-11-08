@@ -75,7 +75,8 @@ var refactorConsultationPrint = function(produits, customs){
                 heure: h,
                 clientNom: p.clientNom,
                 Remarque: p.Remarque,
-                produits:[]
+                produits:[],
+                display: p.display
             };
         }
         result[p.idCommande].produits.push({
@@ -117,16 +118,16 @@ function newMots(params){
             //new word?
             var p = params.produits[indice];
             p.commentaire.split(' ').some(function(mot){
-                //si le mot n'est pas déjà dans le dico, le rajouter
+                //si le mot n'est pas dï¿½jï¿½ dans le dico, le rajouter
                 if(!(oldMots[mot]) && mot!=''){
                     newMots[mot]=mot;
                     thereAreNewWords = true;
                 }
             })
         }
-        //pour la remarque générale aussi :
+        //pour la remarque gï¿½nï¿½rale aussi :
         params.Remarque.split(' ').some(function(mot){
-            //si le mot n'est pas déjà dans le dico, le rajouter
+            //si le mot n'est pas dï¿½jï¿½ dans le dico, le rajouter
             if(!(oldMots[mot])&& mot!=''){
                 newMots[mot]=mot;
             }
@@ -156,7 +157,7 @@ function com_client(params, idTerminal){
     // Client ( idClient, Inscription, Mail, Tel, Nom, TVA, display)
     var Client_idClient = 1;
 
-    //1) on check si le client existe déjà (sur base du numéro de tel)
+    //1) on check si le client existe dï¿½jï¿½ (sur base du numï¿½ro de tel)
     var query_client = "SELECT * FROM Client WHERE Nom='"+params.client.Nom+"';";
     connection.query(query_client , function(err, rows, fields) {
         if (err) throw err;
@@ -170,7 +171,7 @@ function com_client(params, idTerminal){
             com_commande(params, idTerminal, Client_idClient);
         }
         else{
-            //3) sinon, on le crée
+            //3) sinon, on le crï¿½e
             /*                    var query_insert_client = "INSERT INTO Client(Inscription, Mail, Tel, Nom, TVA) VALUES ('"+ connection.escape(new Date())+"','"+params.client.Mail+"','"+params.client.Tel+"','"+params.client.Nom+"','"+params.client.TVA+"');";
              debug(query_insert_client);
              connection.query(query_insert_client , function(err, rows, fields) {if (err) throw err;});*/
@@ -260,7 +261,7 @@ function com_produitcommandes(params){
                         Custom:0
                     }, function(err,rows,fields){
                         if (err) throw err;
-                        debug(p.prod.Nom+" ajouté");
+                        debug(p.prod.Nom+" ajoutï¿½");
                     })
                 });
             }
@@ -520,7 +521,7 @@ exports.complex = function(req, res){
                 vendeuse: '',
                 (idCommande: '')
             }*/
-            /*BON, ça va le faire. A cause de l'asynchronisme, on est obligés de faire des appels imbriqués. Voilà la structure du code :
+            /*BON, ï¿½a va le faire. A cause de l'asynchronisme, on est obligï¿½s de faire des appels imbriquï¿½s. Voilï¿½ la structure du code :
              * INSERT Mots{}
              * INSERT Client{
              *       INSERT Commande{
@@ -534,8 +535,11 @@ exports.complex = function(req, res){
 
             //todo
             //newMots(params);
-
-            var term = req.session.data.terminal.idTerminal;
+            var term = 1;
+            if(req.session.data){
+                term = req.session.data.terminal.idTerminal;
+            console.log(req.session.data.terminal.idTerminal);
+            }
             com_client(params, term);
             res.send('ok');
             //endregion
@@ -656,15 +660,17 @@ exports.complex = function(req, res){
                         Nom: rows[0].clientNom,
                         Tel: rows[0].Tel,
                         Mail: rows[0].Mail,
-                        TVA: rows[0].TVA},
-                    produits: [], //todo
+                        TVA: rows[0].TVA
+                    },
+                    produits: [],
                     Remarque: rows[0].Remarque,
                     PNP: rows[0].PNP,
                     montant: rows[0].Montant
+                    //todo vendeuse !!!
                 };
 
 
-                //ensuite, on chope tous les produits commandés et tous les produits custom
+                //ensuite, on chope tous les produits commandï¿½s et tous les produits custom
                 connection.query("SELECT ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.Produit_idProduit, "+
                     "Produit.Nom, Produit.idProduit, Produit.Categorie_idCategorie FROM ProduitCommande "+
                     "JOIN Produit ON ProduitCommande.Produit_idProduit = idProduit WHERE ?", {Commande_idCommande:params.idCommande}, function(err,produits){
@@ -713,7 +719,7 @@ exports.complex = function(req, res){
             var activeMag  = req.session.data.magasin.idMagasin;
             var query = "";
             debug(Livraison);
-            query = "SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque," +
+            query = "SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, " +
                 "Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom," +
                 "Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.Produit_idProduit, "+
                 "Produit.Nom AS produitNom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin " +
@@ -724,11 +730,11 @@ exports.complex = function(req, res){
                 "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal "+
                 "JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin "+
                 "JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse "+
-                "WHERE Commande.Livraison LIKE '" + Livraison + "%' AND Magasin.idMagasin = "+activeMag+";";
+                "WHERE Commande.Livraison LIKE '" + Livraison + "%' AND "+select_query(params.selectedMagasins,"Terminal.Magasin_idMagasin");
             debug("complex PRINT 1 : "+query);
             connection.query(query , function(errP, rowsP, fields) {
                 if (errP) throw errP;
-                query = "SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque," +
+                query = "SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, " +
                     "Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom," +
                     "Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.ProduitCustom_idProduitCustom, "+
                     "ProduitCustom.Nom AS produitNom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, " +
@@ -760,22 +766,24 @@ exports.complex = function(req, res){
             break;
         case "addRegroupement":
             //params = {Nom:Nom, Categorie_idCategorie:id, produits:[]}
-            connection.query("INSERT INTO regroupement SET ?", {Nom:params.Nom,Categorie_idCategorie:params.Categorie_idCategorie}, function(err, rows){
+            connection.query("INSERT INTO regroupement(Nom, Categorie_idCategorie) VALUES('"+params.Nom+"','"+ params.Categorie_idCategorie+"');", function(err, rows){
                 if (err) throw err;
                 for(var i = 0; i<params.produits.length; i++){
-                    connection.query('UPDATE Produit SET regroupement_idRegroupement ='+res.insertId+' WHERE idProduit='+params.produits[i].idProduit,function(err,rows){
+                    connection.query('UPDATE Produit SET regroupement_idRegroupement ='+rows.insertId+' WHERE idProduit='+params.produits[i].idProduit,function(err,rows){
                         if (err) throw err;
                     });
                 }
+                res.end();
             });
             break;
         case "removeRegroupement":
             //params = {idRegroupement:idRegroupement}
             connection.query("UPDATE regroupement SET display=0 WHERE idRegroupement="+params.idRegroupement, function(err, rows){
                 if(err) throw err;
-            });
-            connection.query("UPDATE Produit SET regroupement_idRegroupement='NULL' WHERE regroupement_idRegroupement="+params.idRegroupement, function(err, rows){
-                if(err) throw err;
+                connection.query("UPDATE Produit SET regroupement_idRegroupement=NULL WHERE regroupement_idRegroupement="+params.idRegroupement, function(err, rows){
+                    if(err) throw err;
+                    res.end();
+                });
             });
             break;
         case "modifyRegroupement":

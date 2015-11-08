@@ -24,6 +24,7 @@
 <body ng-app="magasin" class="h100">
 <div id="wrapper" ng-controller="magasinController" class="h100">
     <div id="header" class="col-md-12">
+        <div ng-if="false"><h1>SI VOUS LISEZ CECI C EST QUE LE TERMINAL EST DECONNECTE DE INTERNET. VEUILLEZ VOUS RECONNECTER OU APPELLER JUSTIN AU 0475/54.75.54</h1></div>
         <div ng-class="{hidden:commande.date==''}" style="float:right">
             <h2 class="nomargin">{{commande.date|date:'EEEE dd MMMM yyyy'}}</h2>
         </div>
@@ -57,10 +58,10 @@
                 <table id="mag{{mag_v.idMagasin}}" ng-repeat="mag_v in vendByMag"
                        class="table table-bordered tab-pane form-control" ng-class="isActiveMag(mag_v.idMagasin)">
                     <tr ng-repeat="row_v in mag_v">
-                        <td ng-repeat="v in row_v" class="form-group-lg vcenter" style="max-width: 100% !important; max-height:70% !important;">
-                            <a ng-click="selectVendeuse(v);next('vendeuse')">
-                                <h4>{{v.Nom}}</h4>
-                                <img src="/default.jpg" class="center-block" style="max-width: 100% !important; max-height:70% !important;">
+                        <td ng-repeat="v in row_v" class="form-group-lg vcenter" style="vertical-align: middle;">
+                            <a id="vend{{v.idVendeuse}}" ng-click="selectVendeuse(v);next('vendeuse')"  style="">
+                                <img src="/vendeuses/{{imageVendeuse(v.idVendeuse)}}.jpg" class="center-block"  style="max-width:470px;max-height:150px;">
+                                <h4 style="background-color: white;text-align:center;position:relative;bottom:10px;">{{v.Nom}}</h4>
                             </a>
                         </td>
                     </tr>
@@ -94,7 +95,7 @@
         </div>
         <!-- Select Commande -->
     <div ng-class="isActiveMenu('selectCommande')" class="h100">
-        <div class="h5 nomargintop">
+        <div id="selectionMagasin" class="h5 nomargintop">
             <ul class="nav nav-tabs nav-justified" role="tablist">
                 <li><a role="tab" class="btn btn-warning" ng-click="previous(activeMenu)">Précédent</a></li>
                 <li ng-repeat="magasin in magasins" ng-if="magasin.display == 1"
@@ -103,36 +104,65 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-12">
+        <div id="tableauCommandes" ng-class="{'col-md-12':!detailCommandeIsOn, 'col-md-9':detailCommandeIsOn}">
+            <input type="text" ng-model="consultClient" placeholder="Nom du Client">
             <table class="table">
                 <thead>
-                <th>#</th>
-                <th>Creation</th>
-                <th>Livraison</th>
-                <th>P/NP</th>
-                <th>Remarque</th>
-                <th>Client</th>
-                <th>Vendeuse</th>
-                <th>Magasin</th>
-                <th>Modifier</th>
-                <th>Supprimer</th>
+                    <th>N°</th>
+                    <th>Client</th>
+                    <th>P/NP</th>
+                    <th>Heure</th>
+                    <th>Magasin</th>
+                    <th>Vendeuse</th>
+                    <th>Creation</th>
+                    <th>Livraison</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="commande in commandes" ng-if="commande.display == 1">
-                <td>{{commande.idCommande}}</td>
-                <td>{{commande.Creation | date:'EEEE dd MMMM yyyy'}}</td>
-                <td>{{commande.Livraison | date:'EEEE dd MMMM yyyy'}}</td>
-                <td>{{(commande.PNP==3)?'AFNP':(commande.PNP==2)?'AF':(commande.PNP==1)?'P':'NP'}}</td>
-                <td>{{commande.Remarque}}</td>
-                <td>{{commande.clientNom}}</td>
-                <td>{{commande.vendeuseNom}}</td>
-                <td>{{commande.magasinNom}}</td>
-                <td><button class="btn btn-primary" ng-click="modify(commande);">Modifier</button></td>
-                <td><button class="btn btn-danger" ng-click="delete(commande);refreshCommandes();">Supprimer</button></td>
+                <tr ng-repeat="commande in commandes" ng-class="{info:det_com.idCommande == commande.idCommande}" ng-if="filter(commande)"  ng-click="details(commande);">
+                    <td>{{commande.idCommande}}</td><td>{{commande.clientNom}}</td>
+                    <td>{{(commande.PNP==3)?'AFNP':(commande.PNP==2)?'AF':(commande.PNP==1)?'P':'NP'}}</td>
+                    <td>{{commande.Livraison | date:'HH'}}h</td>
+                    <td>{{commande.magasinNom}}</td>
+                    <td>{{commande.vendeuseNom}}</td>
+                    <td>{{commande.Creation | date:'EEEE dd MMMM yyyy'}}</td>
+                    <td>{{commande.Livraison | date:'dd/MM'}}</td>
                 </tr>
                 </tbody>
             </table>
-            <a class="btn btn-lg btn-danger" ng-click="getPrint();activeMenu = 'consult_print';">Plus de Details</a>
+            <a class="btn btn-lg btn-danger" ng-click="getPrint();activeMenu = 'consult_print';">Imprimer</a>
+        </div>
+        <div id="DetailCommande" class="col-md-3" ng-if="detailCommandeIsOn" >
+                <div class="detail-content">
+                    <div class="detail-body">
+                        <h2 class="col-md-12">Detail de la commande : </h2>
+                        <div  class="col-md-12">
+                                <label class="col-md-1">Nom:</label>
+                                <div class="col-md-offset-1 col-md-10"><p>{{det_com.client.Nom}}</p></div>
+                            </div>
+                        <div class="col-md-12">
+                                <label class="col-md-1">Tel:</label>
+                                <div class="col-md-offset-1 col-md-10"><p>{{det_com.client.Tel}}</p></div>
+                        </div>
+                        <div class="col-md-12">
+                                <label class="col-md-1">Remarque:</label>
+                                <div><p style="width:400px;text-overflow: ellipsis;overflow:hidden;">{{det_com.Remarque}}</p></div>
+                        </div>
+                        <table class="table table-condensed">
+                            <thead><th>produit</th><th>quantité</th><th>remarque</th></thead>
+                            <tbody><tr ng-repeat="produit in det_com.produits">
+                                <td>{{produit.prod.Nom}}</td>
+                                <td>{{produit.qty}}</td>
+                                <td>{{produit.commentaire}}</td>
+                            </tr></tbody>
+                        </table>
+                    </div>
+                    <div class="detail-footer">
+                        <a type="button" class="btn btn-warning" ng-click="noDetails()" >Fermer</a>
+                        <!--<a type="button" class="btn btn-success" ng-click="detailCommandeIsOn = false;" >Valider</a>-->
+                        <a type="button" class="btn btn-primary" ng-click="modify(det_com);" >Modifier</a>
+                        <a type="button" class="btn btn-danger" ng-click="delete(det_com);" >Supprimer</a>
+                    </div>
+                </div>
         </div>
     </div>
     <div ng-class="isActiveMenu('consult_print')">
@@ -146,7 +176,7 @@
                     <th style="width: 45%">Produits</th>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="commande in fullcommandes | orderBy:'idCommande'">
+                    <tr ng-repeat="commande in fullcommandes | orderBy:'idCommande'" ng-if="commande.display == 1">
                         <th scope="row" style="overflow: hidden">{{commande.idCommande}}</th>
                         <td>
                             <table class="table borderless">
@@ -157,7 +187,7 @@
                                         <td style="width: 75%;overflow: hidden">{{commande.clientNom}}</td>
                                     </tr>
                                     <tr>
-                                        <td></td>
+                                        <td>Display : {{commande.display}}</td>
                                         <td style="overflow: hidden">{{commande.Remarque}}</td>
                                     </tr>
                                     </tbody>
@@ -242,7 +272,7 @@
         <!-- CHOIX CLIENT -->
         <div class="h80" ng-class="isActiveMenu('client')">
             <form id="clientForm" role="form" class="form-horizontal">
-                <div class="patch-zoom-bug form-group">
+                <div class="form-group">
                     <label for="clientNom" class="col-md-2 control-label">Nom</label>
                     <div class="col-md-6" style="width:980px !important;">
                         <input type="text" class="form-control dropdown-toggle" data-toggle="dropdown" ng-model="commande.client.Nom" ng-change="getClients()" aria-haspopup="true" aria-expanded="false">
@@ -271,14 +301,18 @@
                         <input id="clientTVA" ng-model="commande.client.TVA" type="number" max="9999999999" class="form-control">
                     </div>
                 </div>
-
-                <button type="button" class="form-group btn btn-lg btn-primary" ng-click="next('client');" style="float:right">Continuer</button>
+                <div class="form-group">
+                    <label class="col-md-2 control-label"></label>
+                    <div class=" input-group col-md-6" style="padding-right:14px !important; padding-left:14px !important;">
+                        <button type="button" class="btn btn-lg btn-primary" ng-click="next('client');" style="float:right">Continuer</button>
+                    </div>
+                </div>
             </form>
             <button ng-if="false" type="button" class="btn tbn-primary fr" ng-click="commande.client.Nom='Commande de Test';next('client');">Commande de Test</button>
         </div>
         <!-- CHOIX Produits -->
         <div class="h80" ng-class="isActiveMenu('produit')">
-            <div class="col-md-4" style="border-right: 1px solid gray;">
+            <div id="ProduitsSelectionnes" class="col-md-4" style="border-right: 1px solid gray;">
                 <form role="form">
                     <div class="form-group">
                         <label for="listProduit" class="control-label">Produits</label>
@@ -309,8 +343,8 @@
                     </div>-->
                 </form>
             </div>
-            <div class="col-md-8" style="border-left: 1px solid gray; margin-left: -1px;padding-left:0px !important;padding-right:0px !important;">
-                <div class="col-md-2" style="padding-top:10px !important;">
+            <div id="TableauProduits" class="col-md-8" style="border-left: 1px solid gray; margin-left: -1px;padding-left:0px !important;padding-right:0px !important;">
+                <div id="SelectionCategorie" class="col-md-2" style="padding-top:10px !important;">
                     <div class="col-md-12" style="padding-top:5px !important;padding-left:0px !important;padding-right:0px !important;">
                         <button ng-repeat="category in categories" ng-if="category.display == 1" role="tab" data-toggle="tab"
                                 class="btn btn-block btn-lg" style="height:90px !important;" ng-class="buttonCategorie(category.idCategorie)"
@@ -319,7 +353,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="tab-content col-md-10" id="produitBtnDiv" ng-repeat="category in produitTable" >
+                <div id="TableauCategorie" class="tab-content col-md-10" id="produitBtnDiv" ng-repeat="category in produitTable" >
                     <div class="tab-pane" ng-class="tabCategorie(category.idCategorie)">
                         <table class="table table-bordered col-md-12 table-condensed">
                             <tr ng-repeat="row_p in category.row">
@@ -331,7 +365,7 @@
                     </div>
                 </div>
                 <!-- MODAL produit Quantite-->
-                <div class="modal fade"  data-backdrop="static" keyboard="false" role="dialog" and aria-labelledby="modalProduit" id="modalProduit" tabindex="-1" role="dialog">
+                <div id="modalProduit" class="modal fade"  data-backdrop="static" keyboard="false" role="dialog" and aria-labelledby="modalProduit" id="modalProduit" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content" ng-if="modal.mode == 'grp'">
                             <div class="modal-body form-group">
@@ -373,7 +407,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-offset-3 col-md-6">
+                <div id="ProduitPerso" class="col-md-offset-3 col-md-6">
 
                     <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#modalProduit"
                             ng-click="openModalProduit({Nom:'', Categorie_idCategorie:'', Prix:1,custom:true},1,'custom','');">Produit personnalis&eacute...</button>
@@ -389,8 +423,14 @@
                             <textarea class="typeahead form-control" ng-model="commande.Remarque" id="comcom" rows="10" placeholder="Commentaire général"></textarea>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label"></label>
+                        <div class=" input-group col-md-6" style="padding-right:14px !important; padding-left:14px !important;">
+                            <button type="button" class="btn btn-lg btn-primary" ng-click="next('commentaire');" style="float:right">Continuer</button>
+                        </div>
+                    </div>
                 </form>
-            <button type="button" class="btn tbn-primary" ng-click="next('commentaire');">Suivant (Payement)</button>
         </div>
         <!-- CHOIX payement-->
         <div class="h80" ng-class="isActiveMenu('payement')">
@@ -521,8 +561,9 @@
     <div id="COMMANDE SENDING" ng-class="isActiveMenu('sendingCommande')" class ="h100">
         <div class="sendingCommande col-md-offset-3 col-md-6">
             <h2>{{sendingMessage}}</h2>
-            <a type="button" class="col-md-2 col-md-offset-1" ng-click="next('recap')" ng-if="sendingMessage=='La commande a bien &eacute;t&eacute; envoy&eacute;e'">Menu Principal</a>
-            <a type="button" class="col-md-2 col-md-offset-1"  ng-click="sendCommande()" ng-if="sendingMessage!='La commande a bien &eacute;t&eacute; envoy&eacute;e' && sendingMessage != 'Envoi en cours'">Réessayer</a>
+            <a type="button" class="col-md-4 col-md-offset-1" ng-click="next('recap')" ng-if="sendingMessage=='La commande a bien &eacute;t&eacute; envoy&eacute;e'"><h2>Menu Principal</h2></a>
+            <a type="button" class="col-md-4 col-md-offset-1"  ng-click="sendCommande()" ng-if="sendingMessage!='La commande a bien &eacute;t&eacute; envoy&eacute;e' && sendingMessage != 'Envoi en cours'"><h2>Réessayer?</h2></a>
+            <span ng-if="sendingMessage!='La commande a bien &eacute;t&eacute; envoy&eacute;e' && sendingMessage != 'Envoi en cours'"><h2>Appellez Justin au 0475/54.75.54</h2></span>
         </div>
     </div>
 

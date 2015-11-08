@@ -147,9 +147,10 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
                 break;
             case 'commentaire':
                 tab='payement';
+                console.log($scope.commande.PNP);
                 break;
             case 'payement':
-                if($scope.commande.pnp!='null')tab='recap';
+                if($scope.commande.PNP!='null')tab='recap';
                 else $scope.erreur("Payement non valide");
                 break;
             case 'recap':
@@ -282,6 +283,21 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
     $scope.selectVendeuse = function(v){
         $scope.commande.vendeuse = v;
     };
+    $scope.imageVendeuse = function(id){
+        var available = {
+            1:"perrine",
+            2:"sarah",
+            3:"emilieB",
+            4:"emilieV",
+            5:"audrey",
+            12:"romane"
+        };
+        if(available[id]){
+            console.log("vendeuse found");
+            return available[id];
+        }
+        return "default";
+    }
     //endregion
 
     //region Menu
@@ -389,20 +405,21 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
         $scope.commande.Livraison = new Date(($scope.unDS($scope.commande.date)).setHours($scope.commande.heure));
         $scope.commande.Creation = new Date();
         console.log($scope.commande);
-        $http.post("/complex/commande", {params:$scope.commande}).then(
+        $http.post("/complex/commande", {params:$scope.commande}).success(
             function(res){
                 console.log("COMMANDE SUCCESSFUL");
                 $scope.init();
-                $scope.sendingMessage = "La commande a bien &eacute;t&eacute; envoyée";
-            },
+                $scope.sendingMessage = "La commande a bien ete envoyee, mais elle a ete comptee pour le magasin de thorembais. Veuillez modifier la commande dans le menu consulation. Appuyez sur F5 pour vous reconnecter";
+            }).error(
             function(res){
                 console.log("COMMANDE FAILED");
-                $scope.sendingMessage = res;
+                $scope.sendingMessage = "Probleme de connexion..." +res;
             });
     };
     //endregion
 
     //region Consultation
+    $scope.consultClient = "";
     $scope.consultDate = function(date){
         var d = new Date(date);
         d = $filter('date')(d, 'yyyy-MM-dd');
@@ -414,24 +431,63 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
         $scope.params_commandes.selectedMagasins = $scope.selectedMagasins;
         $http.post("get/commande", {params:$scope.params_commandes}).success(function(res){
             $scope.commandes = res;
-            console.log($scope.commandes);
         });
     };
+    $scope.filter = function(commande){
+        if($scope.consultClient != "")
+            return commande.display == 1 && commande.clientNom.toLocaleLowerCase().indexOf($scope.consultClient.toLocaleLowerCase()) > -1;
+        else{
+            return commande.display == 1;
+        }
+    };
+    $scope.confirmDelete = -1;
     $scope.delete = function(toRem){
-        $http.post("remove/commande",{
-            toRemove: toRem
-        });
+        if($scope.confirmDelete == toRem.idCommande) {
+            $http.post("remove/commande", {
+                toRemove: toRem
+            }).success(function(res){
+                $scope.noDetails();
+                $scope.confirmDelete = -1;
+                $scope.refreshCommandes();
+            });
+        }
+        else{
+            $window.alert("Cliquez à nouveau pour confirmer la suppression de la commande");
+            $scope.confirmDelete = toRem.idCommande;
+            console.log($scope.confirmDelete);
+        }
     };
     $scope.modify = function(x){
         $http.post("complex/fullCommande", {params:{idCommande: x.idCommande}}).success(function(res){
+            $scope.noDetails();
             var vendeuse = $scope.commande.vendeuse;
             $scope.commande = res;
             $scope.commande.vendeuse = vendeuse;
             $scope.commande.heure = (new Date($scope.commande.Livraison)).getHours();
             $scope.commande.date =  $scope.DS(new Date($scope.commande.Livraison));
+            $scope.refreshCommandes();
+            $scope.activeMenu = 'date';
         });
-        $scope.activeMenu = 'date';
     };
+
+    //detail commande
+    $scope.detailCommandeIsOn = false
+    $scope.det_com = {}
+    $scope.details = function(x){
+        $http.post("complex/fullCommande", {params:{idCommande: x.idCommande}}).success(function(res){
+            var vendeuse = {Nom:x.vendeuseNom}
+            $scope.det_com = res;
+            $scope.det_com.vendeuse = vendeuse;
+            $scope.det_com.heure = (new Date($scope.det_com.Livraison)).getHours();
+            $scope.det_com.date =  $scope.DS(new Date($scope.det_com.Livraison));
+            $scope.detailCommandeIsOn = true;
+            console.log("detailCommandeIsOn");
+        });
+    };
+    $scope.noDetails = function(){
+        $scope.detailCommandeIsOn = false
+        $scope.det_com.idCommande = -1
+    }
     //endregion
 
     //region PRINT
@@ -449,7 +505,8 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
     };
 
     $scope.getPrint = function(){
-        $http.post('/complex/consultMagCommande',{params:{Livraison:$scope.params_commandes.dateLivraison}}).success(function(res){
+        $scope.params_commandes.selectedMagasins = $scope.selectedMagasins;
+        $http.post('/complex/consultMagCommande',{params:{selectedMagasins:$scope.params_commandes.selectedMagasins, Livraison:$scope.params_commandes.dateLivraison}}).success(function(res){
             $scope.fullcommandes = res;
 
         });

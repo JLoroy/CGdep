@@ -40,6 +40,9 @@ body {
 .h100{
     height:100%;
 }
+.h99{
+    height:99%;
+}
 .h90{
     height:90%;
 }
@@ -87,7 +90,23 @@ body {
 .sendingCommande{
     border-radius: 5%;
     margin-top: 300px;
-    background-color: #428bca;
+    background-color: #9fb2ca;
     padding:30px;
     height:300px;
+}
+
+.detail-content{
+    border-left: 2px solid #bababa;
+    position:relative;
+    height:75%;
+    border-collapse:collapse;
+    /*background-image:linear-gradient(to right,#e0e0e0 0%,white 9%);*/
+}
+.detail-body{
+    float:right;
+}
+.detail-footer{
+    position:relative;
+    float:right;
+    margin-top:30px;
 }

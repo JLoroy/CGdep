@@ -83,7 +83,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
+        <div ng-class="{'col-md-12':!detailCommandeIsOn, 'col-md-9':detailCommandeIsOn}">
             <table class="table">
                 <thead>
                 <th>#</th>
@@ -95,23 +95,54 @@
                 <th>Client</th>
                 <th>Vendeuse</th>
                 <th>Magasin</th>
-                <th>Supprimer</th>
+                <th>Statut</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="commande in commandes" <!--ng-if="commande.display == 1"-->>
+                <tr ng-repeat="commande in commandes" ng-click="details(commande);" ng-class="ngclassDisplay(commande.display)"> <!--ng-if="commande.display == 1"-->>
                     <td>{{commande.idCommande}}</td>
                     <td>{{commande.Creation | date:'EEEE dd MMMM yyyy'}}</td>
                     <td>{{commande.Livraison | date:'EEEE dd MMMM yyyy'}}</td>
                     <td>{{commande.Montant}}</td>
                     <td>{{(commande.PNP==3)?'AFNP':(commande.PNP==2)?'AF':(commande.PNP==1)?'P':'NP'}}</td>
-                    <td>{{commande.Remarque}}</td>
+                    <td><p style="width:400px;text-overflow: ellipsis;overflow:hidden;">{{commande.Remarque}}</p></td>
                     <td>{{commande.clientNom}}</td>
                     <td>{{commande.vendeuseNom}}</td>
                     <td>{{commande.magasinNom}}</td>
-                    <td><button class="btn btn-danger" ng-click="delete(commande);refresh();">Supprimer</button></td>
+                    <td>{{displayBool(commande.display)}}</td>
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div id="DetailCommande" class="col-md-3" ng-if="detailCommandeIsOn" >
+            <div class="detail-content">
+                <div class="detail-body">
+                    <h2 class="col-md-12">Detail de la commande : </h2>
+                    <div  class="col-md-12">
+                        <label class="col-md-1">Nom:</label>
+                        <div class="col-md-offset-1 col-md-10"><p>{{det_com.client.Nom}}</p></div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="col-md-1">Tel:</label>
+                        <div class="col-md-offset-1 col-md-10"><p>{{det_com.client.Tel}}</p></div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="col-md-1">Remarque:</label>
+                        <div><p>{{det_com.Remarque}}</p></div>
+                    </div>
+                    <table class="table table-condensed">
+                        <thead><th>produit</th><th>quantité</th><th>remarque</th></thead>
+                        <tbody><tr ng-repeat="produit in det_com.produits">
+                            <td>{{produit.prod.Nom}}</td>
+                            <td>{{produit.qty}}</td>
+                            <td>{{produit.commentaire}}</td>
+                        </tr></tbody>
+                    </table>
+                </div>
+                <div class="detail-footer">
+                    <a type="button" class="btn btn-warning" ng-click="noDetails()" >Fermer</a>
+                    <a type="button" class="btn btn-danger" ng-click="delete(det_com);" >Supprimer</a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="tab-pane" id="client" ng-controller="ClientController">
@@ -172,7 +203,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
+        <div ng-class="{'col-md-12':!regroupementPanelIsOn, 'col-md-9':regroupementPanelIsOn}">
             <table class="table">
                 <thead>
                 <th>#</th>
@@ -197,12 +228,37 @@
                     <td><input type="text" ng-model="produit.Nom"></td>
                     <td><input type="text" ng-model="produit.Prix"></td>
                     <td><select ng-model="produit.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories | filter: category.display=1" ng-if="category.display = 1"></select></td>
-                    <td><select ng-model="produit.regroupement_idRegroupement" ng-options="regroupement.idRegroupement as regroupement.Nom for regroupement in regroupements"></select></td>
+                    <td><p ng-if="hasRegroupement(produit)">{{getProdRegroupement(produit)}}</p><a class="btn btn-warning" ng-if="!hasRegroupement(produit)" ng-click="selectProduct(produit)">Selectionner</a></td>
                     <td><button class="btn btn-primary" ng-click="modify(produit);getProduits();">Modifier</button></td>
                     <td><button class="btn btn-danger" ng-click="delete(produit);getProduits();">Supprimer</button></td>
                 </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div id="RegroupementPanel" class="col-md-3" ng-if="regroupementPanelIsOn" >
+            <div class="detail-content">
+                <div class="detail-body">
+                    <h2 class="col-md-12">Nouveau Regroupement : </h2>
+                    <div  class="col-md-12">
+                        <label class="col-md-1">Nom:</label>
+                        <div class="col-md-offset-1 col-md-10"><input type="text" ng-model="newRegroupement.Nom"></input></div>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="col-md-1">Categorie:</label>
+                        <div class="col-md-offset-1 col-md-10"><p>{{newRegroupement.Categorie_idCategorie}}</p></div>
+                    </div>
+                    <table class="table table-condensed">
+                        <tbody><tr ng-repeat="prod in selection">
+                            <td>{{prod.Nom}}</td>
+                        </tr></tbody>
+                    </table>
+                </div>
+                <div class="detail-footer">
+                    <a type="button" class="btn btn-warning" ng-click="cancelRegroupement()" >Annuler</a>
+                    <a type="button" class="btn btn-success" ng-click="addRegroupement();" >Ajouter</a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="tab-pane" id="categorie" ng-controller="CategoryController">
@@ -467,7 +523,7 @@
                 <th>Supprimer</th>
                 </thead>
                 <tbody>
-                <tr ng-repeat="regroupement in regroupements">
+                <tr ng-repeat="regroupement in regroupements" ng-if="regroupement.Display == 1">
                     <td>{{regroupement.idRegroupement}}</td>
                     <td><input type="text" ng-model="regroupement.Nom"></td>
                     <td><select ng-model="regroupement.Categorie_idCategorie" ng-options="category.idCategorie as category.Nom for category in categories | filter: category.display=1" ng-if="category.display = 1"></select></td>
