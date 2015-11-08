@@ -472,7 +472,7 @@ exports.complex = function(req, res){
             debug(params.selectedCategories);
             query = "SELECT ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.Produit_idProduit, "+
                 "Produit.Nom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin, " +
-                "Magasin.Nom AS MagasinNom FROM Produitcommande "+
+                "Magasin.Nom AS MagasinNom FROM ProduitCommande "+
                 "JOIN Produit ON ProduitCommande.Produit_idProduit = idProduit "+
                 "JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande " +
                 "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal "+
