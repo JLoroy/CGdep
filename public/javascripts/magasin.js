@@ -10,7 +10,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
     $scope.commandes = {};$scope.params_commandes = {date:''};
     $scope.produitTable = {};
     $scope.motscustoms = {};$scope.params_motscustoms = {};
-    $scope.selectedMagasins = {};
+    $scope.selectedMagasins = {};$scope.currentMagasin = 0;
 
     $scope.commande = {
         Creation:'',
@@ -34,7 +34,11 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
             for(m in $scope.magasins){
                 $scope.selectedMagasins[m.idMagasin] = false;
             }
+
         });
+        /*$http.post("complex/currentMagasin",{}).success(function(res){
+            $scope.currentMagasin = res;
+        });*/
         $http.post("get/category",{}).success(function(res){
             $scope.categories = res;
         });
@@ -59,7 +63,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
         for(j=1; j<=7; j++){
             $scope.calendar[i][j] = {};
             $scope.calendar[i][j].date = new Date($scope.day);
-            if(past){//on disable les past premiers jours
+            if(past-1){//on disable les past premiers jours
                 $scope.calendar[i][j].ok = false;
                 past--;}
             else{$scope.calendar[i][j].ok = true;}
@@ -421,6 +425,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
     //region Consultation
     $scope.consultClient = "";
     $scope.consultDate = function(date){
+        $scope.selectedMagasins[$scope.activeMag] = true;
         var d = new Date(date);
         d = $filter('date')(d, 'yyyy-MM-dd');
         $scope.params_commandes.dateLivraison = d;

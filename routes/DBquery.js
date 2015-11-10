@@ -788,6 +788,18 @@ exports.complex = function(req, res){
             break;
         case "modifyRegroupement":
             break;
+        case "currentMagasin":
+            if(req.session.data){
+                term = req.session.data.terminal.idTerminal;
+                connection.query("SELECT * FROM Magasin JOIN Terminal ON Magasin.idMagasin = Magasin_idMagasin WHERE Terminal.idTerminal ="+term+";", function(err, rows){
+                    if(err) throw err;
+                    res.send(rows);
+                });
+            }
+            else{
+                res.send({});
+            }
+            break;
         default:
             console.log("Requete complexe d'un type inconnu : "+req.params.type);
     }
