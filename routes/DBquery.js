@@ -83,7 +83,7 @@ var refactorConsultationPrint = function(produits, customs){
             //info produit
             Quantite : p.Quantite,
             produitNom : p.produitNom,
-            Detail : p.Detail
+            Detail : p.Details
         })
     }
     for(var i = 0; i< produits.length; i++){
@@ -745,7 +745,7 @@ exports.complex = function(req, res){
                     "JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal " +
                     "JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin "+
                     "JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse "+
-                    "WHERE Commande.Livraison LIKE '" + Livraison + "%' AND Magasin.idMagasin = "+activeMag+";";
+                    "WHERE Commande.Livraison LIKE '" + Livraison + "%' AND "+select_query(params.selectedMagasins,"Terminal.Magasin_idMagasin");
                 debug("complex PRINT 2 : "+query);
                 connection.query(query , function(errC, rowsC, fields) {
                     if (errC) throw errC;

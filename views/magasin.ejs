@@ -177,30 +177,30 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="commande in fullcommandes | orderBy:'idCommande'" ng-if="commande.display == 1">
-                        <th scope="row" style="overflow: hidden">{{commande.idCommande}}</th>
-                        <td>
-                            <table class="table borderless">
+                        <th scope="row" style="overflow: hidden;margin-bottom:10px;">{{commande.idCommande}}</th>
+                        <td class="nopadding">
+                            <table class="table borderless nomargin">
                                 <tbody>
                                     <tr>
                                         <!--infoclient-->
-                                        <td style="width: 25%;overflow: hidden">{{commande.heure}}h</td>
-                                        <td style="width: 75%;overflow: hidden">{{commande.clientNom}}</td>
+                                        <td class="nopadding" style="width: 25%;overflow: hidden">{{commande.heure}}h</td>
+                                        <td class="nopadding" style="width: 75%;overflow: hidden">{{commande.clientNom}}</td>
                                     </tr>
                                     <tr>
-                                        <td>{{commande.magasinNom}}</td>
-                                        <td style="overflow: hidden">{{commande.Remarque}}</td>
+                                        <td  class="nopadding">{{commande.magasinNom}}</td>
+                                        <td  class="nopadding" style="overflow: hidden;font-size: small;">{{commande.Remarque}}</td>
                                     </tr>
                                     </tbody>
                             </table>
                         </td>
-                        <td style="overflow: hidden">
-                            <table class="table borderless">
+                        <td style="overflow: hidden;" class="nopadding">
+                            <table class="table borderless nopadding nomargin">
                                 <!-- produits -->
-                                <tr ng-repeat="p in commande.produits">
-                                    <th scope="row" style="width: 20%;overflow: hidden">{{p.Quantite}}</th>
-                                    <td style="width: 80%;overflow: hidden">{{p.produitNom}}</td>
+                                <tr ng-repeat="p in commande.produits" class="nopadding">
+                                    <th class="nopadding" scope="row" style="width: 10%;">{{p.Quantite}}</th>
+                                    <td class="nopadding" style="width: 40%;">{{p.produitNom}}</td>
+                                    <td class="nopadding" style="width: 50%;font-size: small;">{{p.Detail}}</td>
                                 </tr>
-                                <tr><td></td></td><td>{{P.Detail}}</td></tr>
                             </table>
                         </td>
                     </tr>
