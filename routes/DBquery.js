@@ -307,7 +307,7 @@ exports.get = function(req, res){
             "WHERE "+select_query(params.selectedMagasins,"Terminal.Magasin_idMagasin");
             if(params.dateCreate) query = query + " AND Commande.Creation LIKE '" + params.dateCreate + "%'";
             if(params.dateLivraison) query = query + " AND Commande.Livraison LIKE '" + params.dateLivraison + "%'";
-            query = query + " ORDER BY Commande.Creation DESC LIMIT 0," + (params.nbrResult?params.nbrResult:"20");
+            query = query + " ORDER BY Commande.Creation DESC LIMIT 0," + (params.nbrResult?params.nbrResult:"10000");
             break;
         case "produit":
             query = "SELECT * FROM Produit WHERE ";

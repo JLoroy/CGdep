@@ -294,7 +294,9 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
             3:"emilieB",
             4:"emilieV",
             5:"audrey",
+            6:'alizee',
             12:"romane"
+
         };
         if(available[id]){
             console.log("vendeuse found");
