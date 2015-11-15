@@ -126,3 +126,5 @@ get/magasin : SELECT * FROM Magasin WHERE display = 1;
 get/category : SELECT * FROM Categorie;
 get/magasin : SELECT * FROM Magasin WHERE display = 1;
 get/category : SELECT * FROM Categorie;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
