@@ -3,15 +3,17 @@ var app = angular.module('magasin',[]);
 app.controller('magasinController', ['$scope', '$filter', '$http', '$window', function($scope, $filter, $http, $window){
 
     //region Donnée
-    $scope.magasins = {};
-    $scope.categories = {};
-    $scope.clients = {};$scope.params_clients = {};
-    $scope.vendByMag = {};
-    $scope.commandes = {};$scope.params_commandes = {date:''};
-    $scope.produitTable = {};
-    $scope.motscustoms = {};$scope.params_motscustoms = {};
-    $scope.selectedMagasins = {};$scope.currentMagasin = 0;
+    //les données qu'on utilise dans l'application
+    $scope.magasins = {};           //liste de tous les magasins
+    $scope.categories = {};         //liste des catégories
+    $scope.clients = {};$scope.params_clients = {}; //liste des clients + params
+    $scope.vendByMag = {};          //listes des vendeuses triées par magasin
+    $scope.commandes = {};$scope.params_commandes = {date:''}; //liste de commandes
+    $scope.produitTable = {}; //liste des produits par table
+    $scope.motscustoms = {};$scope.params_motscustoms = {}; //not used yet
+    $scope.selectedMagasins = {}; //magasins concernés
 
+    //l'objet commande
     $scope.commande = {
         Creation:'',
         Livraison:'',
@@ -25,10 +27,11 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
         vendeuse:{Nom:'', idVendeuse:''}
     };
 
+    //fonction qui envoie toutes les requetes et qui chope toutes les infos
     $scope.loadData = function(){
-        $http.post("get/commande",{params:{}}).success(function(res){
+        /*$http.post("get/commande",{params:{}}).success(function(res){
             $scope.commandes = res;
-        });
+        });*/
         $http.post("get/magasin",{}).success(function(res){
             $scope.magasins = res;
             for(m in $scope.magasins){
@@ -42,18 +45,31 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
         $http.post("get/category",{}).success(function(res){
             $scope.categories = res;
         });
-        $http.post("complex/vendByMag",{}).success(function(res){
-            $scope.vendByMag = res.vendByMag;
+        if(!$scope.vendByMag[1]){
+            $http.post("complex/vendByMag",{}).success(function(res){
+                $scope.vendByMag = res.vendByMag;
+                $scope.activeMenu='vendeuse';
+                $scope.activeMag = res.activeMag;
+            });
+        }
+        else{
             $scope.activeMenu='vendeuse';
-            $scope.activeMag = res.activeMag;
-        });
-        $http.post("complex/produitTable",{}).success(function(res){
-            $scope.produitTable = res;
+        }
+
+        if(!$scope.produitTable[1]){
+            $http.post("complex/produitTable",{}).success(function(res){
+                $scope.produitTable = res;
+                $scope.activeCategorie = "1";
+            });
+        }
+        else{
             $scope.activeCategorie = "1";
-        });
+        }
 
     };
     $scope.loadData();
+
+    //objet calendar qui construit le calendrier
     $scope.calendar = {1:{},2:{},3:{},4:{}};
     $scope.today = new Date();
     $scope.day = new Date();
@@ -63,16 +79,18 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
         for(j=1; j<=7; j++){
             $scope.calendar[i][j] = {};
             $scope.calendar[i][j].date = new Date($scope.day);
-            if(past-1){//on disable les past premiers jours
+            if(past){//on disable les past premiers jours
                 $scope.calendar[i][j].ok = false;
                 past--;}
             else{$scope.calendar[i][j].ok = true;}
             $scope.day.setDate(($scope.day).getDate()+1);
         }
     }
+
+    //fonction qui réinitialise tout
     $scope.init = function() {
         $scope.params_clients = {};
-        $scope.params_commandes = {date: ''};
+        $scope.params_commandes = {date: ''}; //reinit de la date de consultation
         $scope.params_motscustoms = {};
 
         $scope.commande = {
@@ -299,7 +317,6 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
 
         };
         if(available[id]){
-            console.log("vendeuse found");
             return available[id];
         }
         return "default";
@@ -415,7 +432,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
             function(res){
                 console.log("COMMANDE SUCCESSFUL");
                 $scope.init();
-                $scope.sendingMessage = "La commande a bien ete envoyee, mais elle a ete comptee pour le magasin de thorembais. Veuillez modifier la commande dans le menu consulation. Appuyez sur F5 pour vous reconnecter";
+                $scope.sendingMessage = "Si rien ne se passe après 30 secondes, appuyez sur F5 pour vous reconnecter";
             }).error(
             function(res){
                 console.log("COMMANDE FAILED");

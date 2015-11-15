@@ -86,7 +86,7 @@
             <table class="table table-bordered table-condensed tab-pane form-control h90">
                 <tr ng-repeat="semaine in calendar">
                     <td ng-repeat="jour in semaine" class="form-group vcenter nopadding">
-                        <a  ng-class="activeDate(jour.date)"  class="btn form-control h100 nopadding" ng-disabled="!(jour.ok)" ng-click="consultDate(jour.date);">
+                        <a  ng-class="activeDate(jour.date)"  class="btn form-control h100 nopadding" ng-click="consultDate(jour.date);">
                             <h2>{{jour.date | date: 'dd EEEE'}}</h2>
                         </a>
                     </td>
@@ -183,8 +183,9 @@
                                 <tbody>
                                     <tr>
                                         <!--infoclient-->
-                                        <td class="nopadding" style="width: 25%;overflow: hidden">{{commande.heure}}h</td>
-                                        <td class="nopadding" style="width: 75%;overflow: hidden">{{commande.clientNom}}</td>
+                                        <td class="nopadding" style="width: 20%;overflow: hidden">{{commande.heure}}h</td>
+                                        <td class="nopadding" style="width: 20%;overflow: hidden">{{(commande.PNP==3)?'AFNP':(commande.PNP==2)?'AF':(commande.PNP==1)?'P':'NP'}}</td>
+                                        <td class="nopadding" style="width: 60%;overflow: hidden">{{commande.clientNom}}</td>
                                     </tr>
                                     <tr>
                                         <td  class="nopadding">{{commande.magasinNom}}</td>
@@ -226,7 +227,7 @@
                 <li ng-class="{disabled:commande.montant==0}"       ng-click="setActiveMenu('commentaire');">   <a role="tab">      Commentaire</a></li>
                 <li ng-class="{disabled:commande.montant==0}"       ng-click="setActiveMenu('payement');">      <a role="tab">      Payement</a></li>
                 <li ng-class="{disabled:commande.PNP=='null'}"      ng-click="setActiveMenu('recap');">         <a role="tab">      Recapitulatif</a></li>
-                <li ng-if="activeMenu != 'recap'"><a role="tab" class="btn btn-success" ng-click="next(activeMenu)">Suivant</a></li>
+                <li ng-if="activeMenu != 'recap'"><a role="tab" class="btn btn-success nohover" ng-click="next(activeMenu)">Suivant</a></li>
                 <li ng-if="false"><a role="tab" class="btn btn-warning" ng-click="commandeDeTest()">COMMANDE DE TEST</a></li>
                 <li ng-if="activeMenu == 'recap'"><a role="tab" class="btn btn-success" ng-click="sendCommande()">Envoyer la commande</a></li>
             </ul>
