@@ -41,7 +41,7 @@
     <div class="h100" ng-class="isActiveMenu('vendeuse')">
         <div>
             <ul class="nav nav-pills nav-justified" role="tablist">
-                <li ng-repeat="magasin in magasins" ng-if="magasin.display == 1" ng-class="isActiveMag(magasin.idMagasin)">
+                <li ng-repeat="magasin in magasins" ng-if="magasin.idMagasin == activeMag || activeMag == 1" ng-class="isActiveMag(magasin.idMagasin)">
                     <a href="#mag{{magasin.idMagasin}}" ng-click="activeMag = magasin.idMagasin" role="tab" data-toggle="tab">
                         {{magasin.Nom}}
                     </a>
@@ -98,7 +98,7 @@
         <div id="selectionMagasin" class="h5 nomargintop">
             <ul class="nav nav-tabs nav-justified" role="tablist">
                 <li><a role="tab" class="btn btn-warning" ng-click="previous(activeMenu)">Précédent</a></li>
-                <li ng-repeat="magasin in magasins" ng-if="magasin.display == 1"
+                <li ng-repeat="magasin in magasins" ng-if="magasin.idMagasin == activeMag || activeMag == 1"
                     ng-click="selectedMagasins[magasin.idMagasin]=(!selectedMagasins[magasin.idMagasin]);refreshCommandes()">
                     <a role="tab" class="btn" ng-class="consultMagSelected(magasin.idMagasin)" >{{magasin.Nom}}</a>
                 </li>

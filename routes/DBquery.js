@@ -207,7 +207,7 @@ function com_commande(params, Terminal_idTerminal, Client_idClient){
             "Remarque = '"+params.Remarque+"',"+
             "Client_idClient = '"+Client_idClient+"',"+
             "Vendeuse_idVendeuse = '"+params.vendeuse.idVendeuse+"',"+
-            "Terminal_idTerminal = '"+Terminal_idTerminal+"'" +
+            "Terminal_idTerminal = '"+params.vendeuse.Magasin_idMagasin+"'" +
             " WHERE idCommande="+params.idCommande+";"
         //les deux d'un coup, oui oui
         debug(query_delete_produitsCommandes+query_update_commande);
@@ -224,7 +224,7 @@ function com_commande(params, Terminal_idTerminal, Client_idClient){
         var Creation = DS(params.Creation);
         var query_insert_commande = "INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ("+
             "'"+Creation+"','"+Livraison+"',"+"'"+params.montant+"',"+"'"+params.PNP+"',"+"'"+params.Remarque+"',"+
-            "'"+Client_idClient+"',"+"'"+params.vendeuse.idVendeuse+"',"+"'"+Terminal_idTerminal+"');"
+            "'"+Client_idClient+"',"+"'"+params.vendeuse.idVendeuse+"',"+"'"+params.vendeuse.Magasin_idMagasin+"');"
         debug(query_insert_commande);
         connection.query(query_insert_commande , function(err, rows, fields) {
             if (err) throw err;
