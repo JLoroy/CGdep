@@ -230,7 +230,10 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
     $scope.goToAtelier = function(){
         $window.location.href = 'atelier';
     }
-
+    $scope.goToToday = function(){
+        d = new Date();
+        $scope.consultDate(d);
+    };
     //endregion
 
     //region ng-class
