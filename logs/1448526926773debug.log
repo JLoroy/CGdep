@@ -1,0 +1,13 @@
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%l%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ll%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%lla%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%llal%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%llala%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%llala\'%';

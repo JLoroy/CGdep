@@ -311,10 +311,10 @@ exports.get = function(req, res){
             break;
         case "produit":
             query = "SELECT * FROM Produit WHERE ";
-            query = query + (params.Nom?("Produit.Nom LIKE '%" + params.Nom + "%' AND "):"") + select_query(params.selectedCategories, "Produit.Categorie_idCategorie") +";";
+            query = query + (params.Nom?("Produit.Nom LIKE " + mysql.escape("%"+params.Nom+"%") + " AND "):"") + select_query(params.selectedCategories, "Produit.Categorie_idCategorie") +";";
             break;
         case "client":
-            query = "SELECT * FROM Client WHERE Client.Nom LIKE '%" + params.Nom + "%';";
+            query = "SELECT * FROM Client WHERE Client.Nom LIKE " + mysql.escape("%"+params.Nom+"%") + ";";
             break;
         case "category":
             query = "SELECT * FROM Categorie;";
@@ -323,11 +323,11 @@ exports.get = function(req, res){
             query = "SELECT * FROM Magasin WHERE display = 1;";
             break;
         case "vendeuse":
-            query = "SELECT * FROM Vendeuse WHERE " + (params.Nom?"Vendeuse.Nom LIKE '%" + params.Nom + "%' ":"")+select_query(params.selectedMagasins,"Vendeuse.Magasin_idMagasin");
+            query = "SELECT * FROM Vendeuse WHERE " + (params.Nom?"Vendeuse.Nom LIKE  " + mysql.escape("%"+params.Nom+"%") + "  ":"")+select_query(params.selectedMagasins,"Vendeuse.Magasin_idMagasin");
             break;
         case "custom":
             query = "SELECT * FROM ProduitCustom WHERE";
-            query = query + (params.Nom?("ProduitCustom.Nom LIKE '%" + params.Nom + "%' AND "):"") + select_query(params.selectedCategories, "ProduitCustom.Categorie_idCategorie") +";";
+            query = query + (params.Nom?("ProduitCustom.Nom LIKE  " + mysql.escape("%"+params.Nom+"%") + "  AND "):"") + select_query(params.selectedCategories, "ProduitCustom.Categorie_idCategorie") +";";
             break;
         case "terminal":
             query = "SELECT * FROM Terminal;";
