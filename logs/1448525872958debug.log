@@ -1,0 +1,1 @@
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%L'%';

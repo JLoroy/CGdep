@@ -1,0 +1,343 @@
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+complex
+complex
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+complex
+complex
+complex
+complex
+complex
+complex
+complex
+complex
+complex
+complex
+complex
+complex
+complex
+complex
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+complex
+complex
+complex
+complex
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+{}
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+{}
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+complex
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 4
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=4) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 4
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=4) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=4) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+complex
+activeMag : 4
+get/category : SELECT * FROM Categorie;
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%a%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%au%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%aub%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%aubé%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%aubepines%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%aubepine%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%aubepin%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%aubepi%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%aubep%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%aube%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%aub%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%au%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%a%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%';
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-12%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%c%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ce%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cey%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ceyp%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ceype%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ceyper%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ceypers%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ceyper%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ceype%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ceyp%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cey%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ce%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%c%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cu%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuy%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuyp%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuype%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuyper%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuypers%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuypers i%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuypers is%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuypers isa%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuypers isab%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuypers isabe%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuypers isabel%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuypers isabell%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%cuypers isabelle%';
+complex
+clientID :1283
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2015-11-11 07:17:55','2015-11-14 08:00:00','58.50','1','','1283','23','4');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (45,'',2950,884,0);
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+complex
+activeMag : 4
+get/category : SELECT * FROM Categorie;
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=4) AND Commande.Livraison LIKE '2015-11-14%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+{ selectedMagasins: { '4': true, undefined: false },
+  Livraison: '2015-11-14' }
+2015-11-14
+complex PRINT 1 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.Produit_idProduit, Produit.Nom AS produitNom, Produit.idProduit, Produit.Categorie_idCategorie, Terminal.Magasin_idMagasin  FROM ProduitCommande JOIN Produit ON ProduitCommande.Produit_idProduit = idProduit JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-11-14%' AND (FALSE  OR Terminal.Magasin_idMagasin=4)
+complex PRINT 2 : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Commande.Client_idClient, Client.idClient, Client.Nom AS clientNom, Client.Tel, Client.Mail, Client.TVA, Vendeuse.idVendeuse, Vendeuse.Nom AS vendeuseNom,Magasin.idMagasin, Magasin.Nom AS magasinNom, ProduitCommande.Quantite, ProduitCommande.Details, ProduitCommande.ProduitCustom_idProduitCustom, ProduitCustom.Nom AS produitNom, ProduitCustom.idProduitCustom, ProduitCustom.Categorie_idCategorie, Terminal.Magasin_idMagasin FROM ProduitCommande JOIN ProduitCustom ON ProduitCommande.ProduitCustom_idProduitCustom = idProduitCustom JOIN Commande ON ProduitCommande.Commande_idCommande = idCommande JOIN Client ON Commande.Client_idClient = idClient JOIN Terminal ON Commande.Terminal_idTerminal = idTerminal JOIN Magasin ON Terminal.Magasin_idMagasin = idMagasin JOIN Vendeuse ON Commande.Vendeuse_idVendeuse = idVendeuse WHERE Commande.Livraison LIKE '2015-11-14%' AND (FALSE  OR Terminal.Magasin_idMagasin=4)
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+complex
+activeMag : 4
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-28%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%b%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%bo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%boo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%boom%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%boo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%boon%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%boon%';
+complex
+UPDATE Client SET Tel='0476400672', Mail = '', Nom = 'boon', TVA = '' WHERE idClient = '343';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2015-11-11 07:50:47','2015-11-14 07:00:00','19.60','1','','343','4','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (8,'',2951,767,0), (8,'',2951,780,0);
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%boon%';
+complex
+UPDATE Client SET Tel='0476400672', Mail = '', Nom = 'boon', TVA = '' WHERE idClient = '343';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2015-11-11 07:51:15','2015-11-15 07:00:00','9.80','1','','343','4','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (4,'',2952,767,0), (4,'',2952,780,0);
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE OR TRUE) ORDER BY Commande.Creation DESC LIMIT 0,20
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 2
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=2) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1 OR Terminal.Magasin_idMagasin=2) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=2) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=2 OR Terminal.Magasin_idMagasin=3) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=2) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=2 OR Terminal.Magasin_idMagasin=4) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=2) AND Commande.Livraison LIKE '2015-11-11%' ORDER BY Commande.Creation DESC LIMIT 0,20

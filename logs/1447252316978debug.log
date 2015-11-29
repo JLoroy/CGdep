@@ -1,0 +1,1 @@
+get/vendeuse : SELECT * FROM Vendeuse WHERE Vendeuse.Nom LIKE '%marie%' (FALSE OR TRUE)

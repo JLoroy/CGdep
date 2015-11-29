@@ -1,0 +1,20 @@
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%J%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Je%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jea%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean B%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean Be%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean Ber%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean Berd%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean Berdd%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean Berd%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean Ber%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean Bern%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean Berna%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean Bernar%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Jean Bernard%';
+complex
+clientID :1425
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2015-11-22 08:46:35','2015-11-29 09:00:00','3.35','0','','1425','6','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (1,'1*16 CFF déco bateau pirate si pas winni l'ourson
+"JA Basile 2 ans"',3254,187,0);
