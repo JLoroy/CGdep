@@ -158,14 +158,14 @@ function com_client(params, idTerminal){
     var Client_idClient = 1;
 
     //1) on check si le client existe d�j� (sur base du num�ro de tel)
-    var query_client = "SELECT * FROM Client WHERE Nom='"+params.client.Nom+"';";
+    var query_client = "SELECT * FROM Client WHERE Nom="+mysql.escape(params.client.Nom)+";";
     connection.query(query_client , function(err, rows, fields) {
         if (err) throw err;
         if (rows.length > 0){
 
             //2) si il existe, on garde son idClient (et on l'update)
             var Client_idClient = rows[0].idClient;
-            var query_update_client = "UPDATE Client SET Tel='"+params.client.Tel +"', Mail = '"+params.client.Mail +"', Nom = '"+params.client.Nom +"', TVA = '"+params.client.TVA +"' WHERE idClient = '"+Client_idClient +"';"
+            var query_update_client = "UPDATE Client SET Tel="+mysql.escape(params.client.Tel)+", Mail ="+mysql.escape(params.client.Mail)+", Nom ="+mysql.escape(params.client.Nom)+", TVA ="+mysql.escape(params.client.TVA)+" WHERE idClient = '"+Client_idClient +"';"
             debug(query_update_client);
             connection.query(query_update_client , function(err, rows, fields) {if (err) throw err;});
             com_commande(params, idTerminal, Client_idClient);
@@ -223,7 +223,7 @@ function com_commande(params, Terminal_idTerminal, Client_idClient){
     else{
         var Creation = DS(params.Creation);
         var query_insert_commande = "INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ("+
-            "'"+Creation+"','"+Livraison+"',"+"'"+params.montant+"',"+"'"+params.PNP+"',"+"'"+params.Remarque+"',"+
+            "'"+Creation+"','"+Livraison+"',"+"'"+params.montant+"',"+"'"+params.PNP+"',"+mysql.escape(params.Remarque)+","+
             "'"+Client_idClient+"',"+"'"+params.vendeuse.idVendeuse+"',"+"'"+params.vendeuse.Magasin_idMagasin+"');"
         debug(query_insert_commande);
         connection.query(query_insert_commande , function(err, rows, fields) {
@@ -247,7 +247,7 @@ function com_produitcommandes(params){
         if(p.prod.custom){
             //todo check if il existe deja (dans le cas d'une modification de commande)
             if(!p.prod.idProduitCustom) {
-                var query_insert_produitCustom = "INSERT INTO ProduitCustom(Nom, Prix, Categorie_idCategorie) VALUES ('" + p.prod.Nom + "'," + 1 + "," + p.prod.Categorie_idCategorie + ");";
+                var query_insert_produitCustom = "INSERT INTO ProduitCustom(Nom, Prix, Categorie_idCategorie) VALUES ("+mysql.escape(p.prod.Nom) + "," + 1 + "," + p.prod.Categorie_idCategorie + ");";
                 debug(query_insert_produitCustom);
                 connection.query(query_insert_produitCustom, function (err, rows, fields) {
                     if (err) throw err;
@@ -269,7 +269,7 @@ function com_produitcommandes(params){
         else{
             //Query normale
             query_insert_produitCommande += firstProduitCommande?   ""    :",";firstProduitCommande = false;
-            query_insert_produitCommande += " ("+p.qty+",'"+p.commentaire+"',"+params.idCommande+","+p.prod.idProduit+",0)";
+            query_insert_produitCommande += " ("+p.qty+","+mysql.escape(p.commentaire)+","+params.idCommande+","+p.prod.idProduit+",0)";
             numberProd++;
         }
     }

@@ -1,0 +1,20 @@
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%u%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%un%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%uno%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%uno\'%';
+complex
+clientID :653
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2015-11-29 13:15:13','2015-12-02 05:00:00','3.70','0','cinco\'','653','3','1');
+INSERT INTO ProduitCustom(Nom, Prix, Categorie_idCategorie) VALUES ('tres\'',1,5);
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (1,'dos\'',1329,91,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+produit custom numero 213
+tres' ajout�
