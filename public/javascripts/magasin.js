@@ -2,16 +2,16 @@ var app = angular.module('magasin',[]);
 
 app.controller('magasinController', ['$scope', '$filter', '$http', '$window', function($scope, $filter, $http, $window){
 
-    //region Donnée
-    //les données qu'on utilise dans l'application
+    //region Donnï¿½e
+    //les donnï¿½es qu'on utilise dans l'application
     $scope.magasins = {};           //liste de tous les magasins
-    $scope.categories = {};         //liste des catégories
+    $scope.categories = {};         //liste des catï¿½gories
     $scope.clients = {};$scope.params_clients = {}; //liste des clients + params
-    $scope.vendByMag = {};          //listes des vendeuses triées par magasin
+    $scope.vendByMag = {};          //listes des vendeuses triï¿½es par magasin
     $scope.commandes = {};$scope.params_commandes = {date:''}; //liste de commandes
     $scope.produitTable = {}; //liste des produits par table
     $scope.motscustoms = {};$scope.params_motscustoms = {}; //not used yet
-    $scope.selectedMagasins = {}; //magasins concernés
+    $scope.selectedMagasins = {}; //magasins concernï¿½s
 
     //l'objet commande
     $scope.commande = {
@@ -73,8 +73,8 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
     $scope.calendar = {1:{},2:{},3:{},4:{}};
     $scope.today = new Date();
     $scope.day = new Date();
-    var past = (($scope.today).getDay());
-    $scope.day.setDate(($scope.today).getDate()+1-past);
+    var past = ((($scope.today).getDay()+6)%7);
+    $scope.day.setDate(($scope.today).getDate()-past);
     for(i=1; i<=4; i++) {
         for(j=1; j<=7; j++){
             $scope.calendar[i][j] = {};
@@ -87,7 +87,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
         }
     }
 
-    //fonction qui réinitialise tout
+    //fonction qui rï¿½initialise tout
     $scope.init = function() {
         $scope.params_clients = {};
         $scope.params_commandes = {date: ''}; //reinit de la date de consultation
@@ -277,7 +277,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
     };
     //vendeuse
     $scope.isActiveMag = function(id) {
-        //determine si le tab magasin selectioné est "id"
+        //determine si le tab magasin selectionï¿½ est "id"
         return id == $scope.activeMag ? 'active' : '';
     };
     //date et heure
@@ -288,7 +288,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
         if($scope.commande.date == $scope.DS(date)) classes += "active activedate"
         return classes;
     };
-    //permet de verifier si le bouton de l'heure a été celui cliqué. Si oui, on rajotue la classe active
+    //permet de verifier si le bouton de l'heure a ï¿½tï¿½ celui cliquï¿½. Si oui, on rajotue la classe active
     $scope.activeHeure = function(heure){
         return $scope.commande.heure == heure?"active activedate":"";
     };
@@ -340,7 +340,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
     //endregion
 
     //region Heure
-    //fonction qui set l'heure de la commande à l'heure cliquée
+    //fonction qui set l'heure de la commande ï¿½ l'heure cliquï¿½e
     $scope.selectHeure = function(heure){
         $scope.commande.heure = heure;
         $scope.next('heure');
@@ -435,7 +435,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
             function(res){
                 console.log("COMMANDE SUCCESSFUL");
                 $scope.init();
-                $scope.sendingMessage = "Si rien ne se passe après 30 secondes, appuyez sur F5 pour vous reconnecter";
+                $scope.sendingMessage = "Si rien ne se passe aprï¿½s 30 secondes, appuyez sur F5 pour vous reconnecter";
             }).error(
             function(res){
                 console.log("COMMANDE FAILED");
@@ -479,7 +479,7 @@ app.controller('magasinController', ['$scope', '$filter', '$http', '$window', fu
             });
         }
         else{
-            $window.alert("Cliquez à nouveau pour confirmer la suppression de la commande");
+            $window.alert("Cliquez ï¿½ nouveau pour confirmer la suppression de la commande");
             $scope.confirmDelete = toRem.idCommande;
             console.log($scope.confirmDelete);
         }
