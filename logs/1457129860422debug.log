@@ -1,0 +1,37 @@
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%l%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%le%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%leo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%leoi%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%leo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%le%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%lem%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%lemo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%lemoi%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%lemoin%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%lemoine%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Lemoine%';
+complex
+UPDATE Client SET Tel='', Mail ='', Nom ='Lemoine', TVA ='' WHERE idClient = '1060';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-03-05 06:13:02','2016-03-12 06:00:00','14.80','1','','1060','52','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (3,'',4918,502,0), (1,'non coupé',4918,786,0), (5,'',4918,760,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%m%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%mo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%mou%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%MOUTHUY%';
+complex
+UPDATE Client SET Tel='081658663', Mail ='', Nom ='MOUTHUY', TVA ='' WHERE idClient = '20';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-03-05 06:14:57','2016-03-06 06:00:00','3.00','1','','20','52','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (6,'',4919,490,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;

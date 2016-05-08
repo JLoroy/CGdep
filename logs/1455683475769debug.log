@@ -1,0 +1,354 @@
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-17%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-17%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-17%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-18%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-17%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%S%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%St%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%S%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sm%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sme%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Smey%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Smeys%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Smeys E%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Smeys Er%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Smeys Eri%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Smeys Eric%';
+complex
+clientID :1938
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 07:41:22','2016-02-19 17:00:00','54.90','0','','1938','49','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (1,'90 pieces assortiements',4613,884,0), (1,'1x8 bav choc \"j-a\"',4613,892,0), (1,'1x8 bav framb \" 30ans\"',4613,892,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%D%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%De%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Der%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Derr%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Derro%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%derroitte%';
+complex
+UPDATE Client SET Tel='0497327711', Mail ='', Nom ='derroitte', TVA ='' WHERE idClient = '446';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 07:43:31','2016-02-18 07:00:00','21.60','1','','446','49','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (12,'',4614,789,0), (12,'',4614,788,0), (12,'',4614,790,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%P%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%PE%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%PEt%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%PE%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%P%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Pe%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Pet%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Peti%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Petit%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Petit L%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Petit La%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Petit Lau%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Petit Laur%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Petit Laure%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Petit Lauren%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Petit Laurent%';
+complex
+UPDATE Client SET Tel='0476/341578', Mail ='', Nom ='Petit Laurent', TVA ='' WHERE idClient = '449';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 07:48:15','2016-02-20 13:00:00','3.35','0','','449','49','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (1,'1x8 foret noir cerise',4615,187,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-18%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-18%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+UPDATE Client SET Tel='0474201510', Mail ='', Nom ='Roumache Sarah', TVA ='' WHERE idClient = '535';
+DELETE FROM ProduitCommande WHERE Commande_idCommande = 4611;UPDATE Commande SET Livraison = '2016-02-18 06:00:00',Montant = '150',PNP = '1',Remarque = '!!!!!!!!!!!!!!!!!!!!! 1 euro pièces !!!!!!!!!!!!!!!!!!',Client_idClient = '535',Vendeuse_idVendeuse = '3',Terminal_idTerminal = '1' WHERE idCommande=4611;
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (300,'uniquement : jambon beurre , fromage beurre, thon mayo et usa',4611,518,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%v%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%va%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van m%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van mo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van mos%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van moss%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van mosse%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van mossel%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van mosselb%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van mosselbe%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van mosselbee%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%van mosselbeen%';
+complex
+clientID :1939
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 07:53:24','2016-02-20 08:00:00','20.10','0','','1939','3','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (6,'forêt noir \" ja Julie 18 ans\"',4616,187,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-19%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+complex
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-19%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Smes Eric%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Smets Eric%';
+complex
+clientID :1940
+DELETE FROM ProduitCommande WHERE Commande_idCommande = 4613;UPDATE Commande SET Livraison = '2016-02-19 16:00:00',Montant = '54.9',PNP = '0',Remarque = '',Client_idClient = '1940',Vendeuse_idVendeuse = '49',Terminal_idTerminal = '1' WHERE idCommande=4613;
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (1,'90 pieces assortiements',4613,884,0), (1,'1x8 bav choc \"j-a\"',4613,892,0), (1,'1x8 bav framb \" 30ans\"',4613,892,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-19%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-19%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-18%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+complex
+complex
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%j%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ja%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%jan%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%jans%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janss%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%jansse%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssen%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens b%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens br%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens b%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens be%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens ber%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens bert%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens bertr%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens bertra%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens bertran%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%janssens bertrand%';
+complex
+clientID :1941
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 08:13:53','2016-02-19 10:00:00','33.50','1','','1941','3','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (10,'bav framboise \" ja  Xael\"',4617,187,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%h%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%he%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%hen%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%henn%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%henne%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%henneb%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%hennebe%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%henneber%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%hennebert%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Hennebert Florence%';
+complex
+UPDATE Client SET Tel='081615333', Mail ='', Nom ='Hennebert Florence', TVA ='' WHERE idClient = '1768';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 08:16:43','2016-02-21 12:00:00','33.50','0','','1768','3','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (10,'bav poire caramel  \" ja \"',4618,187,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%N%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%NI%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%NIC%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%NIC£%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%NIC%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%NI%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%N%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Ni%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Nic%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Nico%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Nicol%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%piraux nicole%';
+complex
+UPDATE Client SET Tel='0493117938', Mail ='', Nom ='piraux nicole', TVA ='' WHERE idClient = '1195';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 08:24:45','2016-02-19 12:00:00','3.35','0','','1195','49','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (1,'1x16 bav fram \"j-a TIMEO\"',4619,187,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-19%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-17%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-18%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%L%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%LE%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%L%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Le%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%LeK%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%LeKK%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%LeK%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%LeKE%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%LeKEN%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%LeKENN%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%LeKENNE%';
+complex
+clientID :1942
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 08:40:47','2016-02-20 10:00:00','1.45','0','','1942','49','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (1,'25 PIECES sur plateau...',4620,885,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-20%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%S%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sp%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Spr%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Spro%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Spr%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Spri%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprim%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimon%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont N%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont Nt%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont N%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont Na%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont Nat%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont Nath%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont Natho%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont Nath%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont Natha%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont Nathal%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont Nathali%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Sprimont Nathalie%';
+complex
+clientID :1943
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 08:42:02','2016-02-18 05:00:00','17.50','0','','1943','49','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (7,'',4621,760,0), (10,'',4621,762,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-20%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-19%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-18%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%s%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%si%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%sim%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%simo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%simon%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%simons%';
+complex
+clientID :1944
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 09:05:25','2016-02-18 06:00:00','10.40','1','','1944','49','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (4,'',4622,88,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%b%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%be%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%bel%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%belv%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%belva%';
+complex
+UPDATE Client SET Tel='', Mail ='', Nom ='belva', TVA ='' WHERE idClient = '10';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 09:17:31','2016-02-18 05:00:00','6.90','0','','10','3','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (1,'',4623,104,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-20%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-18%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+complex
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%D%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%G%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%GG%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%G%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Go%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Gof%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Goff%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Goffi%';
+complex
+clientID :1945
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 10:59:33','2016-02-21 11:00:00','26.80','1','','1945','49','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (1,'1x8 bav framboises \" 90 ans \"j-a\"',4624,892,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%R%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Ru%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Rut%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Ruts%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Rutsa%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Rutsar%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Rutsart%';
+complex
+clientID :1946
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 11:44:57','2016-02-21 11:00:00','3.35','0','','1946','49','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (1,'1x12 bav choco \"j-a- SIAM 3ans\"',4625,187,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-21%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-18%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-17%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%l%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%la%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%lab%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%labi%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Labiouse Monique%';
+complex
+UPDATE Client SET Tel='081655141', Mail ='', Nom ='Labiouse Monique', TVA ='' WHERE idClient = '103';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-02-17 12:27:32','2016-02-21 07:00:00','4.00','1','','103','4','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (10,'',4626,482,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+get/commande : SELECT Commande.idCommande, Commande.Creation, Commande.Livraison, Commande.Montant, Commande.PNP, Commande.Remarque, Commande.display, Client.Nom AS clientNom, Vendeuse.Nom AS vendeuseNom, Magasin.Nom AS magasinNom FROM Commande JOIN Terminal ON Commande.Terminal_idTerminal=idTerminal JOIN Client ON Commande.Client_idClient=Client.idClient JOIN Vendeuse ON Commande.Vendeuse_idVendeuse=Vendeuse.idVendeuse JOIN Magasin ON Terminal.Magasin_idMagasin=Magasin.idMagasin WHERE (FALSE  OR Terminal.Magasin_idMagasin=1) AND Commande.Livraison LIKE '2016-02-21%' ORDER BY Commande.Creation DESC LIMIT 0,10000
+complex
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;

@@ -1,0 +1,17 @@
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%g%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%gu%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%guy%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%guy saussaille%';
+complex
+UPDATE Client SET Tel='', Mail ='', Nom ='guy saussaille', TVA ='' WHERE idClient = '1549';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-04-12 17:02:25','2016-04-14 05:00:00','186.00','3','','1549','3','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (300,'',5608,518,0), (60,'et 60 mini noeuds',5608,794,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;

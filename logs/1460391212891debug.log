@@ -1,0 +1,24 @@
+get/terminal : SELECT * FROM Terminal;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
+complex
+activeMag : 1
+complex
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%B%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Bo%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Bol%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Boll%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Bolll%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Bollll%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Bolll%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Boll%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Bolli%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Bollin%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Bollinne Francoise%';
+complex
+UPDATE Client SET Tel='0476493585', Mail ='', Nom ='Bollinne Francoise', TVA ='' WHERE idClient = '922';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-04-11 16:18:53','2016-04-14 05:00:00','41.00','0','','922','3','1');
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (20,'',5593,760,0), (20,'',5593,762,0);
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;

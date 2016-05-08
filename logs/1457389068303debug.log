@@ -1,0 +1,15 @@
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%m%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%ma%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%man%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%mano%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%manon%';
+get/client : SELECT * FROM Client WHERE Client.Nom LIKE '%Thibou Manon%';
+complex
+UPDATE Client SET Tel='', Mail ='', Nom ='Thibou Manon', TVA ='BE' WHERE idClient = '29';
+INSERT INTO Commande( Creation, Livraison, Montant, PNP, Remarque, Client_idClient, Vendeuse_idVendeuse, Terminal_idTerminal) VALUES ('2016-03-08 05:39:37','2016-03-09 05:00:00','5.70','1','','29','1','1');
+INSERT INTO ProduitCustom(Nom, Prix, Categorie_idCategorie) VALUES ('toscan',1,4);
+INSERT INTO ProduitCommande(Quantite, Details, Commande_idCommande, Produit_idProduit, Custom) VALUES  (2,'',4964,764,0), (1,'mayo salade',4964,724,0);
+produit custom numero 711
+(pisto) Jambon-fromage ajout�
+get/magasin : SELECT * FROM Magasin WHERE display = 1;
+get/category : SELECT * FROM Categorie;
